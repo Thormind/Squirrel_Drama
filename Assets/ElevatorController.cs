@@ -9,14 +9,12 @@ public class ElevatorController : MonoBehaviour
 
     [SerializeField] public float speed = 1.0f;
 
-    public float newRadZ;
-    public float newDegZ;
-
     public Vector3 initialLeftEndPosition;
     public Vector3 initialRightEndPosition;
 
     [SerializeField] private float minHeight = 0.0f;
     [SerializeField] private float maxHeight = 30.0f;
+    [SerializeField] private float maxDistance = 5.0f;
 
     void Start()
     {
@@ -26,6 +24,9 @@ public class ElevatorController : MonoBehaviour
 
     void Update()
     {
+
+        float initialLeftY = leftEnd.localPosition.y;
+        float initialRightY = rightEnd.localPosition.y;
 
         float newLeftY = leftEnd.localPosition.y;
         float newRightY = rightEnd.localPosition.y;
@@ -57,6 +58,10 @@ public class ElevatorController : MonoBehaviour
         newLeftY = newLeftY > maxHeight ? maxHeight : newLeftY;
         newRightY = newRightY > maxHeight ? maxHeight : newRightY;
 
+        float distance = Mathf.Abs(newLeftY - newRightY);
+
+        newLeftY = distance > maxDistance ? initialLeftY : newLeftY;
+        newRightY = distance > maxDistance ? initialRightY : newRightY;
 
         leftEnd.localPosition = new Vector3(leftEnd.localPosition.x, newLeftY, leftEnd.localPosition.z);
         rightEnd.localPosition = new Vector3(rightEnd.localPosition.x, newRightY, rightEnd.localPosition.z);
@@ -73,8 +78,8 @@ public class ElevatorController : MonoBehaviour
     }
     public void rotateAfterMove()
     {
-        newRadZ = Mathf.Atan((rightEnd.position.y - leftEnd.position.y) / (rightEnd.position.x - leftEnd.position.x));
-        newDegZ = Mathf.Rad2Deg * newRadZ;
+        float newRadZ = Mathf.Atan((rightEnd.position.y - leftEnd.position.y) / (rightEnd.position.x - leftEnd.position.x));
+        float newDegZ = Mathf.Rad2Deg * newRadZ;
         elevatorPosition.rotation = Quaternion.Euler(new Vector3(0, 0, newDegZ));
     }
     public void scaleAfterMove()
@@ -85,26 +90,25 @@ public class ElevatorController : MonoBehaviour
         elevatorPosition.localScale = new Vector3(newLength, elevatorPosition.localScale.y, elevatorPosition.localScale.z);
     }
 
-    public GUIStyle style = new GUIStyle();
-    private void OnGUI()
-    {
-        style.fontSize = 20;
-        style.normal.textColor = Color.white;
-
-        string data1 = "___________________________________________\n\n";
-        data1 += $"Radian Angle: {newRadZ}\n";
-        data1 += $"Deg Angle: {newDegZ}\n";
-        data1 += "___________________________________________\n\n";
-        data1 += $"leftEnd Position: {leftEnd.position}\n";
-        data1 += $"rightEnd Position: {rightEnd.position}\n";
-        data1 += "___________________________________________\n\n";
-        data1 += $"elevator Rotation: {elevatorPosition.rotation}\n";
-
-
-
-        GUI.Label(new Rect(10, 150, 400, 1000), data1, style);
-
-    }
-
-
 }
+
+//public GUIStyle style = new GUIStyle();
+//private void OnGUI()
+//{
+//    style.fontSize = 20;
+//    style.normal.textColor = Color.white;
+
+//    string data1 = "___________________________________________\n\n";
+//    data1 += $"Radian Angle: {newRadZ}\n";
+//    data1 += $"Deg Angle: {newDegZ}\n";
+//    data1 += "___________________________________________\n\n";
+//    data1 += $"leftEnd Position: {leftEnd.position}\n";
+//    data1 += $"rightEnd Position: {rightEnd.position}\n";
+//    data1 += "___________________________________________\n\n";
+//    data1 += $"elevator Rotation: {elevatorPosition.rotation}\n";
+
+
+
+//    GUI.Label(new Rect(10, 150, 400, 1000), data1, style);
+
+//}
