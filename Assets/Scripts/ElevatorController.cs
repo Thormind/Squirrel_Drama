@@ -12,7 +12,7 @@ public class ElevatorController : MonoBehaviour
 
     [SerializeField] public float speed = 1.0f;
     [SerializeField] private float minHeight = 0.0f;
-    [SerializeField] private float maxHeight = 30.0f;
+    [SerializeField] private float maxHeight = 60.0f;
     [SerializeField] private float maxDistance = 5.0f;
 
     public Vector3 initialLeftEndPosition;
@@ -36,6 +36,8 @@ public class ElevatorController : MonoBehaviour
         initialLeftEndPosition = leftEnd.localPosition;
         initialRightEndPosition = rightEnd.localPosition;
         initialBallPosition = ballPosition.position;
+
+        HoleSpawner.instance.SpawnHoles();
     }
 
     void Update()
@@ -120,8 +122,11 @@ public class ElevatorController : MonoBehaviour
         RotateElevatorAfterMove();
         ScaleElevatorAfterMove();
 
-        GameSpawner.instance.RemoveObstacles();
-        GameSpawner.instance.SpawnObstacles();
+        HoleSpawner.instance.RemoveHoles();
+        HoleSpawner.instance.SpawnHoles();
+
+        //GameSpawner.instance.RemoveObstacles();
+        //GameSpawner.instance.SpawnObstacles();
     }
 
 }
