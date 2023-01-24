@@ -139,6 +139,7 @@ public class GameController : MonoBehaviour
         CameraFollow2.instance.isGameActive = true;
 
         HoleController.instance.SpawnHoles();
+        BeesController.instance.SpawnBees();
 
         UpdateUI();
     }

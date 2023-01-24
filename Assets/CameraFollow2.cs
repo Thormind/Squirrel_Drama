@@ -35,7 +35,7 @@ public class CameraFollow2 : MonoBehaviour
     {
         if (isGameActive)
         {
-            Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -10);
+            Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -15);
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
             transform.position = smoothedPosition;
         }

@@ -24,7 +24,7 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.gameObject.tag == "Hole")
+        if(collision.transform.gameObject.tag == "Hole" || collision.transform.gameObject.tag == "Obstacles")
         {
             if(collision.transform.parent.gameObject == GameController.instance.GetCurrentHole())
             {
