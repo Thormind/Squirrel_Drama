@@ -38,6 +38,7 @@ public class ElevatorController : MonoBehaviour
         initialBallPosition = ballPosition.position;
 
         HoleSpawner.instance.SpawnHoles();
+        BeeSpawner.instance.SpawnBees();
     }
 
     void Update()
@@ -124,6 +125,9 @@ public class ElevatorController : MonoBehaviour
 
         HoleSpawner.instance.RemoveHoles();
         HoleSpawner.instance.SpawnHoles();
+
+        BeeSpawner.instance.RemoveBees();
+        BeeSpawner.instance.SpawnBees();
 
         //GameSpawner.instance.RemoveObstacles();
         //GameSpawner.instance.SpawnObstacles();

@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Obstacles
   - Ball
+  - Background
+  - Border
+  - Hole
+  - MetalBar
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -13,8 +18,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - MetalBar
+  - Ball
   - 
   - 
   - 
@@ -42,4 +47,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2299329499
+    locked: 0
+  - name: Hole
+    uniqueID: 458088095
+    locked: 0
+  - name: Ball
+    uniqueID: 2585463863
+    locked: 0
+  - name: MetalBar
+    uniqueID: 482077955
+    locked: 0
+  - name: Border
+    uniqueID: 3395904819
+    locked: 0
+  - name: UI
+    uniqueID: 1036391451
     locked: 0

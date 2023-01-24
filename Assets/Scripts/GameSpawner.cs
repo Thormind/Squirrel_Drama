@@ -11,8 +11,8 @@ public class GameSpawner : MonoBehaviour
 
     public float xMin = -10f;
     public float xMax = 10f;
-    public float yMin = 25f;
-    public float yMax = 45f;
+    public float yMin = 5f;
+    public float yMax = 50f;
 
     [SerializeField] public int beesQuantity = 1; // Number of bees to instantiate
     [SerializeField] public int fliesQuantity = 1; // Number of flies to instantiate

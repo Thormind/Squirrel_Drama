@@ -2,19 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HoleSpawner : MonoBehaviour
+public class BeeSpawner : MonoBehaviour
 {
-    public static HoleSpawner instance;
+    public static BeeSpawner instance;
 
-    public GameObject holePrefab;
+    public GameObject beePrefab;
 
-    public int holesQuantity = 50;
+    public int beesQuantity = 50;
     public int maxTries = 100;
     public float minDistance = 2f;
     public float maxDistance = 6f;
 
+    public float xMin = -10f;
+    public float xMax = 10f;
 
-    private List<Vector3> _spawnedHolesPositions = new List<Vector3>();
+    public float yMin = 5f;
+    public float yMax = 50f;
+
+
+    private List<Vector3> _spawnedBeesPositions = new List<Vector3>();
 
     public void Awake()
     {
@@ -28,9 +34,9 @@ public class HoleSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnHoles()
+    public void SpawnBees()
     {
-        for (int i = 0; i < holesQuantity; i++)
+        for (int i = 0; i < beesQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
             if (spawnPosition == Vector3.zero)
@@ -38,8 +44,8 @@ public class HoleSpawner : MonoBehaviour
                 Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
-            Instantiate(holePrefab, spawnPosition, Quaternion.identity);
-            _spawnedHolesPositions.Add(spawnPosition);
+            Instantiate(beePrefab, spawnPosition, Quaternion.identity);
+            _spawnedBeesPositions.Add(spawnPosition);
         }
     }
 
@@ -49,8 +55,8 @@ public class HoleSpawner : MonoBehaviour
         int tries = 0;
         do
         {
-            float x = Random.Range(-10f, 10f);
-            float y = Random.Range(5f, 50f);
+            float x = Random.Range(xMin, xMax);
+            float y = Random.Range(yMin, yMax);
             spawnPosition = new Vector3(x, y, 0);
             tries++;
             if (tries >= maxTries)
@@ -64,7 +70,7 @@ public class HoleSpawner : MonoBehaviour
 
     private bool IsValidPosition(Vector3 position)
     {
-        foreach (Vector3 spawnedPosition in _spawnedHolesPositions)
+        foreach (Vector3 spawnedPosition in _spawnedBeesPositions)
         {
             if (Vector3.Distance(position, spawnedPosition) < minDistance)
             {
@@ -74,13 +80,13 @@ public class HoleSpawner : MonoBehaviour
         return true;
     }
 
-    public void RemoveHoles()
+    public void RemoveBees()
     {
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacles");
         foreach (GameObject obstacle in obstacles)
         {
             Destroy(obstacle);
         }
-        _spawnedHolesPositions.Clear();
+        _spawnedBeesPositions.Clear();
     }
 }
