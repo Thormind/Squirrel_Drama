@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using TMPro;
 
 public class GameController : MonoBehaviour
@@ -9,11 +10,6 @@ public class GameController : MonoBehaviour
 
     public MetalBarController metalBarController;
     public Ball ballRef;
-
-    public List<GameObject> holes;
-    public GameObject holeIndicatorPrefab;
-
-    public List<GameObject> holeIndicatorList;
 
     float score = 0;
     float bonusScore = 100;
@@ -24,8 +20,8 @@ public class GameController : MonoBehaviour
 
     int currentHoleIndex = 0;
 
-    public float timePerDecrement = 5.0f;
-    public float bonusScoreDecrement = 10.0f;
+    public float timePerDecrement = 10.0f;
+    public float bonusScoreDecrement = 5.0f;
 
     public bool gameCompletedState = false;
     public bool gameOverState = false;
@@ -41,6 +37,9 @@ public class GameController : MonoBehaviour
     public TMP_Text gameOverText;
     public GameObject StartButton;
 
+    public VisualEffect leftLifterVFX;
+    public VisualEffect rightLifterVFX;
+
     private void Awake()
     {
         if(instance == null)
@@ -54,6 +53,11 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void Start()
+    {
+        leftLifterVFX.Stop();
+        rightLifterVFX.Stop();
+    }
     private void UpdateUI()
     {
         ballText.text = currentBallNumber.ToString();
@@ -93,7 +97,7 @@ public class GameController : MonoBehaviour
 
     public GameObject GetCurrentHole()
     {
-        return holes[currentHoleIndex];
+        return HoleController.instance.holes[currentHoleIndex];
     }
 
     public void ResetBall()
@@ -129,6 +133,13 @@ public class GameController : MonoBehaviour
         ballText.enabled = true;
         ballText2.enabled = true;
 
+        leftLifterVFX.Play();
+        rightLifterVFX.Play();
+
+        CameraFollow2.instance.isGameActive = true;
+
+        HoleController.instance.SpawnHoles();
+
         UpdateUI();
     }
 
@@ -141,7 +152,7 @@ public class GameController : MonoBehaviour
 
     public void ReadyForNextHole()
     {
-        holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
+        HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
 
@@ -153,10 +164,10 @@ public class GameController : MonoBehaviour
         CancelInvoke(nameof(DecreaseBonusScore));
         if(rightHole)
         {
-            holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+            HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
             RecalculateScore();
 
-            if(currentHoleIndex < holes.Count - 1)
+            if(currentHoleIndex < HoleController.instance.holes.Count - 1)
             {
                 NextHole();
             }
@@ -183,34 +194,19 @@ public class GameController : MonoBehaviour
                 bonusText.enabled = false;
                 bonusText2.enabled = false;
 
+                leftLifterVFX.Stop();
+                rightLifterVFX.Stop();
+
+                CameraFollow2.instance.isGameActive = false;
+
                 RecalculateBestScore();
 
-                holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+                HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
             }
             UpdateUI();
         }
 
         metalBarController.MoveBarToBottomPositionFunction();
-    }
-
-    [ContextMenu("Asign Hole Indicators")]
-    void AsignHoleIndicators()
-    {
-        foreach(GameObject g in holeIndicatorList)
-        {
-            DestroyImmediate(g);
-        }
-
-        holeIndicatorList.Clear();
-
-        for(int i = 0; i < holes.Count; i++)
-        {
-            GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, holes[i].transform.position, Quaternion.identity);
-            holeIndicatorList.Add(holeIndicatorInstantiated);
-
-            holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i + 1);
-        }
-
     }
 
 }
