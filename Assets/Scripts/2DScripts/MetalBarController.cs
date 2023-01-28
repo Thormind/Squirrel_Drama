@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MetalBarController : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class MetalBarController : MonoBehaviour
 
     private Vector2 movementOffsetLeft = new Vector2();
     private Vector2 movementOffsetRight = new Vector2();
+    private float leftUpInputValue;
+    private float leftDownInputValue;
+    private float rightUpInputValue;
+    private float rightDownInputValue;
+
     public float maxDifference = 1f;
 
     public float maxHeight;
@@ -22,6 +28,7 @@ public class MetalBarController : MonoBehaviour
     private bool inputEnabled = false;
 
     public float startPositionVerticalOffset = 1f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,25 +45,21 @@ public class MetalBarController : MonoBehaviour
             movementOffsetLeft = Vector3.zero;
             movementOffsetRight = Vector3.zero;
 
-
-            if(Input.GetKey(KeyCode.W))
+            if (leftUpInputValue != 0)
             {
-                movementOffsetLeft += Time.fixedDeltaTime * movementSpeed * Vector2.up;
+                movementOffsetLeft += leftUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
             }
-
-            if (Input.GetKey(KeyCode.I))
+            if (leftDownInputValue != 0)
             {
-                movementOffsetRight += Time.fixedDeltaTime * movementSpeed * Vector2.up;
+                movementOffsetLeft += leftDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
             }
-
-            if (Input.GetKey(KeyCode.S))
+            if (rightUpInputValue != 0)
             {
-                movementOffsetLeft -= Time.fixedDeltaTime * movementSpeed * Vector2.up;
+                movementOffsetRight += rightUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
             }
-
-            if (Input.GetKey(KeyCode.K))
+            if (rightDownInputValue != 0)
             {
-                movementOffsetRight -= Time.fixedDeltaTime * movementSpeed * Vector2.up;
+                movementOffsetRight += rightDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
             }
 
             if (Mathf.Abs(leftLifter.position.y - (rightLifter.position.y + movementOffsetRight.y)) <= maxDifference)
@@ -133,4 +136,25 @@ public class MetalBarController : MonoBehaviour
         inputEnabled = false;
         StartCoroutine(MoveBarToBottomPosition());
     }
+
+    private void OnLeftEndUp(InputValue leftUpValue)
+    {
+        leftUpInputValue = leftUpValue.Get<float>();
+    }
+
+    private void OnLeftEndDown(InputValue leftDownValue)
+    {
+        leftDownInputValue = leftDownValue.Get<float>();
+    }
+
+    private void OnRightEndUp(InputValue rightUpValue)
+    {
+        rightUpInputValue = rightUpValue.Get<float>();
+    }
+
+    private void OnRightEndDown(InputValue rightDownValue)
+    {
+        rightDownInputValue = rightDownValue.Get<float>();
+    }
+
 }

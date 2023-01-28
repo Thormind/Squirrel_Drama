@@ -7,39 +7,39 @@
             "actions": [
                 {
                     "name": "LeftEndUp",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d606d0fd-aa2d-41c4-85c1-939468f9ca72",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "LeftEndDown",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "2ddb3627-c409-48dc-bf37-5e34a94a2e27",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RightEndUp",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "5833d92c-5246-4301-877e-682a96c75e7c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RightEndDown",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "6783cd9f-b744-4f42-933e-1850178c4d7d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
