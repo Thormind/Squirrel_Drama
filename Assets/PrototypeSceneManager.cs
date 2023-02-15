@@ -10,6 +10,7 @@ public class PrototypeSceneManager : MonoBehaviour
 
     public TMP_Dropdown prototypeDropdown;
     public GameObject loadingPanel;
+    public Button exitButton;
 
     public Scene currentScene;
 
@@ -18,6 +19,7 @@ public class PrototypeSceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        exitButton.onClick.AddListener(() => Application.Quit());
         prototypeDropdown.onValueChanged.AddListener(delegate { HandlePrototypeInputData(prototypeDropdown.value); });
 
         prototypeDropdown.value = 0;
