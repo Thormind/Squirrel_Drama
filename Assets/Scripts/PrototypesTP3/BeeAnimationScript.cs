@@ -14,12 +14,14 @@ public class BeeAnimationScript : MonoBehaviour
 
     private Vector3 position;
 
-    public float ySpeed = 0.75f;
+    public float yMin = 0.0f;
+    public float yMax = 10.0f;
 
-    public float yMin = -0.1f;
-    public float yMax = 0.1f;
-
-    public float yDirection = 1f;
+    private float ySpeed = 0.6f;
+    private int yDirection = 1;
+    private float timeSinceLastChange = 0.0f;
+    private float minChangeTime = 0.5f;
+    private float maxChangeTime = 1.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,7 @@ public class BeeAnimationScript : MonoBehaviour
         animator = GetComponent<Animator>();
 
         animationSpeedSlider.onValueChanged.AddListener(delegate { HandleSpeedAnimation(animationSpeedSlider.value); });
-        animationSpeedSlider.value = 100;
+        animationSpeedSlider.value = 35;
         HandleSpeedAnimation(animationSpeedSlider.value);
 
         yMin += transform.position.y;
@@ -36,13 +38,28 @@ public class BeeAnimationScript : MonoBehaviour
 
     void Update()
     {
-        position = transform.position;
-        position += new Vector3(position.x, ySpeed * yDirection * Time.deltaTime, 0f);
+        CalculateBeeOscillation();
+    }
+
+    private void CalculateBeeOscillation()
+    {
+        // Add some randomness to the bee's movement
+        timeSinceLastChange -= Time.deltaTime;
+        if (timeSinceLastChange <= 0.0f)
+        {
+            ySpeed = Random.Range(0.5f, 0.85f);
+            yDirection = (Random.value < 0.5f) ? -1 : 1;
+            timeSinceLastChange = Random.Range(minChangeTime, maxChangeTime);
+        }
+
+        Vector3 position = transform.position;
+        position += new Vector3(0f, ySpeed * yDirection * Time.deltaTime, 0f);
 
         position.y = Mathf.Clamp(position.y, yMin, yMax);
 
         transform.position = position;
 
+        // Reverse direction when the bee hits the top or bottom of its oscillation
         if (transform.position.y >= yMax || transform.position.y <= yMin)
         {
             yDirection *= -1;

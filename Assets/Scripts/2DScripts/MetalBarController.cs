@@ -9,6 +9,7 @@ public class MetalBarController : MonoBehaviour
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
+    public Ball ballRef;
 
     private Vector3 startPosition;
 
@@ -124,6 +125,43 @@ public class MetalBarController : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator ResetStartPosition()
+    {
+        while (leftLifter.position.y < startPosition.y + startPositionVerticalOffset)
+        {
+            leftLifter.MovePosition(leftLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
+            rightLifter.MovePosition(rightLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
+
+            yield return new WaitForEndOfFrame();
+        }
+        inputEnabled = true;
+
+        yield return null;
+    }
+
+    IEnumerator ResetBottomPosition()
+    {
+        while (leftLifter.position.y > startPosition.y || rightLifter.position.y > startPosition.y)
+        {
+            if (leftLifter.position.y > startPosition.y)
+            {
+                leftLifter.MovePosition(leftLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
+            }
+            if (rightLifter.position.y > startPosition.y)
+            {
+                rightLifter.MovePosition(rightLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        ballRef.ResetBallPosition();
+
+        StartCoroutine(ResetStartPosition());
+
+        yield return null;
+    }
+
     [ContextMenu("Move To Start Position")]
     public void MoveBarToStartPositionFunction()
     {
@@ -135,6 +173,19 @@ public class MetalBarController : MonoBehaviour
     {
         inputEnabled = false;
         StartCoroutine(MoveBarToBottomPosition());
+    }
+
+    [ContextMenu("Reset Start Position")]
+    public void ResetStartPositionFunction()
+    {
+        StartCoroutine(ResetStartPosition());
+    }
+
+    [ContextMenu("Reset Bottom Position")]
+    public void ResetBottomPositionFunction()
+    {
+        inputEnabled = false;
+        StartCoroutine(ResetBottomPosition());
     }
 
     private void OnLeftEndUp(InputValue leftUpValue)

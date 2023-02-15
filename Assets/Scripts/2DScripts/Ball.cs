@@ -77,10 +77,4 @@ public class Ball : MonoBehaviour
 
         ballRigidbody.gravityScale = 4.57f;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

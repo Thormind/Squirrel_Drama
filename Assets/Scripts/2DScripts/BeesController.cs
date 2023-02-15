@@ -52,11 +52,16 @@ public class BeesController : MonoBehaviour
     {
         RemoveBees();
 
+        maxBeesYDistance = ((Mathf.Abs(beesYMin - beesYMax)) / beesQuantity) + 0.2f;
+
         float currentY = beesYMin;
 
         for (int i = 1; i <= beesQuantity; i++)
         {
             float randomX = Random.Range(beesXMin, beesXMax);
+            float randomY = Random.Range(minBeesYDistance, maxBeesYDistance);
+            currentY += randomY;
+
             Vector3 spawnPosition = new Vector3(randomX, currentY, 0);
 
             GameObject beeInstantiated = Instantiate(beePrefab, spawnPosition, Quaternion.identity);
@@ -65,9 +70,6 @@ public class BeesController : MonoBehaviour
             beeInstantiated.transform.parent = beesParent.transform;
 
             _spawnedBeesPositions.Add(spawnPosition);
-
-            float randomY = Random.Range(minBeesYDistance, maxBeesYDistance);
-            currentY += randomY;
         }
     }
 

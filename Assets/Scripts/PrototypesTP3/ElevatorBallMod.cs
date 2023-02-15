@@ -43,6 +43,8 @@ public class ElevatorBallMod : MonoBehaviour
     public TMP_Text ballGravityScaleTxt;
     public Slider ballGravityScaleSlider;
 
+    public Button resetButton;
+
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +66,8 @@ public class ElevatorBallMod : MonoBehaviour
         elevatorGravityScaleSlider.value = elevatorRB.gravityScale;
         */
 
+        resetButton.onClick.AddListener(() => HandleResetButton());
+
         elevatorSpeedSlider.onValueChanged.AddListener(delegate { HandleElevatorSpeedInputData(elevatorSpeedSlider.value); });
         elevatorControllerRef.movementSpeed = elevatorSpeed;
         elevatorSpeedSlider.value = elevatorControllerRef.movementSpeed;
@@ -83,7 +87,7 @@ public class ElevatorBallMod : MonoBehaviour
         ballAngularSlider.value = ballRB.angularDrag;
         ballGravityScaleSlider.value = ballRB.gravityScale;
 
-        elevatorControllerRef.MoveBarToStartPositionFunction();
+        elevatorControllerRef.ResetStartPositionFunction();
 
     }
 
@@ -115,6 +119,11 @@ public class ElevatorBallMod : MonoBehaviour
     {
         ballRB.gravityScale = gravityScale;
         ballGravityScaleTxt.text = gravityScale.ToString();
+    }
+
+    public void HandleResetButton()
+    {
+        elevatorControllerRef.ResetBottomPositionFunction();
     }
 
     /*
