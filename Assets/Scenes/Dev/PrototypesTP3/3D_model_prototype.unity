@@ -337,8 +337,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabsRef:
   - {fileID: 919132149155446097, guid: 1669d54868e8c6d42a5488c96cb6162f, type: 3}
-  - {fileID: 4385080170328260021, guid: ff62b58c5a9ea164fa8ddf8038e10cd1, type: 3}
-  - {fileID: 7405846476849542632, guid: c6308cb7062fac34e8e50600086b12a1, type: 3}
+  - {fileID: 7813731960610106106, guid: 2ec13c6f6b32a0c4eba5981d198ba9e0, type: 3}
+  - {fileID: 2941025020634258147, guid: 60d9ffa4640ed414094e2818fb503622, type: 3}
   gameObjectVizualizer: {fileID: 756285943}
   previousButton: {fileID: 331889959}
   nextButton: {fileID: 2061004242}
