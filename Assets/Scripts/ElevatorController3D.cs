@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElevatorController : MonoBehaviour
+public class ElevatorController3D : MonoBehaviour
 {
-    public static ElevatorController instance;
+    public static ElevatorController3D instance;
 
     [SerializeField] public Transform leftEnd, rightEnd;
     [SerializeField] public Transform elevatorPosition;

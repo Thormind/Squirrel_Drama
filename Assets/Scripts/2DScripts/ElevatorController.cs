@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MetalBarController : MonoBehaviour
+public class ElevatorController : MonoBehaviour
 {
     public float movementSpeed = 1.75f;
 

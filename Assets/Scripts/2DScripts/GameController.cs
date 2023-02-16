@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController instance = null;
 
-    public MetalBarController metalBarController;
+    public ElevatorController elevatorControllerRef;
     public Ball ballRef;
 
     float score = 0;
@@ -148,7 +148,7 @@ public class GameController : MonoBehaviour
     {
         ResetGame();
 
-        metalBarController.MoveBarToStartPositionFunction();
+        elevatorControllerRef.MoveBarToStartPositionFunction();
     }
 
     public void ReadyForNextHole()
@@ -207,7 +207,7 @@ public class GameController : MonoBehaviour
             UpdateUI();
         }
 
-        metalBarController.MoveBarToBottomPositionFunction();
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
 }

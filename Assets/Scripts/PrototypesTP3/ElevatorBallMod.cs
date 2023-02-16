@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class ElevatorBallMod : MonoBehaviour
 {
-    public MetalBarController elevatorControllerRef;
+    public ElevatorController elevatorControllerRef;
 
     [SerializeField] private float elevatorSpeed = 1.75f;
     public TMP_Text elevatorSpeedTxt;
@@ -49,27 +50,16 @@ public class ElevatorBallMod : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*
-        elevatorMassSlider.onValueChanged.AddListener(delegate { HandleElevatorMassInputData(elevatorMassSlider.value); });
-        elevatorLinearSlider.onValueChanged.AddListener(delegate { HandleElevatorLinearInputData(elevatorLinearSlider.value); });
-        elevatorAngularSlider.onValueChanged.AddListener(delegate { HandleElevatorAngularInputData(elevatorAngularSlider.value); });
-        elevatorGravityScaleSlider.onValueChanged.AddListener(delegate { HandleElevatorGravityScaleInputData(elevatorGravityScaleSlider.value); });
 
-        elevatorRB.mass = elevatorMass;
-        elevatorRB.drag = elevatorLinear;
-        elevatorRB.angularDrag = elevatorAngular;
-        elevatorRB.gravityScale = elevatorGravityScale;
+        // Get the current event system
+        EventSystem currentEventSystem = EventSystem.current;
 
-        elevatorMassSlider.value = elevatorRB.mass;
-        elevatorLinearSlider.value = elevatorRB.drag;
-        elevatorAngularSlider.value = elevatorRB.angularDrag;
-        elevatorGravityScaleSlider.value = elevatorRB.gravityScale;
-        */
+        // Disable gamepad input for UI navigation
+        currentEventSystem.sendNavigationEvents = false;
 
         resetButton.onClick.AddListener(() => HandleResetButton());
 
         elevatorSpeedSlider.onValueChanged.AddListener(delegate { HandleElevatorSpeedInputData(elevatorSpeedSlider.value); });
-        elevatorControllerRef.movementSpeed = elevatorSpeed;
         elevatorSpeedSlider.value = elevatorControllerRef.movementSpeed;
 
         ballMassSlider.onValueChanged.AddListener(delegate { HandleBallMassInputData(ballMassSlider.value); });
@@ -126,29 +116,4 @@ public class ElevatorBallMod : MonoBehaviour
         elevatorControllerRef.ResetBottomPositionFunction();
     }
 
-    /*
-    public void HandleElevatorMassInputData(float mass)
-    {
-        elevatorRB.mass = mass;
-        elevatorMassTxt.text = mass.ToString();
-    }
-
-    public void HandleElevatorLinearInputData(float linear)
-    {
-        elevatorRB.drag = linear;
-        elevatorLinearTxt.text = linear.ToString();
-    }
-
-    public void HandleElevatorAngularInputData(float angular)
-    {
-        elevatorRB.angularDrag = angular;
-        elevatorAngularTxt.text = angular.ToString();
-    }
-
-    public void HandleElevatorGravityScaleInputData(float gravityScale)
-    {
-        elevatorRB.gravityScale = gravityScale;
-        elevatorGravityScaleTxt.text = gravityScale.ToString();
-    }
-    */
 }

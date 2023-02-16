@@ -10,7 +10,7 @@ public class ColliderController : MonoBehaviour
         {
             // Perform specific action
             Debug.Log("Collision with object with tag 'Obstacles' detected!");
-            ElevatorController.instance.ResetElevator();
+            ElevatorController3D.instance.ResetElevator();
         }
     }
 }
