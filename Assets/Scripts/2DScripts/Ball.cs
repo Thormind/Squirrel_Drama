@@ -22,6 +22,7 @@ public class Ball : MonoBehaviour
         startBallScale = transform.localScale;
     }
 
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.transform.gameObject.tag == "Hole" || collision.transform.gameObject.tag == "Obstacles")

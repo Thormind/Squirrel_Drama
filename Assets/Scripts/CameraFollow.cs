@@ -9,8 +9,20 @@ public class CameraFollow : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y+5, transform.position.z);
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+
+        if ((target.position.x >= 25 || target.position.x <= -25) || 
+            (target.position.y >= 12 || target.position.y <= -12))
+        {
+            Vector3 desiredPosition = new Vector3(target.position.x, target.position.y, -40);
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
+        else
+        {
+            Vector3 desiredPosition = new Vector3(target.position.x, target.position.y, -25);
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
+
     }
 }
