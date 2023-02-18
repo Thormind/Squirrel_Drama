@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using TMPro;
 
 public class AudioUIController : MonoBehaviour
 {
+    public AudioMixer mixer;
 
     public TMP_Text MasterVolumeTxt;
     public Slider MasterVolumeSlider;
@@ -38,15 +40,18 @@ public class AudioUIController : MonoBehaviour
     public void HandleMasterVolumeInputData(float volume)
     {
         MasterVolumeTxt.text = volume.ToString();
+        mixer.SetFloat("masterVol", (volume - 10));
     }
 
     public void HandleMusicVolumeInputData(float volume)
     {
         MusicVolumeTxt.text = volume.ToString();
+        mixer.SetFloat("musicVol", (volume - 10));
     }
 
     public void HandleSFXVolumeInputData(float volume)
     {
         SFXVolumeTxt.text = volume.ToString();
+        mixer.SetFloat("sfxVol", (volume - 10));
     }
 }
