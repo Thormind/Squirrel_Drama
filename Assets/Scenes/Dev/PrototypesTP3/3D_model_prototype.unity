@@ -336,14 +336,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabsRef:
-  - {fileID: 919132149155446097, guid: 1669d54868e8c6d42a5488c96cb6162f, type: 3}
-  - {fileID: 7163050228602108475, guid: 6fd9c7a9e2cacbe4590bede69a8e9ad8, type: 3}
-  - {fileID: 919132149155446097, guid: 10ab05fd95c2efa4c8ce13cd7a6eddae, type: 3}
+  - {fileID: 919132149155446097, guid: c5afb3507792dc249b623968385fbcc6, type: 3}
+  - {fileID: 8397420850970003960, guid: d840a9cf3f08b5b448a0c7c24ec5ae76, type: 3}
   gameObjectVizualizer: {fileID: 756285943}
   previousButton: {fileID: 331889959}
   nextButton: {fileID: 2061004242}
   index: 0
   rotationSpeed: 10
+  enableAlbedo: 0
+  enableBumpMap: 0
+  enableMetallicSmoothness: 0
 --- !u!4 &756285945
 Transform:
   m_ObjectHideFlags: 0
