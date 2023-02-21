@@ -212,12 +212,9 @@ public class GlobalUIManager : MonoBehaviour
         switch (gameMode)
         {
             case 0:
-                ScenesManager.instance.LoadSceneAsync("story_game_scene", LoadGameCompletedCallback());
-                break;
-            case 1:
                 ScenesManager.instance.LoadSceneAsync("infinite_game_scene", LoadGameCompletedCallback());
                 break;
-            case 2:
+            case 1:
                 ScenesManager.instance.LoadSceneAsync("legacy_game_scene", LoadGameCompletedCallback());
                 break;
             default:
@@ -239,12 +236,9 @@ public class GlobalUIManager : MonoBehaviour
         switch (ScenesManager.instance.gameMode)
         {
             case 0:
-                ScenesManager.instance.UnloadSceneAsync("story_game_scene");
-                break;
-            case 1:
                 ScenesManager.instance.UnloadSceneAsync("infinite_game_scene");
                 break;
-            case 2:
+            case 1:
                 ScenesManager.instance.UnloadSceneAsync("legacy_game_scene");
                 break;
             default:

@@ -22,9 +22,8 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playStoryButton.onClick.AddListener(() => GlobalUIManager.instance.StartGame(0));
-        playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.StartGame(1));
-        playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.StartGame(2));
+        playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.StartGame(0));
+        playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.StartGame(1));
 
         settingsButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
         creditsButton.onClick.AddListener(() => GlobalUIManager.instance.SetCreditsMenu());

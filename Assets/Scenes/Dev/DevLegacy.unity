@@ -1268,7 +1268,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-561604
+  m_Name: pb_Mesh37030
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1465,7 +1465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f7a3a76269902a4ab11ab7aa031f622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  metalBarController: {fileID: 1615474967}
+  elevatorControllerRef: {fileID: 1615474967}
   ballRef: {fileID: 2022623845}
   numberOfBallsPerGame: 3
   timePerDecrement: 5
@@ -2427,6 +2427,7 @@ MonoBehaviour:
   movementSpeed: 1.75
   leftLifter: {fileID: 1448597599}
   rightLifter: {fileID: 1593424148}
+  ballRef: {fileID: 0}
   maxDifference: 1
   maxHeight: 0
   minHeight: 0
