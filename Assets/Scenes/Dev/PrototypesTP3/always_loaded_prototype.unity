@@ -705,7 +705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Animation
+  m_text: Animations
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
   m_sharedMaterial: {fileID: -757681918098489689, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Animation
+    - m_Text: Animations
       m_Image: {fileID: 0}
     - m_Text: 3D Models
       m_Image: {fileID: 0}
