@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 [System.Serializable]
 public enum MENU
@@ -35,6 +34,8 @@ public class GlobalUIManager : MonoBehaviour
 {
     public static GlobalUIManager instance;
 
+    [SerializeField] public EventSystem es;
+
     [SerializeField] private MenuPrefab[] prefabsRef;
     [SerializeField] private Dictionary<MENU, MenuPrefab> prefabsDictionary = new Dictionary<MENU, MenuPrefab>();
     [SerializeField] private Dictionary<MENU, GameObject> runtimeMenuRefs = new Dictionary<MENU, GameObject>();
@@ -62,6 +63,7 @@ public class GlobalUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         foreach (MenuPrefab prefab in prefabsRef)
         {
             prefabsDictionary.Add(prefab.menuType, prefab);
@@ -73,7 +75,8 @@ public class GlobalUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && gameIsActive)
+        
+        if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && gameIsActive && es.enabled)
         {
             if (gameIsPaused)
             {
@@ -84,6 +87,7 @@ public class GlobalUIManager : MonoBehaviour
                 PauseGame();
             }
         }
+        
     }
 
     private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
@@ -94,18 +98,18 @@ public class GlobalUIManager : MonoBehaviour
             GameObject menu = Instantiate(prefabsDictionary[desiredMenu].prefabRef);
             runtimeMenuRefs.Add(desiredMenu, menu);
             menu.transform.SetParent(gameObject.transform);
-            //menu.transform.localPosition = new Vector2(Screen.width, Screen.height);
+            menu.transform.localPosition = new Vector2(Screen.width, Screen.height);
         }
 
         foreach (var menu in runtimeMenuRefs)
         {
             if (menu.Key == desiredMenu)
             {
-                menu.Value.SetActive(true);
+                StartCoroutine(SetAnimation(menu.Key, menu.Value, 1));
             }
-            else
+            if (menu.Key == lastMenu)
             {
-                menu.Value.SetActive(false);
+                StartCoroutine(SetAnimation(menu.Key, menu.Value, 0));
             }
         }
 
@@ -115,6 +119,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetMenu(MENU desiredMenu)
     {
+        es.enabled = false;
 
         if (menuStack.Count > 0)
         {
@@ -132,8 +137,12 @@ public class GlobalUIManager : MonoBehaviour
         currentMenu = desiredMenu;
         SetMenuInternal(desiredMenu);
     }
+
+
     public void SetLastMenu()
     {
+        es.enabled = false;
+
         if (menuStackSize <= 1)
         {
             Debug.LogAssertion("Can't go back, no menu left.");
@@ -153,6 +162,35 @@ public class GlobalUIManager : MonoBehaviour
 
         currentMenu = menuStack.Peek();
         SetMenuInternal(menuStack.Peek());
+    }
+
+    public IEnumerator SetAnimation(MENU menuType, GameObject menuObject, int animationInOut)
+    {
+
+        if (menuType == MENU.MENU_CREDITS)
+        {
+            if (animationInOut == 1)
+            {
+                menuObject.SetActive(true);
+            }
+            else
+            {
+                menuObject.SetActive(false);
+            }
+        }
+
+        UIAnimation animation = menuObject.GetComponent<UIAnimation>();
+        animation.animationInOut = animationInOut;
+        animation.startPosition = new Vector2(0, Screen.height);  // Set the starting position for the animation
+        animation.endPosition = Vector2.zero;  // Set the ending position for the animation
+        animation.play();
+
+        //yield return new WaitForSecondsRealtime(0.01f);
+
+        yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
+
+        ClearMenusException();
+        es.enabled = true;
     }
 
     public void SetMainMenu()
@@ -192,19 +230,26 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        SetLastMenu();
+        SetMenu(MENU.MENU_HUD);
         gameIsPaused = false;
+        StartCoroutine(PauseResumeCallback());
     }
 
     public void PauseGame()
     {
         SetMenu(MENU.MENU_PAUSE);
         gameIsPaused = true;
+        StartCoroutine(PauseResumeCallback());
+    }
+
+    public IEnumerator PauseResumeCallback()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        gameIsActive = true;
     }
 
     public void StartGame(int gameMode)
     {
-        SetMenu(MENU.MENU_HUD);
         SetMenu(MENU.MENU_LOADING);
 
         ScenesManager.instance.gameMode = gameMode;
@@ -255,16 +300,45 @@ public class GlobalUIManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void ClearMenus()
+    {
+        foreach (var menu in runtimeMenuRefs)
+        {
+            Destroy(menu.Value);
+        }
+        runtimeMenuRefs.Clear();
+    }
+
+    public void ClearMenusException()
+    {
+        var keysToRemove = new List<MENU>();
+
+        foreach (var menu in runtimeMenuRefs)
+        {
+            //  && lastMenu != menu.Key
+            if (currentMenu != menu.Key)
+            {
+                Destroy(menu.Value);
+                keysToRemove.Add(menu.Key);
+            }
+        }
+        foreach (var key in keysToRemove)
+        {
+            runtimeMenuRefs.Remove(key);
+        }
+    }
+
     IEnumerator LoadGameCompletedCallback()
     {
         yield return null;
-        SetMenu(MENU.MENU_PAUSE);
+        ClearMenus();
         SetMenu(MENU.MENU_HUD);
     }
 
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
+        ClearMenus();
         SetMenu(MENU.MENU_MAIN);
     }
 }

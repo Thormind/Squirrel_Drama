@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 4412724153958774524}
   - component: {fileID: 4412724153958774525}
   - component: {fileID: 9106274835136720559}
+  - component: {fileID: 9081089260170094497}
   m_Layer: 5
   m_Name: credits_menu
   m_TagString: Untagged
@@ -266,6 +267,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb265d6ec4620e04585b4d412f8b377f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9081089260170094497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412724153958774527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36caa646ccb49f249b3e840b8f840817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationDuration: 0
+  animationInOut: 0
+  animationType: 3
+  startPosition: {x: 0, y: 0}
+  endPosition: {x: 0, y: 0}
+  startScale: {x: 0, y: 0, z: 0}
+  endScale: {x: 0, y: 0, z: 0}
+  easedProgress: 0
 --- !u!1 &4412724155961077787
 GameObject:
   m_ObjectHideFlags: 0

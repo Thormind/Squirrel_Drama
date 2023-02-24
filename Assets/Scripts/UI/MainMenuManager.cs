@@ -17,7 +17,13 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button creditsButton;
     [SerializeField] private Button playAnimationButton;
+
     [SerializeField] private Button quitButton;
+    [SerializeField] private Button quitConfirmButton;
+    [SerializeField] private Button quitCancelButton;
+
+    public GameObject mainPanel;
+    public GameObject quitPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +35,21 @@ public class MainMenuManager : MonoBehaviour
         creditsButton.onClick.AddListener(() => GlobalUIManager.instance.SetCreditsMenu());
         //playAnimationButton.onClick.AddListener(() => GlobalUIManager.instance.SetAnimationMenu());
 
-        quitButton.onClick.AddListener(() => GlobalUIManager.instance.QuitApplication());
+        quitButton.onClick.AddListener(() => HandleQuitButton());
+        quitConfirmButton.onClick.AddListener(() => GlobalUIManager.instance.QuitApplication());
+        quitCancelButton.onClick.AddListener(() => HandleCancelButton());
+    }
+
+    private void HandleQuitButton()
+    {
+        mainPanel.SetActive(false);
+        quitPanel.SetActive(true);
+    }
+
+    private void HandleCancelButton()
+    {
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
     }
 
 }
