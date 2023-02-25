@@ -65,12 +65,12 @@ public class PauseMenuManager : MonoBehaviour
 
     private void HandleReplayButton()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             //InfiniteGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             LegacyGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();

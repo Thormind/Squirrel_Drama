@@ -12,11 +12,11 @@ public class PreGameMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             SetInfinitePregame();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             SetLegacyPregame();
         }
@@ -41,12 +41,12 @@ public class PreGameMenuManager : MonoBehaviour
 
     private void OnConfirm()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             GlobalUIManager.instance.SetHUDMenu();
             //InfiniteGameController.instance.StartGame();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             GlobalUIManager.instance.SetHUDMenu();
             LegacyGameController.instance.StartGame();

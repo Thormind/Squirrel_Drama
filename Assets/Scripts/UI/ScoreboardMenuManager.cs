@@ -46,12 +46,12 @@ public class ScoreboardMenuManager : MonoBehaviour
 
     private void HandleReplayButton()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             //InfiniteHoleController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             LegacyGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
@@ -60,12 +60,12 @@ public class ScoreboardMenuManager : MonoBehaviour
 
     public void SetFinalScore()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             //ScoreText.text = InfiniteGameController.instance.score.ToString();
             //BestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             ScoreText.text = LegacyGameController.instance.score.ToString();
             BestScoreText.text = LegacyGameController.instance.bestScore.ToString();

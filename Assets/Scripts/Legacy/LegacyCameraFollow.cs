@@ -13,7 +13,8 @@ public class LegacyCameraFollow : MonoBehaviour
     private float unfocusedFOV = 30f;
     private float focusedFOV = 40f;
 
-    public float smoothSpeed = 0.2f;
+    public float introSpeed = 2.0f;
+    public float smoothSpeed = 1.2f;
     public float cameraVerticalOffset = 0.125f;
 
     public bool isFocused = false;
@@ -32,7 +33,7 @@ public class LegacyCameraFollow : MonoBehaviour
 
     void Start()
     {
-        startingRotation = transform.rotation;
+        startingRotation = Quaternion.Euler(0, 0, 0);
     }
 
     void FixedUpdate()

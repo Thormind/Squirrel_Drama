@@ -31,11 +31,11 @@ public class HUDMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (ScenesManager.instance.gameMode == 0)
+        if (ScenesManager.instance.gameMode == 1)
         {
             SetInfiniteHUD();
         }
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == 2)
         {
             SetLegacyHUD();
         }

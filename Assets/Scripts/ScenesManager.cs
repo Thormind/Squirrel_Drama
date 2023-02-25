@@ -23,6 +23,13 @@ public class ScenesManager : MonoBehaviour
             Destroy(this);
         }
     }
+
+	private void Start()
+	{
+		gameMode = 0;
+	}
+
+
 	private IEnumerator LoadSceneAsyncInternal(string sceneName, IEnumerator sceneLoadedCallback)
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
