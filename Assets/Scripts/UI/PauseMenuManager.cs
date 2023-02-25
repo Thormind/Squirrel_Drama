@@ -35,6 +35,15 @@ public class PauseMenuManager : MonoBehaviour
         cancelQuitButton.onClick.AddListener(() => HandleCancelButton());
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            GlobalUIManager.instance.OnPauseResume();
+        }
+    }
+
     private void HandleRetryButton()
     {
         mainPanel.SetActive(false);

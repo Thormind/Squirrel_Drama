@@ -13,6 +13,7 @@ public enum MENU
     MENU_LOADING,
     MENU_SCOREBOARD,
     MENU_CREDITS,
+    MENU_PREGAME,
     NONE
 };
 
@@ -72,11 +73,10 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_MAIN);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPauseResume()
     {
-        
-        if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && gameIsActive && es.enabled)
+        //(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && 
+        if (gameIsActive && es.enabled)
         {
             if (gameIsPaused)
             {
@@ -87,7 +87,6 @@ public class GlobalUIManager : MonoBehaviour
                 PauseGame();
             }
         }
-        
     }
 
     private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
@@ -228,9 +227,15 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_CREDITS);
     }
 
+    public void SetPreGameMenu()
+    {
+        SetMenu(MENU.MENU_PREGAME);
+    }
+
     public void ResumeGame()
     {
         SetMenu(MENU.MENU_HUD);
+        Time.timeScale = 1f;
         gameIsPaused = false;
         StartCoroutine(PauseResumeCallback());
     }
@@ -238,6 +243,7 @@ public class GlobalUIManager : MonoBehaviour
     public void PauseGame()
     {
         SetMenu(MENU.MENU_PAUSE);
+        //Time.timeScale = 0f;
         gameIsPaused = true;
         StartCoroutine(PauseResumeCallback());
     }
@@ -248,7 +254,7 @@ public class GlobalUIManager : MonoBehaviour
         gameIsActive = true;
     }
 
-    public void StartGame(int gameMode)
+    public void LoadGame(int gameMode)
     {
         SetMenu(MENU.MENU_LOADING);
 
@@ -268,6 +274,7 @@ public class GlobalUIManager : MonoBehaviour
         }
 
         ScenesManager.instance.UnloadSceneAsync("ui_world_scene");
+        Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = true;
     }
@@ -291,6 +298,7 @@ public class GlobalUIManager : MonoBehaviour
                 break;
         }
 
+        Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = false;
     }
@@ -298,6 +306,12 @@ public class GlobalUIManager : MonoBehaviour
     public void QuitApplication()
     {
         Application.Quit();
+    }
+
+    public void UpdateHUD()
+    {
+        GameObject HUDmenu = runtimeMenuRefs[MENU.MENU_HUD];
+        //HUDmenu.GetComponent<HUDMenuManager>().UpdateHUD();
     }
 
     public void ClearMenus()
@@ -332,7 +346,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         yield return null;
         ClearMenus();
-        SetMenu(MENU.MENU_HUD);
+        SetMenu(MENU.MENU_PREGAME);
     }
 
     IEnumerator UnloadGameCompletedCallback()

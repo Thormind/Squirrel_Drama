@@ -37,8 +37,8 @@ public class GameController : MonoBehaviour
     public TMP_Text gameOverText;
     public GameObject StartButton;
 
-    public VisualEffect leftLifterVFX;
-    public VisualEffect rightLifterVFX;
+    //public VisualEffect leftLifterVFX;
+    //public VisualEffect rightLifterVFX;
 
     private void Awake()
     {
@@ -55,8 +55,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        leftLifterVFX.Stop();
-        rightLifterVFX.Stop();
+        //leftLifterVFX.Stop();
+        //rightLifterVFX.Stop();
     }
     private void UpdateUI()
     {
@@ -133,8 +133,8 @@ public class GameController : MonoBehaviour
         ballText.enabled = true;
         ballText2.enabled = true;
 
-        leftLifterVFX.Play();
-        rightLifterVFX.Play();
+        //leftLifterVFX.Play();
+        //rightLifterVFX.Play();
 
         CameraFollow2.instance.isGameActive = true;
 
@@ -195,8 +195,8 @@ public class GameController : MonoBehaviour
                 bonusText.enabled = false;
                 bonusText2.enabled = false;
 
-                leftLifterVFX.Stop();
-                rightLifterVFX.Stop();
+                //leftLifterVFX.Stop();
+                //rightLifterVFX.Stop();
 
                 CameraFollow2.instance.isGameActive = false;
 

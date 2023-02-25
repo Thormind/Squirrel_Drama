@@ -1,5 +1,5 @@
 {
-    "name": "InputManager",
+    "name": "ElevatorInput",
     "maps": [
         {
             "name": "ElevatorMovement",
