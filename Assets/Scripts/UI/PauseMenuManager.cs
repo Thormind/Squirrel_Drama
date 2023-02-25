@@ -27,7 +27,7 @@ public class PauseMenuManager : MonoBehaviour
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
         replayButton.onClick.AddListener(() => HandleRetryButton());
-        //confirmRetryButton.onClick.AddListener(() => GlobalUIManager.instance.ReplayGame());
+        confirmRetryButton.onClick.AddListener(() => HandleReplayButton());
         cancelRetryButton.onClick.AddListener(() => HandleCancelButton());
 
         homeButton.onClick.AddListener(() => HandleQuitButton());
@@ -61,5 +61,19 @@ public class PauseMenuManager : MonoBehaviour
         retryPanel.SetActive(false);
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
+    }
+
+    private void HandleReplayButton()
+    {
+        if (ScenesManager.instance.gameMode == 0)
+        {
+            //InfiniteGameController.instance.ResetGame();
+            GlobalUIManager.instance.ReplayGame();
+        }
+        if (ScenesManager.instance.gameMode == 1)
+        {
+            LegacyGameController.instance.ResetGame();
+            GlobalUIManager.instance.ReplayGame();
+        }
     }
 }

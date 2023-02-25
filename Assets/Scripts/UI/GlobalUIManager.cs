@@ -248,6 +248,14 @@ public class GlobalUIManager : MonoBehaviour
         StartCoroutine(PauseResumeCallback());
     }
 
+    public void ReplayGame()
+    {
+        SetMenu(MENU.MENU_PREGAME);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+        StartCoroutine(PauseResumeCallback());
+    }
+
     public IEnumerator PauseResumeCallback()
     {
         yield return new WaitForSecondsRealtime(1f);

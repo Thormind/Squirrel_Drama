@@ -773,6 +773,8 @@ MonoBehaviour:
   homeButton: {fileID: 7531261795086852093}
   confirmHomeButton: {fileID: 6698961009771761576}
   cancelHomeButton: {fileID: 7653861342970642849}
+  ScoreText: {fileID: 500254779379403482}
+  BestScoreText: {fileID: 3034292837404823881}
   mainPanel: {fileID: 6204765283064175678}
   quitPanel: {fileID: 4151989224893340763}
 --- !u!114 &7201561076618177647

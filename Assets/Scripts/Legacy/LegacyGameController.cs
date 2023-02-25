@@ -11,11 +11,11 @@ public class LegacyGameController : MonoBehaviour
     public LegacyElevatorController elevatorControllerRef;
     public LegacyBall ballRef;
 
-    float score = 0;
-    float bonusScore = 1000;
-    float bestScore = 0;
+    public float score = 0;
+    public float bonusScore = 1000;
+    public float bestScore = 0;
 
-    int currentBallNumber = 3;
+    public int currentBallNumber = 3;
     public int numberOfBallsPerGame = 3;
 
     int currentHoleIndex = 0;
@@ -51,9 +51,8 @@ public class LegacyGameController : MonoBehaviour
     
     public void UpdateHUD()
     {
-        HUDMenuManager.instance.UpdateLegacyHUD(score, bonusScore, bestScore, currentBallNumber);
+        HUDMenuManager.instance.UpdateLegacyHUD();
     }
-  
 
     private void RecalculateScore()
     {
@@ -101,7 +100,7 @@ public class LegacyGameController : MonoBehaviour
         UpdateHUD();
     }
 
-    void ResetGame()
+    public void ResetGame()
     {
         currentBallNumber = numberOfBallsPerGame;
         score = 0;
@@ -109,12 +108,17 @@ public class LegacyGameController : MonoBehaviour
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
 
         gameCompletedState = false;
-        gameOverState = false;
+        gameOverState = true;
 
         //leftLifterVFX.Play();
         //rightLifterVFX.Play();
 
-        LegacyHoleController.instance.SpawnHoles();
+        LegacyHoleController.instance.RemoveHoles();
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+
+        CancelInvoke(nameof(DecreaseBonusScore));
+        RecalculateBestScore();
 
         UpdateHUD();
     }
@@ -122,7 +126,10 @@ public class LegacyGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        ResetGame();
+        //ResetGame();
+        gameOverState = false;
+
+        LegacyHoleController.instance.SpawnHoles();
 
         elevatorControllerRef.MoveBarToStartPositionFunction();
     }
@@ -166,6 +173,8 @@ public class LegacyGameController : MonoBehaviour
                 RecalculateBestScore();
 
                 LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+
+                GlobalUIManager.instance.SetScoreBoardMenu();
             }
             UpdateHUD();
         }

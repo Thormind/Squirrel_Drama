@@ -65,12 +65,12 @@ public class HUDMenuManager : MonoBehaviour
         LegacyGameController.instance.UpdateHUD();
     }
 
-    public void UpdateLegacyHUD(float score, float bonusScore, float bestScore, float life)
+    public void UpdateLegacyHUD()
     {
-        legacyScoreText.text = score.ToString();
-        legacyBonusText.text = bonusScore.ToString();
-        legacyBestScoreText.text = bestScore.ToString();
-        legacyBallLifeText.text = life.ToString();
+        legacyScoreText.text = LegacyGameController.instance.score.ToString();
+        legacyBonusText.text = LegacyGameController.instance.bonusScore.ToString();
+        legacyBestScoreText.text = LegacyGameController.instance.bestScore.ToString();
+        legacyBallLifeText.text = LegacyGameController.instance.currentBallNumber.ToString();
     }
 
     public void UpdateInfiniteHUD(float score, float bonusScore, float bestScore, float life, float level)
