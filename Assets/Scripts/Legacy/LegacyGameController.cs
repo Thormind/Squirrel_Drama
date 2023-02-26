@@ -10,6 +10,7 @@ public class LegacyGameController : MonoBehaviour
 
     public LegacyElevatorController elevatorControllerRef;
     public LegacyBall ballRef;
+    public GameObject LegacyMachineLight;
 
     public float score = 0;
     public float bonusScore = 1000;
@@ -27,9 +28,6 @@ public class LegacyGameController : MonoBehaviour
     public bool gameCompletedState = false;
     public bool gameOverState = false;
 
-    //public VisualEffect leftLifterVFX;
-    //public VisualEffect rightLifterVFX;
-
     private void Awake()
     {
         if (instance == null)
@@ -44,8 +42,7 @@ public class LegacyGameController : MonoBehaviour
 
     void Start()
     {
-        //leftLifterVFX.Stop();
-        //rightLifterVFX.Stop();
+
     }
 
     
@@ -83,6 +80,11 @@ public class LegacyGameController : MonoBehaviour
         }
     }
 
+    public Vector3 GetBallPosition()
+    {
+        return ballRef.gameObject.transform.position;
+    }
+
     public GameObject GetCurrentHole()
     {
         return LegacyHoleController.instance.holes[currentHoleIndex];
@@ -110,8 +112,9 @@ public class LegacyGameController : MonoBehaviour
         gameCompletedState = false;
         gameOverState = true;
 
-        //leftLifterVFX.Play();
-        //rightLifterVFX.Play();
+        LegacyMachineLight.SetActive(false);
+
+        CameraManager.instance.SetUnfocus();
 
         LegacyHoleController.instance.RemoveHoles();
 
@@ -127,9 +130,14 @@ public class LegacyGameController : MonoBehaviour
     public void StartGame()
     {
         //ResetGame();
+
         gameOverState = false;
 
         LegacyHoleController.instance.SpawnHoles();
+
+        CameraManager.instance.SetFocus();
+
+        LegacyMachineLight.SetActive(true);
 
         elevatorControllerRef.MoveBarToStartPositionFunction();
     }
@@ -166,9 +174,6 @@ public class LegacyGameController : MonoBehaviour
             if (currentBallNumber <= 0)
             {
                 gameOverState = true;
-
-                //leftLifterVFX.Stop();
-                //rightLifterVFX.Stop();
 
                 RecalculateBestScore();
 

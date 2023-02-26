@@ -44,7 +44,7 @@ public class PreGameMenuManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == 1)
         {
             GlobalUIManager.instance.SetHUDMenu();
-            //InfiniteGameController.instance.StartGame();
+            InfiniteGameController.instance.StartGame();
         }
         if (ScenesManager.instance.gameMode == 2)
         {

@@ -281,7 +281,7 @@ public class GlobalUIManager : MonoBehaviour
                 break;
         }
 
-        ScenesManager.instance.UnloadSceneAsync("ui_world_scene");
+        //ScenesManager.instance.UnloadSceneAsync("world_scene");
         Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = true;
@@ -291,20 +291,22 @@ public class GlobalUIManager : MonoBehaviour
     {
         SetMenu(MENU.MENU_LOADING);
 
-        ScenesManager.instance.LoadSceneAsync("ui_world_scene", UnloadGameCompletedCallback());
+        //ScenesManager.instance.LoadSceneAsync("world_scene", UnloadGameCompletedCallback());
 
         switch (ScenesManager.instance.gameMode)
         {
             case 1:
-                ScenesManager.instance.UnloadSceneAsync("infinite_game_scene");
+                ScenesManager.instance.UnloadSceneAsync("infinite_game_scene", UnloadGameCompletedCallback());
                 break;
             case 2:
-                ScenesManager.instance.UnloadSceneAsync("legacy_game_scene");
+                ScenesManager.instance.UnloadSceneAsync("legacy_game_scene", UnloadGameCompletedCallback());
                 break;
             default:
                 Debug.LogAssertion("Unknown Game Type!");
                 break;
         }
+
+        ScenesManager.instance.gameMode = 0;
 
         Time.timeScale = 1f;
         gameIsPaused = false;
@@ -314,12 +316,6 @@ public class GlobalUIManager : MonoBehaviour
     public void QuitApplication()
     {
         Application.Quit();
-    }
-
-    public void UpdateHUD()
-    {
-        GameObject HUDmenu = runtimeMenuRefs[MENU.MENU_HUD];
-        //HUDmenu.GetComponent<HUDMenuManager>().UpdateHUD();
     }
 
     public void ClearMenus()
@@ -354,6 +350,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         yield return null;
         ClearMenus();
+        CameraManager.instance.ModeTransition();
         SetMenu(MENU.MENU_PREGAME);
     }
 
@@ -361,6 +358,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         yield return null;
         ClearMenus();
+        CameraManager.instance.ModeTransition();
         SetMenu(MENU.MENU_MAIN);
     }
 }

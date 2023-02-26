@@ -171,7 +171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1536668784079336616
 RectTransform:
   m_ObjectHideFlags: 0
@@ -609,6 +609,11 @@ MonoBehaviour:
   legacyBonusText: {fileID: 327162355094083746}
   legacyBestScoreText: {fileID: 6042410091162263872}
   legacyBallLifeText: {fileID: 5109693100923524276}
+  infiniteScoreText: {fileID: 1536668785054052338}
+  infiniteBonusText: {fileID: 1536668784907186207}
+  infiniteBestScoreText: {fileID: 1536668784592198752}
+  infiniteLevelText: {fileID: 1536668785370808006}
+  infiniteFruitLifeText: {fileID: 1536668785485305554}
 --- !u!114 &8988028778398786476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3241,7 +3246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4554688542595901625
 RectTransform:
   m_ObjectHideFlags: 0

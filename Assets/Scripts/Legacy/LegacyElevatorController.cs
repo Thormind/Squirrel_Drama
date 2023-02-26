@@ -10,6 +10,7 @@ public class LegacyElevatorController : MonoBehaviour
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
     public LegacyBall ballRef;
+    public Transform ballTransformRef;
 
     private Vector3 startPosition;
 
@@ -25,7 +26,6 @@ public class LegacyElevatorController : MonoBehaviour
     public float maxHeight;
     public float minHeight;
 
-
     private bool inputEnabled = false;
 
     public float startPositionVerticalOffset = 1f;
@@ -35,6 +35,8 @@ public class LegacyElevatorController : MonoBehaviour
 
     public Transform leftShaftTransform;
     public Transform rightShaftTransform;
+
+    public Material material;
 
 
     // Start is called before the first frame update
@@ -79,6 +81,10 @@ public class LegacyElevatorController : MonoBehaviour
                 rightRotationAmount = Mathf.Lerp(0, -20f, rightDownInputValue);
             }
 
+            float ballHeight = Mathf.Clamp(ballTransformRef.position.y, minHeight, maxHeight);
+            float y_offset = Mathf.Lerp(-0.1f, 0.1f, (ballHeight - minHeight) / (maxHeight - minHeight));
+            material.SetTextureOffset("_MainTex", new Vector2(0, y_offset));
+
             leftShaftTransform.localRotation = Quaternion.Euler(leftShaftInitialRotation.x + leftRotationAmount, leftShaftInitialRotation.y, 0f);
             rightShaftTransform.localRotation = Quaternion.Euler(rightShaftInitialRotation.x + rightRotationAmount, rightShaftInitialRotation.y, 0f);
 
@@ -112,7 +118,8 @@ public class LegacyElevatorController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         inputEnabled = true;
-        LegacyCameraFollow.instance.isFocused = true;
+
+        CameraManager.instance.SetFocus();
 
         LegacyGameController.instance.ReadyForNextHole();
 
@@ -192,7 +199,7 @@ public class LegacyElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
-        LegacyCameraFollow.instance.isFocused = false;
+        CameraManager.instance.SetUnfocus();
         StartCoroutine(MoveBarToBottomPosition());
     }
 

@@ -10,7 +10,7 @@ public class CameraFollow2 : MonoBehaviour
     public Vector3 gameOverPosition;
 
     public float smoothSpeed = 0.125f;
-    public float cameraVerticalOffset = 0.125f;
+    public float cameraVerticalOffset = 20f;
 
     public bool isGameActive = false;
 
@@ -28,21 +28,16 @@ public class CameraFollow2 : MonoBehaviour
 
     void Start()
     {
+        InfiniteGameController.instance.StartGame();
         gameOverPosition = transform.position;
     }
 
     void FixedUpdate()
     {
-        if (isGameActive)
-        {
-            Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -15);
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-            transform.position = smoothedPosition;
-        }
-        else
-        {
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, gameOverPosition, smoothSpeed);
-            transform.position = smoothedPosition;
-        }
+
+        Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -250);
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        transform.position = smoothedPosition;
+
     }
 }

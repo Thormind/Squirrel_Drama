@@ -48,7 +48,7 @@ public class ScoreboardMenuManager : MonoBehaviour
     {
         if (ScenesManager.instance.gameMode == 1)
         {
-            //InfiniteHoleController.instance.ResetGame();
+            InfiniteGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
         }
         if (ScenesManager.instance.gameMode == 2)
@@ -62,8 +62,8 @@ public class ScoreboardMenuManager : MonoBehaviour
     {
         if (ScenesManager.instance.gameMode == 1)
         {
-            //ScoreText.text = InfiniteGameController.instance.score.ToString();
-            //BestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
+            ScoreText.text = InfiniteGameController.instance.score.ToString();
+            BestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
         }
         if (ScenesManager.instance.gameMode == 2)
         {

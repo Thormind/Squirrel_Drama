@@ -16,6 +16,12 @@ public class HUDMenuManager : MonoBehaviour
     public TMP_Text legacyBestScoreText;
     public TMP_Text legacyBallLifeText;
 
+    public TMP_Text infiniteScoreText;
+    public TMP_Text infiniteBonusText;
+    public TMP_Text infiniteBestScoreText;
+    public TMP_Text infiniteLevelText;
+    public TMP_Text infiniteFruitLifeText;
+
     public void Awake()
     {
         if (instance == null)
@@ -55,7 +61,7 @@ public class HUDMenuManager : MonoBehaviour
     {
         legacyPanel.SetActive(false);
         infinitePanel.SetActive(true);
-        //InfiniteGameController.instance.UpdateHUD();
+        InfiniteGameController.instance.UpdateHUD();
     }
 
     public void SetLegacyHUD()
@@ -73,12 +79,12 @@ public class HUDMenuManager : MonoBehaviour
         legacyBallLifeText.text = LegacyGameController.instance.currentBallNumber.ToString();
     }
 
-    public void UpdateInfiniteHUD(float score, float bonusScore, float bestScore, float life, float level)
+    public void UpdateInfiniteHUD()
     {
-        //infiniteScoreText.text = score.ToString();
-        //infiniteBonusText.text = bonusScore.ToString();
-        //infiniteBestScoreText.text = bestScore.ToString();
-        //infiniteBallLifeText.text = life.ToString();
-        //infiniteLevelText.text = level.ToString();
+        infiniteScoreText.text = InfiniteGameController.instance.score.ToString();
+        infiniteBonusText.text = InfiniteGameController.instance.bonusScore.ToString();
+        infiniteBestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
+        infiniteFruitLifeText.text = InfiniteGameController.instance.currentFruitNumber.ToString();
+        infiniteLevelText.text = InfiniteGameController.instance.level.ToString();
     }
 }
