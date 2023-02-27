@@ -37,8 +37,8 @@ public class ElevatorController3D : MonoBehaviour
         initialRightEndPosition = rightEnd.localPosition;
         initialBallPosition = ballPosition.position;
 
-        HoleSpawner.instance.SpawnHoles();
-        BeeSpawner.instance.SpawnBees();
+        //HoleSpawner.instance.SpawnHoles();
+        //BeeSpawner.instance.SpawnBees();
     }
 
     void Update()

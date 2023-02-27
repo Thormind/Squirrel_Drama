@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
     private Vector3 menuPosition = new Vector3(0f, 0f, -900f);
     private Vector3 launchPosition = new Vector3(0f, 200f, -7000f);
 
-    private Vector3 legacyUnfocusedPosition = new Vector3(0f, 0f, -35f);
+    private Vector3 legacyUnfocusedPosition = new Vector3(0f, -0.5f, -35f);
     private Vector3 legacyFocusedPosition = new Vector3(0f, 0f, -15f);
 
     private Vector3 infiniteUnfocusedPosition = new Vector3(0f, -260f, -2000f);
