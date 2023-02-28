@@ -172,7 +172,7 @@ MonoBehaviour:
   holePrefab: {fileID: 2889715039030902513, guid: 5946513529ae5ba4a8b388fc61fcd4cc, type: 3}
   holesQuantity: 100
   maxTries: 100
-  minDistance: 6
+  minDistance: 0.5
   xMin: -2.8
   xMax: 2.8
   yMin: 2
@@ -352,6 +352,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 43109835}
+  - component: {fileID: 43109836}
   m_Layer: 0
   m_Name: InfiniteWormsController
   m_TagString: Untagged
@@ -374,6 +375,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &43109836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43109834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c447708d3260546bc8ddc5023655a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worms: []
+  wormsParent: {fileID: 370970711}
+  wormPrefab: {fileID: 3229739297079387043, guid: 39b147f3f7548df4790223499f18c13b, type: 3}
 --- !u!1 &83998207
 GameObject:
   m_ObjectHideFlags: 0

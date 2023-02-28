@@ -149,6 +149,7 @@ public class InfiniteFruitsController : MonoBehaviour
         fruits.Clear();
 
         _spawnedFruitsPositions.Clear();
+        _spawnedFruitsPositions = new List<Vector3>();
     }
 
 }

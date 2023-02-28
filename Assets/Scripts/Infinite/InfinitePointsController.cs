@@ -137,6 +137,7 @@ public class InfinitePointsController : MonoBehaviour
         points.Clear();
 
         _spawnedPointsPositions.Clear();
+        _spawnedPointsPositions = new List<Vector3>();
     }
 
     public List<Vector3> GetSpawnedPositions()

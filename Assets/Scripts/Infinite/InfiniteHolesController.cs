@@ -56,18 +56,18 @@ public class InfiniteHolesController : MonoBehaviour
         for (int i = 0; i < holesQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
+
             if (spawnPosition == Vector3.zero)
             {
                 Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
 
-            //Vector3 worldPosition = holesParent.transform.TransformPoint(spawnPosition);
             GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
             holes.Add(holeInstantiated);
             holeInstantiated.transform.parent = holesParent.transform;
 
-            _spawnedHolesPositions.Add(spawnPosition);
+            //_spawnedHolesPositions.Add(spawnPosition);
         }
     }
 
@@ -90,8 +90,13 @@ public class InfiniteHolesController : MonoBehaviour
                 spawnPosition = Vector3.zero;
                 break;
             }
-        } while (!IsValidPosition(spawnPosition));
-        _spawnedHolesPositions.Add(localPosition);
+        } while (!IsValidPosition(localPosition));
+
+        if (spawnPosition != Vector3.zero)
+        {
+            _spawnedHolesPositions.Add(localPosition);
+        }
+
         return spawnPosition;
     }
 
@@ -99,6 +104,7 @@ public class InfiniteHolesController : MonoBehaviour
     {
         foreach (Vector3 spawnedPosition in _spawnedHolesPositions)
         {
+            //print($"{Vector3.Distance(position, spawnedPosition)} < {minDistance}");
             if (Vector3.Distance(position, spawnedPosition) < minDistance)
             {
                 return false;
@@ -118,11 +124,27 @@ public class InfiniteHolesController : MonoBehaviour
         holes.Clear();
 
         _spawnedHolesPositions.Clear();
+        _spawnedHolesPositions = new List<Vector3>();
     }
 
     public List<Vector3> GetSpawnedPositions()
     {
         return _spawnedHolesPositions;
+    }
+
+    public List<Vector3> GetRandomSpawnedPositions()
+    {
+        List<Vector3> holePositions = _spawnedHolesPositions;
+
+        for (int i = 0; i < holePositions.Count; i++)
+        {
+            int randomIndex = Random.Range(i, holePositions.Count);
+            Vector3 temp = holePositions[i];
+            holePositions[i] = holePositions[randomIndex];
+            holePositions[randomIndex] = temp;
+        }
+
+        return holePositions;
     }
 
 }

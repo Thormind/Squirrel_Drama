@@ -83,6 +83,7 @@ public class InfiniteBeesController : MonoBehaviour
         }
 
         _spawnedBeesPositions.Clear();
+        _spawnedBeesPositions = new List<Vector3>();
     }
 
     private Vector3 GetRandomSpawnPosition()

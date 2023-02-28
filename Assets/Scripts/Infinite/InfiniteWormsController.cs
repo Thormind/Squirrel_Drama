@@ -14,7 +14,7 @@ public class InfiniteWormsController : MonoBehaviour
 
     private int maxTries = 100;
     private float minDistance = 2f;
-    private float maxDistance = 5f;
+    private float maxDistance = 6f;
 
     private float minTime = 5f;
     private float maxTime = 10f;
@@ -41,44 +41,53 @@ public class InfiniteWormsController : MonoBehaviour
     private void Start()
     {
         isSpawning = false;
-        GetRandomTime();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            RemoveWorms();
             SpawnWorm();
+
         }
     }
 
     private void FixedUpdate()
     {
-        if (isSpawning)
+        if (isSpawning && time < 0)
         {
-            while (time > 0f)
-            {
-                SpawnWorm();
-                GetRandomTime();
-            }
-
-            time -= Time.fixedDeltaTime / randomTime;
+            SpawnWorm();
+            GetRandomTime();
         }
+
+        time -= Time.fixedDeltaTime / randomTime;
     }
 
     public void SpawnWorms()
     {
         RemoveWorms();
         isSpawning = true;
+        GetRandomTime();
     }
 
     public void SpawnWorm()
     {
         Vector3 holePosition = GetRandomHoleNearFruit();
-        GameObject wormInstantiated = Instantiate(wormPrefab, holePosition, Quaternion.identity);
-        worms.Add(wormInstantiated);
-        wormInstantiated.transform.parent = wormsParent.transform;
-        _spawnedWormsPositions.Add(holePosition);
+
+        if (holePosition == Vector3.zero)
+        {
+            Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
+        }
+        else
+        {
+            //print($"Hole Position (from spawn worm): {holePosition}");
+            Vector3 worldPosition = wormsParent.transform.TransformPoint(holePosition);
+            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.identity);
+            worms.Add(wormInstantiated);
+            wormInstantiated.transform.parent = wormsParent.transform;
+            _spawnedWormsPositions.Add(holePosition);
+        }
 
         //wormInstantiated.GetComponent<InfiniteWormsAnimation>().PlayAnimation();
     }
@@ -93,7 +102,9 @@ public class InfiniteWormsController : MonoBehaviour
         }
 
         worms.Clear();
+
         _spawnedWormsPositions.Clear();
+        _spawnedWormsPositions = new List<Vector3>();
     }
 
     private void GetRandomTime()
@@ -110,13 +121,20 @@ public class InfiniteWormsController : MonoBehaviour
         {
             if (InfiniteHolesController.instance != null)
             {
-                foreach (Vector3 spawnedPosition in InfiniteHolesController.instance.GetSpawnedPositions())
+                List<Vector3> holePositions = InfiniteHolesController.instance.GetRandomSpawnedPositions();
+
+                foreach (Vector3 spawnedPosition in holePositions)
                 {
                     Vector2 tmpFruitPos = fruitPosition;
                     Vector2 tmpSpawnedPos = spawnedPosition;
-                    if (Vector2.Distance(tmpFruitPos, tmpSpawnedPos) < maxDistance || Vector2.Distance(tmpFruitPos, tmpSpawnedPos) > minDistance)
+                    float distance = Vector2.Distance(tmpFruitPos, tmpSpawnedPos);
+                    //print($"Hole Position (from position finder) : {spawnedPosition}");
+                    //print($"Distance: {distance}");
+
+                    if (distance <= maxDistance)
                     {
-                        spawnPosition = wormsParent.transform.TransformPoint(spawnedPosition);
+                        //spawnPosition = wormsParent.transform.TransformPoint(spawnedPosition);
+                        spawnPosition = tmpSpawnedPos;
                     }
                 }
             }
