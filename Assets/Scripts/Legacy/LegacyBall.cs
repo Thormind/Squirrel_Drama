@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LegacyBall : MonoBehaviour
 {
-    public float enterTheHoleTime = 0.2f;
+    public float enterTheHoleTime = 5f;
 
     Rigidbody2D ballRigidbody;
 
@@ -45,11 +45,12 @@ public class LegacyBall : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Transform holeTransform)
     {
         float t = 0;
-        Vector3 ballPosition = transform.position;
+        Vector2 ballPosition = transform.position;
+        Vector2 holePosition = holeTransform.position;
 
         while (t <= 1)
         {
-            transform.position = Vector3.Lerp(ballPosition, holeTransform.position, t);
+            transform.position = Vector2.Lerp(ballPosition, holePosition, t);
             transform.localScale = startBallScale * Mathf.Lerp(1, 0.75f, t);
 
             t += Time.deltaTime / enterTheHoleTime;

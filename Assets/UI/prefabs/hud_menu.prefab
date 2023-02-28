@@ -165,13 +165,14 @@ GameObject:
   - component: {fileID: 1536668784079336616}
   - component: {fileID: 1536668784079336618}
   - component: {fileID: 1536668784079336617}
+  - component: {fileID: 7046575930724528439}
   m_Layer: 5
   m_Name: infinite_hud_panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1536668784079336616
 RectTransform:
   m_ObjectHideFlags: 0
@@ -235,6 +236,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7046575930724528439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536668784079336623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
+  m_EffectDistance: {x: 7.85, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1536668784272480847
 GameObject:
   m_ObjectHideFlags: 0
@@ -3240,13 +3256,14 @@ GameObject:
   - component: {fileID: 4554688542595901625}
   - component: {fileID: 7756250805620294408}
   - component: {fileID: 8861881624980531236}
+  - component: {fileID: 177293832739946215}
   m_Layer: 5
   m_Name: legacy_hud_panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4554688542595901625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3309,6 +3326,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &177293832739946215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6577083548061915112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+  m_EffectDistance: {x: 6.2, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &7393385281307101570
 GameObject:
   m_ObjectHideFlags: 0

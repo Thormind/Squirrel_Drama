@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class InfiniteFruitsController : MonoBehaviour
+public class InfinitePointsController : MonoBehaviour
 {
 
-    public static InfiniteFruitsController instance;
+    public static InfinitePointsController instance;
 
-    public List<GameObject> fruits;
+    public List<GameObject> points;
 
-    public GameObject fruitsParent;
+    public GameObject pointsParent;
 
-    public GameObject fruitPrefab;
+    public GameObject pointPrefab;
 
-    private int fruitsQuantity = 1;
+    private int pointsQuantity = 50;
     private int maxTries = 100;
-    private float minDistance = 4f;
+    private float minDistance = 10f;
 
     private float xMin = -2.5f;
     private float xMax = 2.5f;
 
-    private float yMin = 10f;
-    private float yMax = 30f;
+    private float yMin = 4f;
+    private float yMax = 38f;
 
 
-    private List<Vector3> _spawnedFruitsPositions = new List<Vector3>();
+    private List<Vector3> _spawnedPointsPositions = new List<Vector3>();
 
     public void Awake()
     {
@@ -42,18 +42,18 @@ public class InfiniteFruitsController : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            SpawnFruits();
+            SpawnPoints();
         }
 
     }
 
-    public void SpawnFruits()
+    public void SpawnPoints()
     {
-        RemoveFruits();
+        RemovePoints();
 
-        for (int i = 0; i < fruitsQuantity; i++)
+        for (int i = 0; i < pointsQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
             if (spawnPosition == Vector3.zero)
@@ -61,11 +61,11 @@ public class InfiniteFruitsController : MonoBehaviour
                 Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
-            GameObject fruitInstantiated = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity);
-            fruits.Add(fruitInstantiated);
-            fruitInstantiated.transform.parent = fruitsParent.transform;
+            GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity);
+            points.Add(pointInstantiated);
+            pointInstantiated.transform.parent = pointsParent.transform;
 
-            _spawnedFruitsPositions.Add(spawnPosition);
+            _spawnedPointsPositions.Add(spawnPosition);
         }
     }
 
@@ -77,7 +77,7 @@ public class InfiniteFruitsController : MonoBehaviour
         {
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
-            spawnPosition = fruitsParent.transform.TransformPoint(new Vector3(x, y, -0.25f));
+            spawnPosition = pointsParent.transform.TransformPoint(new Vector3(x, y, -0.25f));
 
             tries++;
             if (tries >= maxTries)
@@ -91,9 +91,9 @@ public class InfiniteFruitsController : MonoBehaviour
 
     private bool IsValidPosition(Vector3 position)
     {
-        foreach (Vector2 spawnedPosition in _spawnedFruitsPositions)
+        foreach (Vector3 spawnedPosition in _spawnedPointsPositions)
         {
-            if (Vector2.Distance(position, spawnedPosition) < minDistance)
+            if (Vector3.Distance(position, spawnedPosition) < minDistance)
             {
                 return false;
             }
@@ -104,7 +104,7 @@ public class InfiniteFruitsController : MonoBehaviour
             {
                 Vector2 tmpPos = position;
                 Vector2 tmpSpawnedPos = spawnedPosition;
-                if (Vector2.Distance(tmpPos, tmpSpawnedPos) < minDistance)
+                if (Vector3.Distance(tmpPos, tmpSpawnedPos) < minDistance)
                 {
                     return false;
                 }
@@ -116,19 +116,7 @@ public class InfiniteFruitsController : MonoBehaviour
             {
                 Vector2 tmpPos = position;
                 Vector2 tmpSpawnedPos = spawnedPosition;
-                if (Vector2.Distance(tmpPos, tmpSpawnedPos) < minDistance)
-                {
-                    return false;
-                }
-            }
-        }
-        if (InfinitePointsController.instance != null)
-        {
-            foreach (Vector3 spawnedPosition in InfinitePointsController.instance.GetSpawnedPositions())
-            {
-                Vector2 tmpPos = position;
-                Vector2 tmpSpawnedPos = spawnedPosition;
-                if (Vector2.Distance(tmpPos, tmpSpawnedPos) < minDistance)
+                if (Vector3.Distance(tmpPos, tmpSpawnedPos) < minDistance)
                 {
                     return false;
                 }
@@ -138,17 +126,22 @@ public class InfiniteFruitsController : MonoBehaviour
         return true;
     }
 
-    public void RemoveFruits()
+    public void RemovePoints()
     {
 
-        foreach (GameObject g in fruits)
+        foreach (GameObject g in points)
         {
             Destroy(g);
         }
 
-        fruits.Clear();
+        points.Clear();
 
-        _spawnedFruitsPositions.Clear();
+        _spawnedPointsPositions.Clear();
+    }
+
+    public List<Vector3> GetSpawnedPositions()
+    {
+        return _spawnedPointsPositions;
     }
 
 }

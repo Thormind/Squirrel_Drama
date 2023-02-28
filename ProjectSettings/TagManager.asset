@@ -15,6 +15,8 @@ TagManager:
   - Fruit
   - Worm
   - Bear
+  - FxTemporaire
+  - Points
   layers:
   - Default
   - TransparentFX

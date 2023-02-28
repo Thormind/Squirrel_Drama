@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InfiniteFruit : MonoBehaviour
 {
-    public float enterTheHoleTime = 0.2f;
+    public float enterTheHoleTime = 5f;
 
     Rigidbody2D fruitRigidbody;
 
@@ -43,6 +43,12 @@ public class InfiniteFruit : MonoBehaviour
             StartCoroutine(FallFromTreeCoroutine(collision.transform));
         }
 
+        if (collision.transform.gameObject.tag == "Points")
+        {
+            collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
+            InfiniteGameController.instance.HandleFruitInPoints();
+        }
+
         if (collision.transform.gameObject.tag == "Fruit")
         {
             collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
@@ -53,11 +59,12 @@ public class InfiniteFruit : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Transform holeTransform)
     {
         float t = 0;
-        Vector3 fruitPosition = transform.position;
+        Vector2 fruitPosition = transform.position;
+        Vector2 holePosition = holeTransform.position;
 
         while (t <= 1)
         {
-            transform.position = Vector3.Lerp(fruitPosition, holeTransform.position, t);
+            transform.position = Vector2.Lerp(fruitPosition, holePosition, t);
             transform.localScale = startFruitScale * Mathf.Lerp(1, 0.75f, t);
 
             t += Time.deltaTime / enterTheHoleTime;

@@ -18,11 +18,12 @@ public class InfiniteGameController : MonoBehaviour
     public float level;
     public int currentFruitNumber = 3;
 
-    public float timePerDecrement = 10.0f;
+    public float timePerDecrement = 2.0f;
     public float bonusScoreIncrement = 1000f;
-    public float bonusScoreDecrement = 100f;
+    public float bonusScoreDecrement = 10f;
 
     public float fruitScoreIncrement;
+    public float pointsScoreIncrement;
 
     public bool levelCompletedState = false;
     public bool gameOverState = false;
@@ -43,17 +44,27 @@ public class InfiniteGameController : MonoBehaviour
     {
         level = 1;
         fruitScoreIncrement = 500f;
+        pointsScoreIncrement = 50f;
     }
 
 
     public void UpdateHUD()
     {
-        HUDMenuManager.instance.UpdateInfiniteHUD();
+        if (HUDMenuManager.instance != null)
+        {
+            HUDMenuManager.instance.UpdateInfiniteHUD();
+        }
     }
 
     private void RecalculateScore()
     {
         score += bonusScore;
+        UpdateHUD();
+    }
+
+    private void PointsScoreIncrement()
+    {
+        score += pointsScoreIncrement;
         UpdateHUD();
     }
 
@@ -116,10 +127,14 @@ public class InfiniteGameController : MonoBehaviour
 
         UpdateHUD();
 
-        CameraManager.instance.SetUnfocus();
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
 
         InfiniteHolesController.instance.RemoveHoles();
         InfiniteBeesController.instance.RemoveBees();
+        InfinitePointsController.instance.RemovePoints();
         InfiniteFruitsController.instance.RemoveFruits();
 
         elevatorControllerRef.movementSpeed = 200f;
@@ -136,10 +151,15 @@ public class InfiniteGameController : MonoBehaviour
         levelCompletedState = false;
         gameOverState = true;
 
-        CameraManager.instance.SetUnfocus();
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
 
         InfiniteHolesController.instance.RemoveHoles();
         InfiniteBeesController.instance.RemoveBees();
+        InfinitePointsController.instance.RemovePoints();
         InfiniteFruitsController.instance.RemoveFruits();
 
         elevatorControllerRef.movementSpeed = 200f;
@@ -159,9 +179,14 @@ public class InfiniteGameController : MonoBehaviour
 
         InfiniteHolesController.instance.SpawnHoles();
         InfiniteBeesController.instance.SpawnBees();
+        InfinitePointsController.instance.SpawnPoints();
         InfiniteFruitsController.instance.SpawnFruits();
 
-        CameraManager.instance.SetFocus();
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetFocus();
+        }
 
 
         UpdateHUD();
@@ -173,7 +198,10 @@ public class InfiniteGameController : MonoBehaviour
     public void ReadyForNextHole()
     {
 
-        CameraManager.instance.SetFocus();
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetFocus();
+        }
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
 
@@ -184,7 +212,10 @@ public class InfiniteGameController : MonoBehaviour
     {
         CancelInvoke(nameof(DecreaseBonusScore));
 
-        CameraManager.instance.SetUnfocus();
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
 
         RecalculateScore();
         currentFruitNumber--; 
@@ -207,7 +238,10 @@ public class InfiniteGameController : MonoBehaviour
     {
         CancelInvoke(nameof(DecreaseBonusScore));
 
-        CameraManager.instance.SetUnfocus();
+        if(CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
 
         RecalculateScore();
         currentFruitNumber--;
@@ -224,6 +258,13 @@ public class InfiniteGameController : MonoBehaviour
         UpdateHUD();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
+    public void HandleFruitInPoints()
+    {
+        PointsScoreIncrement();
+
+        UpdateHUD();
     }
 
     public void HandleFruitInFruit()
