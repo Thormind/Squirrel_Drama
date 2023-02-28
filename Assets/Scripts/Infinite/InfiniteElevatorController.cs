@@ -5,7 +5,9 @@ using UnityEngine.InputSystem;
 
 public class InfiniteElevatorController : MonoBehaviour
 {
-    public float movementSpeed = 1.75f;
+    private float bottomMovementSpeed = 60f;
+    private float startMovementSpeed = 45f;
+    private float movementSpeed = 30f;
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
@@ -117,8 +119,8 @@ public class InfiniteElevatorController : MonoBehaviour
             Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
             Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
 
-            Vector2 newLifterPosition = leftWorldPos + Vector2.up * movementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos + Vector2.up * movementSpeed * Time.fixedDeltaTime;
+            Vector2 newLifterPosition = leftWorldPos + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightWorldPos + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
 
             leftLifter.MovePosition(newLifterPosition);
             rightLifter.MovePosition(newRightLifterPosition);
@@ -134,7 +136,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToBottomPosition()
     {
-        while (leftLifterPosition.y > bottomPosition.y || rightLifter.position.y > bottomPosition.y)
+        while (leftLifterPosition.y > bottomPosition.y || rightLifterPosition.y > bottomPosition.y)
         {
 
             leftLifterPosition = leftLifter.transform.localPosition;
@@ -146,8 +148,8 @@ public class InfiniteElevatorController : MonoBehaviour
             Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
             Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
 
-            Vector2 newLeftLifterPosition = leftWorldPos - Vector2.up * movementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos - Vector2.up * movementSpeed * Time.fixedDeltaTime;
+            Vector2 newLeftLifterPosition = leftWorldPos - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightWorldPos - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime;
 
             if (leftLifterPosition.y > bottomPosition.y)
             {

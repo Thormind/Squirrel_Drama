@@ -102,6 +102,11 @@ public class InfiniteGameController : MonoBehaviour
         return fruitRef.gameObject.transform.position;
     }
 
+    public Vector3 GetFruitLocalPosition()
+    {
+        return fruitRef.gameObject.transform.localPosition;
+    }
+
     public void ResetFruit()
     {
         fruitRef.ResetFruitPosition();
@@ -132,12 +137,27 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.SetUnfocus();
         }
 
-        InfiniteHolesController.instance.RemoveHoles();
-        InfiniteBeesController.instance.RemoveBees();
-        InfinitePointsController.instance.RemovePoints();
-        InfiniteFruitsController.instance.RemoveFruits();
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.RemoveHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.RemoveBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.RemoveWorms();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.RemovePoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.RemoveFruits();
+        }
 
-        elevatorControllerRef.movementSpeed = 200f;
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
@@ -157,12 +177,27 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.SetUnfocus();
         }
 
-        InfiniteHolesController.instance.RemoveHoles();
-        InfiniteBeesController.instance.RemoveBees();
-        InfinitePointsController.instance.RemovePoints();
-        InfiniteFruitsController.instance.RemoveFruits();
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.RemoveHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.RemoveBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.RemoveWorms();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.RemovePoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.RemoveFruits();
+        }
 
-        elevatorControllerRef.movementSpeed = 200f;
         elevatorControllerRef.MoveBarToBottomPositionFunction();
 
         CancelInvoke(nameof(DecreaseBonusScore));
@@ -177,10 +212,27 @@ public class InfiniteGameController : MonoBehaviour
         levelCompletedState = false;
         gameOverState = false;
 
-        InfiniteHolesController.instance.SpawnHoles();
-        InfiniteBeesController.instance.SpawnBees();
-        InfinitePointsController.instance.SpawnPoints();
-        InfiniteFruitsController.instance.SpawnFruits();
+
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.SpawnHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.SpawnBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.SpawnWorms();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.SpawnPoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.SpawnFruits();
+        }
 
 
         if (CameraManager.instance != null)
@@ -191,7 +243,6 @@ public class InfiniteGameController : MonoBehaviour
 
         UpdateHUD();
 
-        elevatorControllerRef.movementSpeed = 30f;
         elevatorControllerRef.MoveBarToStartPositionFunction();
     }
 
@@ -217,7 +268,6 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.SetUnfocus();
         }
 
-        RecalculateScore();
         currentFruitNumber--; 
 
         if (currentFruitNumber <= 0)
@@ -226,7 +276,10 @@ public class InfiniteGameController : MonoBehaviour
 
             RecalculateBestScore();
 
-            GlobalUIManager.instance.SetScoreBoardMenu();
+            if (GlobalUIManager.instance != null)
+            {
+                GlobalUIManager.instance.SetScoreBoardMenu();
+            }
         }
 
         UpdateHUD();
@@ -243,7 +296,6 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.SetUnfocus();
         }
 
-        RecalculateScore();
         currentFruitNumber--;
 
         if (currentFruitNumber <= 0)
@@ -252,7 +304,10 @@ public class InfiniteGameController : MonoBehaviour
 
             RecalculateBestScore();
 
-            GlobalUIManager.instance.SetScoreBoardMenu();
+            if (GlobalUIManager.instance != null)
+            {
+                GlobalUIManager.instance.SetScoreBoardMenu();
+            }
         }
 
         UpdateHUD();

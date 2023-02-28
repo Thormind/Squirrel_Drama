@@ -51,7 +51,7 @@ public class InfiniteBeeAnimation : MonoBehaviour
         animator.SetBool("isBothWings", true);
 
         rightRotation = Vector3.zero;
-        leftRotation = new Vector3(0f, 180f, 0);
+        leftRotation = new Vector3(0f, -180f, 0);
 
         //Y
         yMin = transform.localPosition.y + yMin;

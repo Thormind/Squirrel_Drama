@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class InfiniteFruit : MonoBehaviour
 {
-    public float enterTheHoleTime = 5f;
+    private float fruitFallingGravityScale = 50f;
+    private float fruitGravityScale = 108f;
+
+    private float enterTheHoleTime = 1f;
+    private float fallingFromTreeTime = 0.1f;
 
     Rigidbody2D fruitRigidbody;
 
@@ -15,19 +19,19 @@ public class InfiniteFruit : MonoBehaviour
     {
         fruitRigidbody = GetComponent<Rigidbody2D>();
     }
+
     // Start is called before the first frame update
     void Start()
     {
         startFruitPosition = transform.position;
         startFruitScale = transform.localScale;
+        fruitRigidbody.gravityScale = fruitGravityScale;
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.gameObject.tag == "Hole")
         {
-
             InfiniteGameController.instance.HandleFruitInHole();
 
             fruitRigidbody.simulated = false;
@@ -36,7 +40,6 @@ public class InfiniteFruit : MonoBehaviour
 
         if (collision.transform.gameObject.tag == "Bee")
         {
-
             InfiniteGameController.instance.HandleFruitInBee();
 
             fruitRigidbody.simulated = false;
@@ -59,12 +62,12 @@ public class InfiniteFruit : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Transform holeTransform)
     {
         float t = 0;
-        Vector2 fruitPosition = transform.position;
-        Vector2 holePosition = holeTransform.position;
+        Vector3 fruitPosition = transform.localPosition;
+        Vector3 holePosition = new Vector3(holeTransform.localPosition.x, holeTransform.localPosition.y, holeTransform.localPosition.z + 2f);
 
         while (t <= 1)
         {
-            transform.position = Vector2.Lerp(fruitPosition, holePosition, t);
+            transform.localPosition = Vector3.Lerp(fruitPosition, holePosition, t);
             transform.localScale = startFruitScale * Mathf.Lerp(1, 0.75f, t);
 
             t += Time.deltaTime / enterTheHoleTime;
@@ -72,38 +75,36 @@ public class InfiniteFruit : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        transform.position = holeTransform.position;
+        transform.localPosition = holePosition;
 
         GetComponent<CircleCollider2D>().enabled = false;
         fruitRigidbody.simulated = true;
 
-        fruitRigidbody.gravityScale = 50f;
+        fruitRigidbody.gravityScale = fruitFallingGravityScale;
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
 
     }
 
-    IEnumerator FallFromTreeCoroutine(Transform holeTransform)
+    IEnumerator FallFromTreeCoroutine(Transform obstacleTransform)
     {
         float t = 0;
-        Vector3 fruitPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
+        Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z - 1f);
+        Vector3 fruitPosition = transform.localPosition;
 
         while (t <= 1)
         {
-            transform.position = Vector3.Lerp(fruitPosition, holeTransform.position, t);
-            transform.localScale = startFruitScale * Mathf.Lerp(0.75f, 1f, t);
+            transform.localPosition = Vector3.Lerp(fruitPosition, fruitTargetPosition, t);
 
-            t += Time.deltaTime / enterTheHoleTime;
+            t += Time.deltaTime / fallingFromTreeTime;
 
             yield return new WaitForEndOfFrame();
         }
 
-        transform.position = holeTransform.position;
-
         GetComponent<CircleCollider2D>().enabled = false;
         fruitRigidbody.simulated = true;
 
-        fruitRigidbody.gravityScale = 50f;
+        fruitRigidbody.gravityScale = fruitFallingGravityScale;
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
 
@@ -117,6 +118,6 @@ public class InfiniteFruit : MonoBehaviour
         fruitRigidbody.angularVelocity = 0;
         transform.localScale = startFruitScale;
 
-        fruitRigidbody.gravityScale = 108f;
+        fruitRigidbody.gravityScale = fruitGravityScale;
     }
 }

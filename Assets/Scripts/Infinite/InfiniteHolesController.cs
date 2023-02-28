@@ -61,6 +61,8 @@ public class InfiniteHolesController : MonoBehaviour
                 Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
+
+            //Vector3 worldPosition = holesParent.transform.TransformPoint(spawnPosition);
             GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
             holes.Add(holeInstantiated);
             holeInstantiated.transform.parent = holesParent.transform;
@@ -72,12 +74,15 @@ public class InfiniteHolesController : MonoBehaviour
     private Vector3 GetRandomSpawnPosition()
     {
         Vector3 spawnPosition;
+        Vector3 localPosition;
         int tries = 0;
         do
         {
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
-            spawnPosition = holesParent.transform.TransformPoint(new Vector3(x, y, 0));
+
+            localPosition = new Vector3(x, y, 0);
+            spawnPosition = holesParent.transform.TransformPoint(localPosition);
 
             tries++;
             if (tries >= maxTries)
@@ -86,6 +91,7 @@ public class InfiniteHolesController : MonoBehaviour
                 break;
             }
         } while (!IsValidPosition(spawnPosition));
+        _spawnedHolesPositions.Add(localPosition);
         return spawnPosition;
     }
 
