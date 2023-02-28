@@ -18,9 +18,6 @@ public class InfiniteHolesController : MonoBehaviour
     public int maxTries = 100;
     public float minDistance = 0.5f;
 
-    public float minHolesIndicatorYDistance = 0.6f;
-    public float maxHolesIndicatorYDistance = 0.9f;
-
     public float xMin = -2.75f;
     public float xMax = 2.75f;
 
@@ -80,7 +77,8 @@ public class InfiniteHolesController : MonoBehaviour
         {
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
-            spawnPosition = new Vector3(x, y, 0);
+            spawnPosition = holesParent.transform.TransformPoint(new Vector3(x, y, 0));
+
             tries++;
             if (tries >= maxTries)
             {
@@ -115,4 +113,10 @@ public class InfiniteHolesController : MonoBehaviour
 
         _spawnedHolesPositions.Clear();
     }
+
+    public List<Vector3> GetSpawnedPositions()
+    {
+        return _spawnedHolesPositions;
+    }
+
 }

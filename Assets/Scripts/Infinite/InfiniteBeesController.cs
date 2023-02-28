@@ -10,19 +10,19 @@ public class InfiniteBeesController : MonoBehaviour
 
     public GameObject beePrefab;
 
-    public int beesQuantity = 10;
-    public int maxTries = 100;
-    public float minDistance = 0.5f;
+    private int beesQuantity = 30;
+    private int maxTries = 100;
 
-    public float beesXMin = -2.5f;
-    public float beesXMax = 2.5f;
+    public float beesXMin = -3.15f;
+    public float beesXMax = 3.15f;
 
-    public float beesYMin = -3.5f;
-    public float beesYMax = 3.5f;
+    private float beesYMin = 2f;
+    private float beesYMax = 38f;
 
-    public float minBeesYDistance = 0.3f;
-    public float maxBeesYDistance = 0.9f;
+    private float minBeesYDistance = 2f;
+    private float maxBeesYDistance = 3f;
 
+    private float currentY;
 
     private List<Vector3> _spawnedBeesPositions = new List<Vector3>();
 
@@ -54,21 +54,22 @@ public class InfiniteBeesController : MonoBehaviour
 
         maxBeesYDistance = ((Mathf.Abs(beesYMin - beesYMax)) / beesQuantity) + 0.2f;
 
-        float currentY = beesYMin;
+        currentY = beesYMin;
 
         for (int i = 1; i <= beesQuantity; i++)
         {
-            float randomX = Random.Range(beesXMin, beesXMax);
-            float randomY = Random.Range(minBeesYDistance, maxBeesYDistance);
-            currentY += randomY;
+            Vector3 spawnPosition = GetRandomSpawnPosition();
 
-            Vector3 spawnPosition = new Vector3(randomX, currentY, 0);
+            if (spawnPosition == Vector3.zero)
+            {
+                Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
+                break;
+            }
 
-            GameObject beeInstantiated = Instantiate(beePrefab, spawnPosition, Quaternion.identity);
-            beeInstantiated.GetComponent<BeeMovement>().initialPosition = spawnPosition;
+            Vector3 realPosition = beesParent.transform.TransformPoint(spawnPosition);
 
+            GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity);
             beeInstantiated.transform.parent = beesParent.transform;
-
             _spawnedBeesPositions.Add(spawnPosition);
         }
     }
@@ -82,6 +83,44 @@ public class InfiniteBeesController : MonoBehaviour
         }
 
         _spawnedBeesPositions.Clear();
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        Vector3 spawnPosition;
+        int tries = 0;
+        do
+        {
+            float randomX = Random.Range(beesXMin, beesXMax);
+            float randomY = Random.Range(minBeesYDistance, maxBeesYDistance);
+            currentY += randomY;
+            spawnPosition = new Vector3(randomX, currentY, -0.25f);
+
+            tries++;
+            if (tries >= maxTries)
+            {
+                spawnPosition = Vector3.zero;
+                break;
+            }
+        } while (!IsValidPosition(spawnPosition));
+        return spawnPosition;
+    }
+
+    private bool IsValidPosition(Vector3 position)
+    {
+        if (position.y >= beesYMax)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public List<Vector3> GetSpawnedPositions()
+    {
+        return _spawnedBeesPositions;
     }
 
 }

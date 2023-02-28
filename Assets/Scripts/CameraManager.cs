@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour
     private Vector3 legacyFocusedPosition = new Vector3(0f, 0f, -15f);
 
     private Vector3 infiniteUnfocusedPosition = new Vector3(0f, -260f, -2000f);
-    private Vector3 infiniteFocusedPosition = new Vector3(0f, -550f, -250f);
+    private Vector3 infiniteFocusedPosition = new Vector3(0f, -550f, -290f);
     public float infiniteVerticalOffset = 20f;
 
     private Quaternion menuRotation;

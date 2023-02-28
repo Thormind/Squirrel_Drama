@@ -15,12 +15,14 @@ public class InfiniteGameController : MonoBehaviour
     public float bonusScore = 1000;
     public float bestScore = 0;
 
-    public float level = 0;
+    public float level;
     public int currentFruitNumber = 3;
 
     public float timePerDecrement = 10.0f;
     public float bonusScoreIncrement = 1000f;
     public float bonusScoreDecrement = 100f;
+
+    public float fruitScoreIncrement;
 
     public bool levelCompletedState = false;
     public bool gameOverState = false;
@@ -40,6 +42,7 @@ public class InfiniteGameController : MonoBehaviour
     void Start()
     {
         level = 1;
+        fruitScoreIncrement = 500f;
     }
 
 
@@ -51,6 +54,12 @@ public class InfiniteGameController : MonoBehaviour
     private void RecalculateScore()
     {
         score += bonusScore;
+        UpdateHUD();
+    }
+
+    private void FruitScoreIncrement()
+    {
+        score += fruitScoreIncrement;
         UpdateHUD();
     }
 
@@ -111,6 +120,7 @@ public class InfiniteGameController : MonoBehaviour
 
         InfiniteHolesController.instance.RemoveHoles();
         InfiniteBeesController.instance.RemoveBees();
+        InfiniteFruitsController.instance.RemoveFruits();
 
         elevatorControllerRef.movementSpeed = 200f;
         elevatorControllerRef.MoveBarToBottomPositionFunction();
@@ -130,6 +140,7 @@ public class InfiniteGameController : MonoBehaviour
 
         InfiniteHolesController.instance.RemoveHoles();
         InfiniteBeesController.instance.RemoveBees();
+        InfiniteFruitsController.instance.RemoveFruits();
 
         elevatorControllerRef.movementSpeed = 200f;
         elevatorControllerRef.MoveBarToBottomPositionFunction();
@@ -143,13 +154,12 @@ public class InfiniteGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        //ResetGame();
-
         levelCompletedState = false;
         gameOverState = false;
 
         InfiniteHolesController.instance.SpawnHoles();
         InfiniteBeesController.instance.SpawnBees();
+        InfiniteFruitsController.instance.SpawnFruits();
 
         CameraManager.instance.SetFocus();
 
@@ -163,6 +173,8 @@ public class InfiniteGameController : MonoBehaviour
     public void ReadyForNextHole()
     {
 
+        CameraManager.instance.SetFocus();
+
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
 
         UpdateHUD();
@@ -171,6 +183,8 @@ public class InfiniteGameController : MonoBehaviour
     public void HandleFruitInHole()
     {
         CancelInvoke(nameof(DecreaseBonusScore));
+
+        CameraManager.instance.SetUnfocus();
 
         RecalculateScore();
         currentFruitNumber--; 
@@ -187,6 +201,41 @@ public class InfiniteGameController : MonoBehaviour
         UpdateHUD();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
+    public void HandleFruitInBee()
+    {
+        CancelInvoke(nameof(DecreaseBonusScore));
+
+        CameraManager.instance.SetUnfocus();
+
+        RecalculateScore();
+        currentFruitNumber--;
+
+        if (currentFruitNumber <= 0)
+        {
+            gameOverState = true;
+
+            RecalculateBestScore();
+
+            GlobalUIManager.instance.SetScoreBoardMenu();
+        }
+
+        UpdateHUD();
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
+    public void HandleFruitInFruit()
+    {
+        FruitScoreIncrement();
+
+        if (currentFruitNumber < 3)
+        {
+            currentFruitNumber++;
+        }
+
+        UpdateHUD();
     }
 
 }

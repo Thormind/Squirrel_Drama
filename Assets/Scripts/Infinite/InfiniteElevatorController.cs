@@ -127,9 +127,7 @@ public class InfiniteElevatorController : MonoBehaviour
         }
         inputEnabled = true;
 
-        CameraManager.instance.SetFocus();
-
-        //InfiniteGameController.instance.ReadyForNextHole();
+        InfiniteGameController.instance.ReadyForNextHole();
 
         yield return null;
     }
@@ -188,31 +186,30 @@ public class InfiniteElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
-        //CameraManager.instance.SetUnfocus();
         StartCoroutine(MoveBarToBottomPosition());
     }
 
     private void OnLeftEndUp(InputValue leftUpValue)
     {
-        print("UP");
+        //print("UP");
         leftUpInputValue = leftUpValue.Get<float>();
     }
 
     private void OnLeftEndDown(InputValue leftDownValue)
     {
-        print("DOWN");
+        //print("DOWN");
         leftDownInputValue = leftDownValue.Get<float>();
     }
 
     private void OnRightEndUp(InputValue rightUpValue)
     {
-        print("UP");
+        //print("UP");
         rightUpInputValue = rightUpValue.Get<float>();
     }
 
     private void OnRightEndDown(InputValue rightDownValue)
     {
-        print("DOWN");
+        //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
     }
 

@@ -11,6 +11,10 @@ TagManager:
   - Hole
   - MetalBar
   - UI
+  - Bee
+  - Fruit
+  - Worm
+  - Bear
   layers:
   - Default
   - TransparentFX
