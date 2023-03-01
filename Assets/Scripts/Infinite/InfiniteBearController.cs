@@ -98,9 +98,7 @@ public class InfiniteBearController : MonoBehaviour
 
             //Vector3 worldPosition = bearParent.transform.TransformPoint(position);
             Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-60f, 60));
-            bearInstantiated = Instantiate(bearPrefab, position, randomRotation);
-
-            bearInstantiated.transform.parent = bearParent.transform;
+            bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
 
             float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 1f, BearWarnAnimationTime + 1f);
             float randomImpactRange = Random.Range(BearImpactRange - 0.25f, BearImpactRange + 0.25f);
