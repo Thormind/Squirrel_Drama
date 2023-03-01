@@ -283,10 +283,10 @@ public class LevelScalingController : MonoBehaviour
             case 2: // Worms
                 if (InfiniteWormsController.instance != null)
                 {
-                    InstantiateSlider("Worms", "minDistance", 0f, 6f, InfiniteWormsController.instance.WormsMinDistance, 0);
-                    InstantiateSlider("Worms", "maxDistance", 0f, 6f, InfiniteWormsController.instance.WormsMaxDistance, 1);
-                    InstantiateSlider("Worms", "minSpawningInterval", 0f, 10f, InfiniteWormsController.instance.WormsMinSpawningInterval, 2);
-                    InstantiateSlider("Worms", "maxSpawningInterval", 0f, 10f, InfiniteWormsController.instance.WormsMaxSpawningInterval, 3);
+                    InstantiateSlider("Worms", "minDistance", 0f, 10f, InfiniteWormsController.instance.WormsMinDistance, 0);
+                    InstantiateSlider("Worms", "maxDistance", 0f, 10f, InfiniteWormsController.instance.WormsMaxDistance, 1);
+                    InstantiateSlider("Worms", "minSpawningInterval", 0f, 20f, InfiniteWormsController.instance.WormsMinSpawningInterval, 2);
+                    InstantiateSlider("Worms", "maxSpawningInterval", 0f, 20f, InfiniteWormsController.instance.WormsMaxSpawningInterval, 3);
                     InstantiateSlider("Worms", "spawnProbability", 0f, 1f, InfiniteWormsController.instance.WormsSpawnProbability, 4);
                     InstantiateSlider("Worms", "inAnimationTime", 0f, 10f, InfiniteWormsController.instance.WormsInAnimationTime, 5);
                     InstantiateSlider("Worms", "derpAnimationTime", 0f, 10f, InfiniteWormsController.instance.WormsDerpAnimationTime, 6);
@@ -296,10 +296,10 @@ public class LevelScalingController : MonoBehaviour
             case 3: // Bears
                 if (InfiniteBearController.instance != null)
                 {
-                    InstantiateSlider("Bear", "minDistance", 0f, 6f, InfiniteBearController.instance.BearMinDistance, 0);
-                    InstantiateSlider("Bear", "maxDistance", 0f, 6f, InfiniteBearController.instance.BearMaxDistance, 1);
-                    InstantiateSlider("Bear", "minSpawningInterval", 0f, 10f, InfiniteBearController.instance.BearMinSpawningInterval, 2);
-                    InstantiateSlider("Bear", "maxSpawningInterval", 0f, 10f, InfiniteBearController.instance.BearMaxSpawningInterval, 3);
+                    InstantiateSlider("Bear", "minDistance", 0f, 10f, InfiniteBearController.instance.BearMinDistance, 0);
+                    InstantiateSlider("Bear", "maxDistance", 0f, 10f, InfiniteBearController.instance.BearMaxDistance, 1);
+                    InstantiateSlider("Bear", "minSpawningInterval", 0f, 20f, InfiniteBearController.instance.BearMinSpawningInterval, 2);
+                    InstantiateSlider("Bear", "maxSpawningInterval", 0f, 20f, InfiniteBearController.instance.BearMaxSpawningInterval, 3);
                     InstantiateSlider("Bear", "spawnProbability", 0f, 1f, InfiniteBearController.instance.BearSpawnProbability, 4);
                     InstantiateSlider("Bear", "warnAnimationTime", 0f, 10f, InfiniteBearController.instance.BearWarnAnimationTime, 5);
                     InstantiateSlider("Bear", "impactRange", 0f, 10f, InfiniteBearController.instance.BearImpactRange, 6);

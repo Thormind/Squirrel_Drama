@@ -13,13 +13,13 @@ public class InfiniteBearController : MonoBehaviour
     public List<GameObject> bears;
 
     //Difficulty Parameters
-    private float[] _bearMinDistance = new float[9];
-    private float[] _bearMaxDistance = new float[9];
-    private float[] _bearMinSpawningInterval = new float[9];
-    private float[] _bearMaxSpawningInterval = new float[9];
-    private float[] _bearSpawnProbability = new float[9];
-    private float[] _bearWarnAnimationTime = new float[9];
-    private float[] _bearImpactRange = new float[9];
+    private float[] _bearMinDistance = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearMaxDistance = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearMinSpawningInterval = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearMaxSpawningInterval = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearSpawnProbability = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearWarnAnimationTime = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    private float[] _bearImpactRange = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
 
 
     //Spawning Limits Parameters
@@ -271,7 +271,7 @@ public class InfiniteBearController : MonoBehaviour
         {
             _bearMaxSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1] = value;
             SaveBearMaxSpawningInterval();
-            SpawnBear();
+            SpawnBears();
         }
     }
 

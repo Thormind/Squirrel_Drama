@@ -93,6 +93,15 @@ public class InfiniteBearAnimation : MonoBehaviour
         //collider.isTrigger = true;
         collider.enabled = true;
 
+        while (t < 1f)
+        {
+            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+            t += Time.deltaTime / delayBeforeDestroy;
+            yield return null;
+        }
+
+        collider.enabled = false;
+
         startPosition = bearPaw.transform.localPosition;
         endPosition = new Vector3(0f, 0f, -0.5f);
 

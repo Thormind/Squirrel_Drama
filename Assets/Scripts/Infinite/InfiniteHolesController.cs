@@ -49,6 +49,7 @@ public class InfiniteHolesController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.R))
         {
             SpawnHoles();
+            InfiniteGameController.instance.SetLevel(InfiniteGameController.instance.currentLevel);
         }
     }
 
