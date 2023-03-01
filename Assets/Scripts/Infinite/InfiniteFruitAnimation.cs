@@ -20,8 +20,6 @@ public class InfiniteFruitAnimation : MonoBehaviour
     {
         maxY = transform.localPosition.y + maxY;
         endOfLifePosition = new Vector3(transform.localPosition.x, maxY, transform.localPosition.z);
-        print($"{maxY}");
-        print($"{endOfLifePosition}");
     }
 
     // Update is called once per frame

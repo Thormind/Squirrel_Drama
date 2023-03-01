@@ -136,6 +136,11 @@ public class InfiniteBeeAnimation : MonoBehaviour
         }
     }
 
+    public void SetMovementSpeed(float speed)
+    {
+        xSpeed = speed;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

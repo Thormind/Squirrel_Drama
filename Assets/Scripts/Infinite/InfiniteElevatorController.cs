@@ -8,6 +8,7 @@ public class InfiniteElevatorController : MonoBehaviour
     private float bottomMovementSpeed = 60f;
     private float startMovementSpeed = 45f;
     private float movementSpeed = 30f;
+    private float resetMovementSpeed = 500f;
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
@@ -214,5 +215,96 @@ public class InfiniteElevatorController : MonoBehaviour
         //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
     }
+
+    public void QuickBarResetFunction()
+    {
+        inputEnabled = false;
+        StartCoroutine(QuickBarResetToBottom());
+    }
+
+    IEnumerator QuickBarResetToBottom()
+    {
+        while (leftLifterPosition.y > bottomPosition.y || rightLifterPosition.y > bottomPosition.y)
+        {
+
+            leftLifterPosition = leftLifter.transform.localPosition;
+            rightLifterPosition = rightLifter.transform.localPosition;
+
+            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
+            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
+
+            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
+            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
+
+            Vector2 newLeftLifterPosition = leftWorldPos - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightWorldPos - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
+
+            if (leftLifterPosition.y > bottomPosition.y)
+            {
+                leftLifter.MovePosition(newLeftLifterPosition);
+            }
+            if (rightLifterPosition.y > bottomPosition.y)
+            {
+                rightLifter.MovePosition(newRightLifterPosition);
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        StartCoroutine(QuickBarResetToStart());
+
+        yield return null;
+    }
+
+    IEnumerator QuickBarResetToStart()
+    {
+        while (leftLifter.transform.localPosition.y < bottomPosition.y + startPositionVerticalOffset)
+        {
+            leftLifterPosition = leftLifter.transform.localPosition;
+            rightLifterPosition = rightLifter.transform.localPosition;
+
+            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
+            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
+
+            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
+            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
+
+            Vector2 newLifterPosition = leftWorldPos + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightWorldPos + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
+
+            leftLifter.MovePosition(newLifterPosition);
+            rightLifter.MovePosition(newRightLifterPosition);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        inputEnabled = true;
+
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.SpawnHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.SpawnBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.SpawnWorms();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.SpawnPoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.SpawnFruits();
+        }
+
+        InfiniteGameController.instance.QuickResetFruit();
+
+        yield return null;
+    }
+
 
 }

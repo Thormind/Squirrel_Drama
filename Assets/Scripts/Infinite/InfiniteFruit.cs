@@ -46,6 +46,22 @@ public class InfiniteFruit : MonoBehaviour
             StartCoroutine(FallFromTreeCoroutine(collision.transform));
         }
 
+        if (collision.transform.gameObject.tag == "Worm")
+        {
+            InfiniteGameController.instance.HandleFruitInWorm();
+
+            fruitRigidbody.simulated = false;
+            StartCoroutine(FallFromTreeCoroutine(collision.transform));
+        }
+
+        if (collision.transform.gameObject.tag == "Bear")
+        {
+            InfiniteGameController.instance.HandleFruitInBear();
+
+            fruitRigidbody.simulated = false;
+            StartCoroutine(CrushedCoroutine(collision.transform));
+        }
+
         if (collision.transform.gameObject.tag == "Points")
         {
             collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
@@ -110,6 +126,30 @@ public class InfiniteFruit : MonoBehaviour
 
     }
 
+    IEnumerator CrushedCoroutine(Transform bearTransform)
+    {
+        float t = 0;
+        Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 5f);
+        Vector3 fruitPosition = transform.localPosition;
+
+        while (t <= 1)
+        {
+            transform.localPosition = Vector3.Lerp(fruitPosition, fruitTargetPosition, t);
+
+            t += Time.deltaTime / fallingFromTreeTime;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        GetComponent<CircleCollider2D>().enabled = false;
+        fruitRigidbody.simulated = true;
+
+        fruitRigidbody.gravityScale = fruitFallingGravityScale;
+        fruitRigidbody.velocity = Vector2.zero;
+        fruitRigidbody.angularVelocity = 0;
+
+    }
+
     public void ResetFruitPosition()
     {
         transform.position = startFruitPosition;
@@ -119,5 +159,10 @@ public class InfiniteFruit : MonoBehaviour
         transform.localScale = startFruitScale;
 
         fruitRigidbody.gravityScale = fruitGravityScale;
+    }
+
+    public void QuickResetFruitPosition(Vector3 position)
+    {
+        transform.localPosition = position;
     }
 }

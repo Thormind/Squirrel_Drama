@@ -10,9 +10,9 @@ public class CameraFollow2 : MonoBehaviour
     public Vector3 gameOverPosition;
 
     public float smoothSpeed = 0.125f;
-    public float cameraVerticalOffset = 20f;
+    public float cameraVerticalOffset = 50f;
 
-    public bool isGameActive = false;
+    public bool isFocused = false;
 
     public void Awake()
     {
@@ -32,12 +32,28 @@ public class CameraFollow2 : MonoBehaviour
         gameOverPosition = transform.position;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isFocused = !isFocused;
+        }
+    }
+
     void FixedUpdate()
     {
-
-        Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -250);
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+        if (isFocused)
+        {
+            Vector3 desiredPosition = new Vector3(transform.position.x, target.position.y + cameraVerticalOffset, -400f);
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
+        else
+        {
+            Vector3 desiredPosition = new Vector3(transform.position.x, -300, -1500f);
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+        }
 
     }
 }

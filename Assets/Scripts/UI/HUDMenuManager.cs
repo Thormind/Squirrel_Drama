@@ -85,6 +85,6 @@ public class HUDMenuManager : MonoBehaviour
         infiniteBonusText.text = InfiniteGameController.instance.bonusScore.ToString();
         infiniteBestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
         infiniteFruitLifeText.text = InfiniteGameController.instance.currentFruitNumber.ToString();
-        infiniteLevelText.text = InfiniteGameController.instance.level.ToString();
+        infiniteLevelText.text = InfiniteGameController.instance.currentLevel.ToString();
     }
 }

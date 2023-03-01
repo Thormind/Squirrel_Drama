@@ -15,7 +15,8 @@ public class InfiniteGameController : MonoBehaviour
     public float bonusScore = 1000;
     public float bestScore = 0;
 
-    public float level;
+    public int difficultyLevel;
+    public int currentLevel;
     public int currentFruitNumber = 3;
 
     public float timePerDecrement = 2.0f;
@@ -38,15 +39,12 @@ public class InfiniteGameController : MonoBehaviour
         {
             Destroy(this);
         }
-    }
 
-    void Start()
-    {
-        level = 1;
+        currentLevel = 1;
+        difficultyLevel = 1;
         fruitScoreIncrement = 500f;
-        pointsScoreIncrement = 50f;
+        pointsScoreIncrement = 25f;
     }
-
 
     public void UpdateHUD()
     {
@@ -112,9 +110,59 @@ public class InfiniteGameController : MonoBehaviour
         fruitRef.ResetFruitPosition();
     }
 
+    public void QuickResetFruit()
+    {
+        Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.25f, 0);
+        fruitRef.QuickResetFruitPosition(positon);
+    }
+
     public void LevelCompleted()
     {
         NextLevel();
+    }
+
+    public void SetLevel(int l)
+    {
+        currentLevel = l;
+
+        if (l > 9)
+        {
+            difficultyLevel = 9;
+        }
+        else
+        {
+            difficultyLevel = l;
+        }
+
+        currentFruitNumber = 10000;
+
+
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.RemoveHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.RemoveBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.RemoveWorms();
+        }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.RemoveBears();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.RemovePoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.RemoveFruits();
+        }
+
+        elevatorControllerRef.QuickBarResetFunction();
     }
 
     public void NextLevel()
@@ -123,8 +171,15 @@ public class InfiniteGameController : MonoBehaviour
 
         RecalculateScore();
 
-        level++;
-        bonusScore = level * bonusScoreIncrement;
+        currentLevel++;
+        difficultyLevel++;
+        
+        if (difficultyLevel > 9)
+        {
+            difficultyLevel = 9;
+        }
+
+        bonusScore = currentLevel * bonusScoreIncrement;
 
         levelCompletedState = true;
 
@@ -149,6 +204,10 @@ public class InfiniteGameController : MonoBehaviour
         {
             InfiniteWormsController.instance.RemoveWorms();
         }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.RemoveBears();
+        }
         if (InfinitePointsController.instance != null)
         {
             InfinitePointsController.instance.RemovePoints();
@@ -165,8 +224,9 @@ public class InfiniteGameController : MonoBehaviour
     {
         currentFruitNumber = 3;
         score = 0;
-        level = 1;
-        bonusScore = level * bonusScoreIncrement;
+        currentLevel = 1;
+        difficultyLevel = 1;
+        bonusScore = currentLevel * bonusScoreIncrement;
 
         levelCompletedState = false;
         gameOverState = true;
@@ -188,6 +248,10 @@ public class InfiniteGameController : MonoBehaviour
         if (InfiniteWormsController.instance != null)
         {
             InfiniteWormsController.instance.RemoveWorms();
+        }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.RemoveBears();
         }
         if (InfinitePointsController.instance != null)
         {
@@ -224,6 +288,10 @@ public class InfiniteGameController : MonoBehaviour
         if (InfiniteWormsController.instance != null)
         {
             InfiniteWormsController.instance.SpawnWorms();
+        }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.SpawnBears();
         }
         if (InfinitePointsController.instance != null)
         {
@@ -315,6 +383,62 @@ public class InfiniteGameController : MonoBehaviour
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
+    public void HandleFruitInWorm()
+    {
+        CancelInvoke(nameof(DecreaseBonusScore));
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
+
+        currentFruitNumber--;
+
+        if (currentFruitNumber <= 0)
+        {
+            gameOverState = true;
+
+            RecalculateBestScore();
+
+            if (GlobalUIManager.instance != null)
+            {
+                GlobalUIManager.instance.SetScoreBoardMenu();
+            }
+        }
+
+        UpdateHUD();
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
+    public void HandleFruitInBear()
+    {
+        CancelInvoke(nameof(DecreaseBonusScore));
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.SetUnfocus();
+        }
+
+        currentFruitNumber--;
+
+        if (currentFruitNumber <= 0)
+        {
+            gameOverState = true;
+
+            RecalculateBestScore();
+
+            if (GlobalUIManager.instance != null)
+            {
+                GlobalUIManager.instance.SetScoreBoardMenu();
+            }
+        }
+
+        UpdateHUD();
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
     public void HandleFruitInPoints()
     {
         PointsScoreIncrement();
@@ -333,5 +457,7 @@ public class InfiniteGameController : MonoBehaviour
 
         UpdateHUD();
     }
+
+
 
 }

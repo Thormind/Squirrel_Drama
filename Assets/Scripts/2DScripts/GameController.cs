@@ -136,7 +136,7 @@ public class GameController : MonoBehaviour
         //leftLifterVFX.Play();
         //rightLifterVFX.Play();
 
-        CameraFollow2.instance.isGameActive = true;
+        //CameraFollow2.instance.isGameActive = true;
 
         HoleController.instance.SpawnHoles();
         BeesController.instance.SpawnBees();
@@ -198,7 +198,7 @@ public class GameController : MonoBehaviour
                 //leftLifterVFX.Stop();
                 //rightLifterVFX.Stop();
 
-                CameraFollow2.instance.isGameActive = false;
+                //CameraFollow2.instance.isGameActive = false;
 
                 RecalculateBestScore();
 

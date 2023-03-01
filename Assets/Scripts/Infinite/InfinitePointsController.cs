@@ -8,16 +8,17 @@ public class InfinitePointsController : MonoBehaviour
 
     public static InfinitePointsController instance;
 
-    public List<GameObject> points;
-
     public GameObject pointsParent;
-
     public GameObject pointPrefab;
 
-    private int pointsQuantity = 50;
-    private int maxTries = 100;
-    private float minDistance = 10f;
+    public List<GameObject> points;
+    private List<Vector3> _spawnedPointsPositions = new List<Vector3>();
 
+    //Difficulty Parameters
+    private int[] _pointsQuantity = new int[9]; // { 10, 15, 20, 25, 30, 35, 40, 50, 60 };
+    private float[] _pointsMinDistance = new float[9]; // { 1.5f, 1f, 1f, 1f, 1f, 1f, 0.5f, 0.5f, 0.5f };
+
+    //Spawning Limits Parameters
     private float xMin = -2.5f;
     private float xMax = 2.5f;
 
@@ -25,7 +26,9 @@ public class InfinitePointsController : MonoBehaviour
     private float yMax = 38f;
 
 
-    private List<Vector3> _spawnedPointsPositions = new List<Vector3>();
+    private int maxTries = 100;
+    public bool isAllSpawned;
+
 
     public void Awake()
     {
@@ -37,12 +40,17 @@ public class InfinitePointsController : MonoBehaviour
         {
             Destroy(this);
         }
+
+        LoadPointsQuantity();
+        LoadPointsMinDistance();
+
+        isAllSpawned = false;
     }
 
     private void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.G))
+        
+        if (Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.R))
         {
             SpawnPoints();
         }
@@ -53,14 +61,21 @@ public class InfinitePointsController : MonoBehaviour
     {
         RemovePoints();
 
-        for (int i = 0; i < pointsQuantity; i++)
+        int randomPointsQuantity = Random.Range(PointsQuantity - 5, PointsQuantity + 5);
+
+        for (int i = 0; i < randomPointsQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
+
             if (spawnPosition == Vector3.zero)
             {
-                Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
+                NotifySpawnDebug(false);
+                Debug.Log("Could not find a valid POINTS spawn position after " + maxTries + " tries.");
                 break;
             }
+
+            NotifySpawnDebug(true);
+
             GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity);
             points.Add(pointInstantiated);
             pointInstantiated.transform.parent = pointsParent.transform;
@@ -72,12 +87,15 @@ public class InfinitePointsController : MonoBehaviour
     private Vector3 GetRandomSpawnPosition()
     {
         Vector3 spawnPosition;
+        Vector3 localPosition;
         int tries = 0;
         do
         {
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
-            spawnPosition = pointsParent.transform.TransformPoint(new Vector3(x, y, -0.25f));
+
+            localPosition = new Vector3(x, y, -0.25f);
+            spawnPosition = pointsParent.transform.TransformPoint(localPosition);
 
             tries++;
             if (tries >= maxTries)
@@ -85,7 +103,13 @@ public class InfinitePointsController : MonoBehaviour
                 spawnPosition = Vector3.zero;
                 break;
             }
-        } while (!IsValidPosition(spawnPosition));
+        } while (!IsValidPosition(localPosition));
+
+        if (spawnPosition != Vector3.zero)
+        {
+            _spawnedPointsPositions.Add(localPosition);
+        }
+
         return spawnPosition;
     }
 
@@ -93,7 +117,7 @@ public class InfinitePointsController : MonoBehaviour
     {
         foreach (Vector3 spawnedPosition in _spawnedPointsPositions)
         {
-            if (Vector3.Distance(position, spawnedPosition) < minDistance)
+            if (Vector3.Distance(position, spawnedPosition) < PointsMinDistance)
             {
                 return false;
             }
@@ -104,19 +128,7 @@ public class InfinitePointsController : MonoBehaviour
             {
                 Vector2 tmpPos = position;
                 Vector2 tmpSpawnedPos = spawnedPosition;
-                if (Vector3.Distance(tmpPos, tmpSpawnedPos) < minDistance)
-                {
-                    return false;
-                }
-            }
-        }
-        if (InfiniteBeesController.instance != null)
-        {
-            foreach (Vector3 spawnedPosition in InfiniteBeesController.instance.GetSpawnedPositions())
-            {
-                Vector2 tmpPos = position;
-                Vector2 tmpSpawnedPos = spawnedPosition;
-                if (Vector3.Distance(tmpPos, tmpSpawnedPos) < minDistance)
+                if (Vector3.Distance(tmpPos, tmpSpawnedPos) < PointsMinDistance)
                 {
                     return false;
                 }
@@ -140,9 +152,75 @@ public class InfinitePointsController : MonoBehaviour
         _spawnedPointsPositions = new List<Vector3>();
     }
 
+    private void NotifySpawnDebug(bool spawned)
+    {
+        isAllSpawned = spawned;
+
+        if (LevelScalingController.instance != null)
+        {
+            LevelScalingController.instance.UpdateObstacleMessages();
+        }
+    }
+
     public List<Vector3> GetSpawnedPositions()
     {
         return _spawnedPointsPositions;
+    }
+
+    //POINTS QUANTITY
+    public int PointsQuantity
+    {
+        get { return _pointsQuantity[InfiniteGameController.instance.difficultyLevel - 1]; }
+        set
+        {
+            _pointsQuantity[InfiniteGameController.instance.difficultyLevel - 1] = value;
+            SavePointsQuantity();
+            SpawnPoints();
+        }
+    }
+
+    private void SavePointsQuantity()
+    {
+        for (int i = 0; i < _pointsQuantity.Length; i++)
+        {
+            PlayerPrefs.SetInt("PointsQuantity_Level_" + (i + 1), _pointsQuantity[i]);
+        }
+    }
+
+    private void LoadPointsQuantity()
+    {
+        for (int i = 0; i < _pointsQuantity.Length; i++)
+        {
+            _pointsQuantity[i] = PlayerPrefs.GetInt("PointsQuantity_Level_" + (i + 1), 50);
+        }
+    }
+
+    //MIN DISTANCE
+    public float PointsMinDistance
+    {
+        get { return _pointsMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        set
+        {
+            _pointsMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
+            SavePointsMinDistance();
+            SpawnPoints();
+        }
+    }
+
+    private void SavePointsMinDistance()
+    {
+        for (int i = 0; i < _pointsMinDistance.Length; i++)
+        {
+            PlayerPrefs.SetFloat("PointsMinDistance_Level_" + (i + 1), _pointsMinDistance[i]);
+        }
+    }
+
+    private void LoadPointsMinDistance()
+    {
+        for (int i = 0; i < _pointsMinDistance.Length; i++)
+        {
+            _pointsMinDistance[i] = PlayerPrefs.GetFloat("PointsMinDistance_Level_" + (i + 1), 50);
+        }
     }
 
 }
