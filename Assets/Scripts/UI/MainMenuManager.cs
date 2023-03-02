@@ -6,11 +6,9 @@ using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public TMP_Text storyBestScore;
     public TMP_Text infiniteBestScore;
     public TMP_Text legacyBestScore;
 
-    [SerializeField] private Button playStoryButton;
     [SerializeField] private Button playInfiniteButton;
     [SerializeField] private Button playLegacyButton;
 
@@ -28,8 +26,8 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(1));
-        playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(2));
+        playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.INFINITE_MODE));
+        playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.LEGACY_MODE));
 
         settingsButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
         creditsButton.onClick.AddListener(() => GlobalUIManager.instance.SetCreditsMenu());
@@ -38,6 +36,9 @@ public class MainMenuManager : MonoBehaviour
         quitButton.onClick.AddListener(() => HandleQuitButton());
         quitConfirmButton.onClick.AddListener(() => GlobalUIManager.instance.QuitApplication());
         quitCancelButton.onClick.AddListener(() => HandleCancelButton());
+
+        infiniteBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
+        legacyBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
     }
 
     private void HandleQuitButton()

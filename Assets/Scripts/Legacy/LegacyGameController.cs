@@ -12,9 +12,9 @@ public class LegacyGameController : MonoBehaviour
     public LegacyBall ballRef;
     public GameObject LegacyMachineLight;
 
-    public float score = 0;
-    public float bonusScore = 1000;
-    public float bestScore = 0;
+    public int score = 0;
+    public int bonusScore = 1000;
+    public int bestScore;
 
     public int currentBallNumber = 3;
     public int numberOfBallsPerGame = 3;
@@ -22,8 +22,8 @@ public class LegacyGameController : MonoBehaviour
     int currentHoleIndex = 0;
 
     public float timePerDecrement = 5.0f;
-    public float bonusScoreIncrement = 1000f;
-    public float bonusScoreDecrement = 100f;
+    public int bonusScoreIncrement = 1000;
+    public int bonusScoreDecrement = 100;
 
     public bool gameCompletedState = false;
     public bool gameOverState = false;
@@ -38,13 +38,9 @@ public class LegacyGameController : MonoBehaviour
         {
             Destroy(this);
         }
+
+        bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
     }
-
-    void Start()
-    {
-
-    }
-
     
     public void UpdateHUD()
     {
@@ -59,10 +55,7 @@ public class LegacyGameController : MonoBehaviour
 
     private void RecalculateBestScore()
     {
-        if (bestScore < score)
-        {
-            bestScore = score;
-        }
+        SaveManager.instance.UpdateBestScore(GAME_MODE.LEGACY_MODE, score);
         UpdateHUD();
     }
 
@@ -121,7 +114,6 @@ public class LegacyGameController : MonoBehaviour
         elevatorControllerRef.MoveBarToBottomPositionFunction();
 
         CancelInvoke(nameof(DecreaseBonusScore));
-        RecalculateBestScore();
 
         UpdateHUD();
     }

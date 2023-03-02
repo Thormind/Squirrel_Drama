@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GAME_MODE
+{
+	NONE, 
+	INFINITE_MODE,
+	LEGACY_MODE
+};
+
 public class ScenesManager : MonoBehaviour
 {
     public static ScenesManager instance;
@@ -10,7 +17,7 @@ public class ScenesManager : MonoBehaviour
     public float loadProgress;
     public float unloadProgress;
 
-	public int gameMode;
+	public GAME_MODE gameMode;
 
     private void Awake()
     {
@@ -22,11 +29,14 @@ public class ScenesManager : MonoBehaviour
         {
             Destroy(this);
         }
-    }
+
+		LoadSceneAsync("ui");
+		LoadSceneAsync("world_scene");
+	}
 
 	private void Start()
 	{
-		gameMode = 0;
+		gameMode = GAME_MODE.NONE;
 	}
 
 

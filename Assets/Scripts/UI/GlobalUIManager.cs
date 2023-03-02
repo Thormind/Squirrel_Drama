@@ -112,8 +112,8 @@ public class GlobalUIManager : MonoBehaviour
             }
         }
 
-        print($"Current Menu : {currentMenu}");
-        print($"Last Menu : {lastMenu}");
+        //print($"Current Menu : {currentMenu}");
+        //print($"Last Menu : {lastMenu}");
     }
 
     public void SetMenu(MENU desiredMenu)
@@ -262,7 +262,7 @@ public class GlobalUIManager : MonoBehaviour
         gameIsActive = true;
     }
 
-    public void LoadGame(int gameMode)
+    public void LoadGame(GAME_MODE gameMode)
     {
         SetMenu(MENU.MENU_LOADING);
 
@@ -270,10 +270,10 @@ public class GlobalUIManager : MonoBehaviour
 
         switch (gameMode)
         {
-            case 1:
+            case GAME_MODE.INFINITE_MODE:
                 ScenesManager.instance.LoadSceneAsync("infinite_game_scene", LoadGameCompletedCallback());
                 break;
-            case 2:
+            case GAME_MODE.LEGACY_MODE:
                 ScenesManager.instance.LoadSceneAsync("legacy_game_scene", LoadGameCompletedCallback());
                 break;
             default:
@@ -281,7 +281,6 @@ public class GlobalUIManager : MonoBehaviour
                 break;
         }
 
-        //ScenesManager.instance.UnloadSceneAsync("world_scene");
         Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = true;
@@ -291,14 +290,12 @@ public class GlobalUIManager : MonoBehaviour
     {
         SetMenu(MENU.MENU_LOADING);
 
-        //ScenesManager.instance.LoadSceneAsync("world_scene", UnloadGameCompletedCallback());
-
         switch (ScenesManager.instance.gameMode)
         {
-            case 1:
+            case GAME_MODE.INFINITE_MODE:
                 ScenesManager.instance.UnloadSceneAsync("infinite_game_scene", UnloadGameCompletedCallback());
                 break;
-            case 2:
+            case GAME_MODE.LEGACY_MODE:
                 ScenesManager.instance.UnloadSceneAsync("legacy_game_scene", UnloadGameCompletedCallback());
                 break;
             default:
@@ -306,7 +303,7 @@ public class GlobalUIManager : MonoBehaviour
                 break;
         }
 
-        ScenesManager.instance.gameMode = 0;
+        ScenesManager.instance.gameMode = GAME_MODE.NONE;
 
         Time.timeScale = 1f;
         gameIsPaused = false;

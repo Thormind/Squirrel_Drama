@@ -128,15 +128,20 @@ public class InfiniteElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+
         inputEnabled = true;
 
-        InfiniteGameController.instance.ReadyForNextHole();
+        InfiniteGameController.instance.ReadyForLevel();
 
         yield return null;
     }
 
     IEnumerator MoveBarToBottomPosition()
     {
+
+        bottomMovementSpeed = CalculateMoveBarToBottomSpeed();
+        print($"{bottomMovementSpeed}");
+
         while (leftLifterPosition.y > bottomPosition.y || rightLifterPosition.y > bottomPosition.y)
         {
 
@@ -192,6 +197,12 @@ public class InfiniteElevatorController : MonoBehaviour
         StartCoroutine(MoveBarToBottomPosition());
     }
 
+    public float CalculateMoveBarToBottomSpeed()
+    {
+        return maxHeight + (transform.localPosition.y * 2.5f);
+    }
+
+
     private void OnLeftEndUp(InputValue leftUpValue)
     {
         //print("UP");
@@ -215,6 +226,13 @@ public class InfiniteElevatorController : MonoBehaviour
         //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
     }
+
+
+
+
+
+
+    // ========== DEV FUNCTIONS ========== //
 
     public void QuickBarResetFunction()
     {
@@ -305,6 +323,4 @@ public class InfiniteElevatorController : MonoBehaviour
 
         yield return null;
     }
-
-
 }

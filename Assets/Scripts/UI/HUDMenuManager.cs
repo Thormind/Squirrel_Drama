@@ -8,7 +8,6 @@ public class HUDMenuManager : MonoBehaviour
     public static HUDMenuManager instance;
 
     public GameObject infinitePanel;
-
     public GameObject legacyPanel;
 
     public TMP_Text legacyScoreText;
@@ -37,11 +36,11 @@ public class HUDMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (ScenesManager.instance.gameMode == 1)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             SetInfiniteHUD();
         }
-        if (ScenesManager.instance.gameMode == 2)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             SetLegacyHUD();
         }
@@ -75,7 +74,7 @@ public class HUDMenuManager : MonoBehaviour
     {
         legacyScoreText.text = LegacyGameController.instance.score.ToString();
         legacyBonusText.text = LegacyGameController.instance.bonusScore.ToString();
-        legacyBestScoreText.text = LegacyGameController.instance.bestScore.ToString();
+        legacyBestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
         legacyBallLifeText.text = LegacyGameController.instance.currentBallNumber.ToString();
     }
 
@@ -83,7 +82,7 @@ public class HUDMenuManager : MonoBehaviour
     {
         infiniteScoreText.text = InfiniteGameController.instance.score.ToString();
         infiniteBonusText.text = InfiniteGameController.instance.bonusScore.ToString();
-        infiniteBestScoreText.text = InfiniteGameController.instance.bestScore.ToString();
+        infiniteBestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
         infiniteFruitLifeText.text = InfiniteGameController.instance.currentFruitNumber.ToString();
         infiniteLevelText.text = InfiniteGameController.instance.currentLevel.ToString();
     }

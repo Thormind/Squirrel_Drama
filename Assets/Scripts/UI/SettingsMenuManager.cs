@@ -19,9 +19,9 @@ public class SettingsMenuManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject resetPanel;
 
-    public float masterVolume = 0.8f;
-    public float musicVolume = 0.5f;
-    public float sfxVolume = 1f;
+    public float masterVolume;
+    public float musicVolume;
+    public float sfxVolume;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +37,9 @@ public class SettingsMenuManager : MonoBehaviour
         confirmResetButton.onClick.AddListener(() => HandleConfirmResetButton());
         cancelResetButton.onClick.AddListener(() => HandleCancelButton());
 
+        masterVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MASTER);
+        musicVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
+        sfxVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
     }
 
     // Update is called once per frame
@@ -51,16 +54,19 @@ public class SettingsMenuManager : MonoBehaviour
     public void HandleMasterVolumeInputData(float volume)
     {
         masterVolume = volume;
+        SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MASTER, volume);
     }
 
     public void HandleMusicVolumeInputData(float volume)
     {
         musicVolume = volume;
+        SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MUSIC, volume);
     }
 
     public void HandleSFXVolumeInputData(float volume)
     {
         sfxVolume = volume;
+        SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.SFX, volume);
     }
 
     private void HandleResetButton()
@@ -77,7 +83,7 @@ public class SettingsMenuManager : MonoBehaviour
 
     private void HandleConfirmResetButton()
     {
-        //SaveManager.ResetData();
+        SaveManager.instance.ResetBestScores();
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
     }
