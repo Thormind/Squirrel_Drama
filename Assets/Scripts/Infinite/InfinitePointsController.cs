@@ -26,7 +26,7 @@ public class InfinitePointsController : MonoBehaviour
     private float yMax = 38f;
 
 
-    private int maxTries = 100;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
 

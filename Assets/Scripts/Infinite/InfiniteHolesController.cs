@@ -24,7 +24,7 @@ public class InfiniteHolesController : MonoBehaviour
     private float yMin = 2f;
     private float yMax = 38f;
 
-    private int maxTries = 100;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
     public void Awake()

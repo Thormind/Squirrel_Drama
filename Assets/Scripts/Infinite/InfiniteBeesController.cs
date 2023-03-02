@@ -25,7 +25,7 @@ public class InfiniteBeesController : MonoBehaviour
     private float beesYMax = 38f;
 
     private float currentY;
-    private int maxTries = 100;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
     public void Awake()
@@ -63,7 +63,7 @@ public class InfiniteBeesController : MonoBehaviour
 
         currentY = beesYMin;
 
-        int randomBeesQuantity = Random.Range(BeesQuantity - 2, BeesQuantity + 2);
+        int randomBeesQuantity = Random.Range(BeesQuantity, BeesQuantity + 2);
 
         for (int i = 1; i <= randomBeesQuantity; i++)
         {
@@ -82,7 +82,7 @@ public class InfiniteBeesController : MonoBehaviour
 
             GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity);
 
-            float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.05f, BeesMovementSpeed + 0.05f);
+            float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.1f, BeesMovementSpeed + 0.1f);
             beeInstantiated.GetComponent<InfiniteBeeAnimation>().SetMovementSpeed(randomMovementSpeed);
 
             beeInstantiated.transform.parent = beesParent.transform;

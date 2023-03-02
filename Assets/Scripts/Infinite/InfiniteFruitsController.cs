@@ -25,7 +25,7 @@ public class InfiniteFruitsController : MonoBehaviour
     private float yMin = 10f;
     private float yMax = 30f;
 
-    private int maxTries = 100;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
 

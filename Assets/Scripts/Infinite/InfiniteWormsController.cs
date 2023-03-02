@@ -26,7 +26,7 @@ public class InfiniteWormsController : MonoBehaviour
     private Vector3 spawnPosition;
     private bool isSpawning;
     private float _nextSpawnTime;
-    private int maxTries = 100;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
     public void Awake()
@@ -142,7 +142,7 @@ public class InfiniteWormsController : MonoBehaviour
                     //print($"Hole Position (from position finder) : {spawnedPosition}");
                     //print($"Distance: {distance}");
 
-                    if (distance <= WormsMaxDistance)
+                    if (distance <= WormsMaxDistance && tmpSpawnedPos.y > fruitPosition.y && distance >= WormsMinDistance)
                     {
                         //spawnPosition = wormsParent.transform.TransformPoint(spawnedPosition);
                         spawnPosition = tmpSpawnedPos;

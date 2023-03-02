@@ -32,7 +32,7 @@ public class InfiniteBearController : MonoBehaviour
     private Vector3 spawnPosition;
     private bool isSpawning;
     private float _nextSpawnTime;
-    private int maxTries = 200;
+    private int maxTries = 500;
     public bool isAllSpawned;
 
     public void Awake()
@@ -97,7 +97,7 @@ public class InfiniteBearController : MonoBehaviour
             NotifySpawnDebug(true);
 
             //Vector3 worldPosition = bearParent.transform.TransformPoint(position);
-            Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-60f, 60));
+            Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
             bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
 
             float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 1f, BearWarnAnimationTime + 1f);
@@ -134,7 +134,7 @@ public class InfiniteBearController : MonoBehaviour
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
 
-            localPosition = new Vector3(x, y, 0);
+            localPosition = new Vector3(x, y, 0.25f);
             spawnPosition = bearParent.transform.TransformPoint(localPosition);
 
             //print($"Bear Local Position (from position finder) : {localPosition}");
