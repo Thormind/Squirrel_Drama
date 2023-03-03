@@ -32,7 +32,7 @@ public class UIAnimation : MonoBehaviour
     public float easedProgress;
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (isPlaying)
         {
@@ -48,6 +48,9 @@ public class UIAnimation : MonoBehaviour
         // Set the start time for the animation
         startTime = Time.realtimeSinceStartup;
 
+        if(animationType == MENU_ANIMATION_TYPE.BOUNCING)
+            Debug.Log("start time:" + startTime);
+
         isPlaying = true;
     }
 
@@ -55,6 +58,9 @@ public class UIAnimation : MonoBehaviour
     {
         // Calculate the progress of the animation
         float progress = (Time.realtimeSinceStartup - startTime) / animationDuration;
+
+        if (animationType == MENU_ANIMATION_TYPE.BOUNCING)
+            Debug.Log("progress:" + progress);
 
         // Use the animation curve to ease the animation
         if (animationType == MENU_ANIMATION_TYPE.NO_TRANSITION)

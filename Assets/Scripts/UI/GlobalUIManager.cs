@@ -243,7 +243,7 @@ public class GlobalUIManager : MonoBehaviour
     public void PauseGame()
     {
         SetMenu(MENU.MENU_PAUSE);
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         gameIsPaused = true;
         StartCoroutine(PauseResumeCallback());
     }
