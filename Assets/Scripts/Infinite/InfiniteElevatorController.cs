@@ -10,118 +10,56 @@ public class InfiniteElevatorController : MonoBehaviour
     private float movementSpeed = 30f;
     private float resetMovementSpeed = 500f;
 
+    public Transform bottom;
+    public Transform start;
+    public Transform end;
+
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
-    public Vector2 leftLifterPosition;
-    public Vector2 rightLifterPosition;
 
-    public Transform fruitTransformRef;
+    private Vector2 movementOffset;
 
-    private Vector3 bottomPosition;
-    private Vector3 startPosition;
-
-    private Vector2 movementOffsetLeft = new Vector2();
-    private Vector2 movementOffsetRight = new Vector2();
     private float leftUpInputValue;
     private float leftDownInputValue;
     private float rightUpInputValue;
     private float rightDownInputValue;
 
-    public float maxDifference = 6f;
-
-    public float maxHeight;
-    public float minHeight;
+    private float maxDifference = 12f;
 
     private bool inputEnabled = false;
-
-    public float startPositionVerticalOffset = 6f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        bottomPosition = transform.localPosition;
-        startPosition = bottomPosition + new Vector3(0, startPositionVerticalOffset, 0);
-        minHeight = startPosition.y;
-        maxHeight = minHeight + 40.5f;
-    }
 
     private void FixedUpdate()
     {
         if (inputEnabled)
         {
-            movementOffsetLeft = Vector3.zero;
-            movementOffsetRight = Vector3.zero;
-
-            if (leftUpInputValue != 0)
-            {
-                movementOffsetLeft += leftUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
-            }
-            if (leftDownInputValue != 0)
-            {
-                movementOffsetLeft += leftDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
-            }
-            if (rightUpInputValue != 0)
-            {
-                movementOffsetRight += rightUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
-            }
-            if (rightDownInputValue != 0)
-            {
-                movementOffsetRight += rightDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
-            }
-
-            leftLifterPosition = leftLifter.transform.localPosition;
-            rightLifterPosition = rightLifter.transform.localPosition;
-
-            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
-            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
-
-            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
-            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
-
-            Vector2 newLeftLifterPosition = leftWorldPos + movementOffsetLeft;
-            Vector2 newRightLifterPosition = rightWorldPos + movementOffsetRight;
-
-            if (Mathf.Abs(leftLifterPosition.y - (rightLifterPosition.y + movementOffsetRight.y)) <= maxDifference)
-            {
-                if (rightLifterPosition.y + movementOffsetRight.y >= minHeight
-                    && rightLifterPosition.y + movementOffsetRight.y <= maxHeight)
-                {
-                    rightLifter.MovePosition(newRightLifterPosition);
-                }
-            }
-
-            if (Mathf.Abs((leftLifterPosition.y + movementOffsetLeft.y) - rightLifterPosition.y) <= maxDifference)
-            {
-                if (leftLifterPosition.y + movementOffsetLeft.y >= minHeight
-                     && leftLifterPosition.y + movementOffsetLeft.y <= maxHeight)
-                {
-                    leftLifter.MovePosition(newLeftLifterPosition);
-                }
-            }
-
-            if (rightLifterPosition.y + movementOffsetRight.y >= maxHeight
-                || leftLifterPosition.y + movementOffsetLeft.y >= maxHeight)
+            if (leftLifter.position.y >= end.position.y
+                || rightLifter.position.y >= end.position.y)
             {
                 InfiniteGameController.instance.LevelCompleted();
+            }
+
+            Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
+            movementOffset = input * Time.fixedDeltaTime * movementSpeed;
+
+            Vector2 newLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
+            Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
+
+            if (Mathf.Abs(newLeftLifterPosition.y - (newRightLifterPosition.y)) <= maxDifference)
+            {
+                float leftTargetY = Mathf.Clamp(newLeftLifterPosition.y, start.position.y, end.position.y);
+                float rightTargetY = Mathf.Clamp(newRightLifterPosition.y, start.position.y, end.position.y);
+                leftLifter.MovePosition(new Vector2(newLeftLifterPosition.x, leftTargetY));
+                rightLifter.MovePosition(new Vector2(newRightLifterPosition.x, rightTargetY));
             }
         }
     }
 
     IEnumerator MoveBarToStartPosition()
     {
-        while (leftLifter.transform.localPosition.y < bottomPosition.y + startPositionVerticalOffset)
+        while (leftLifter.position.y < start.position.y)
         {
-            leftLifterPosition = leftLifter.transform.localPosition;
-            rightLifterPosition = rightLifter.transform.localPosition;
-
-            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
-            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
-
-            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
-            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
-
-            Vector2 newLifterPosition = leftWorldPos + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newLifterPosition = leftLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
 
             leftLifter.MovePosition(newLifterPosition);
             rightLifter.MovePosition(newRightLifterPosition);
@@ -138,32 +76,18 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToBottomPosition()
     {
-
         bottomMovementSpeed = CalculateMoveBarToBottomSpeed();
-        print($"{bottomMovementSpeed}");
 
-        while (leftLifterPosition.y > bottomPosition.y || rightLifterPosition.y > bottomPosition.y)
+        while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
         {
 
-            leftLifterPosition = leftLifter.transform.localPosition;
-            rightLifterPosition = rightLifter.transform.localPosition;
-
-            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
-            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
-
-            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
-            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
-
-            Vector2 newLeftLifterPosition = leftWorldPos - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime;
-
-            if (leftLifterPosition.y > bottomPosition.y)
+            if (leftLifter.position.y > bottom.position.y)
             {
-                leftLifter.MovePosition(newLeftLifterPosition);
+                leftLifter.MovePosition(leftLifter.position - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime);
             }
-            if (rightLifterPosition.y > bottomPosition.y)
+            if (rightLifter.position.y > bottom.position.y)
             {
-                rightLifter.MovePosition(newRightLifterPosition);
+                rightLifter.MovePosition(rightLifter.position - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime);
             }
 
             yield return new WaitForEndOfFrame();
@@ -199,7 +123,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public float CalculateMoveBarToBottomSpeed()
     {
-        return maxHeight + (transform.localPosition.y * 2.5f);
+        return 40f + (transform.localPosition.y * 2.5f);
     }
 
 
@@ -242,28 +166,16 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator QuickBarResetToBottom()
     {
-        while (leftLifterPosition.y > bottomPosition.y || rightLifterPosition.y > bottomPosition.y)
+        while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
         {
 
-            leftLifterPosition = leftLifter.transform.localPosition;
-            rightLifterPosition = rightLifter.transform.localPosition;
-
-            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
-            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
-
-            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
-            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
-
-            Vector2 newLeftLifterPosition = leftWorldPos - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
-
-            if (leftLifterPosition.y > bottomPosition.y)
+            if (leftLifter.position.y > bottom.position.y)
             {
-                leftLifter.MovePosition(newLeftLifterPosition);
+                leftLifter.MovePosition(leftLifter.position - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime);
             }
-            if (rightLifterPosition.y > bottomPosition.y)
+            if (rightLifter.position.y > bottom.position.y)
             {
-                rightLifter.MovePosition(newRightLifterPosition);
+                rightLifter.MovePosition(leftLifter.position - Vector2.up * resetMovementSpeed * Time.fixedDeltaTime);
             }
 
             yield return new WaitForEndOfFrame();
@@ -276,48 +188,17 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator QuickBarResetToStart()
     {
-        while (leftLifter.transform.localPosition.y < bottomPosition.y + startPositionVerticalOffset)
+        while (leftLifter.position.y < start.position.y)
         {
-            leftLifterPosition = leftLifter.transform.localPosition;
-            rightLifterPosition = rightLifter.transform.localPosition;
-
-            Vector2 leftLifterParentPosition = leftLifter.transform.parent.localPosition;
-            Vector2 rightLifterParentPosition = rightLifter.transform.parent.localPosition;
-
-            Vector2 leftWorldPos = leftLifter.transform.TransformPoint(leftLifterParentPosition);
-            Vector2 rightWorldPos = rightLifter.transform.TransformPoint(rightLifterParentPosition);
-
-            Vector2 newLifterPosition = leftWorldPos + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightWorldPos + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime;
-
-            leftLifter.MovePosition(newLifterPosition);
-            rightLifter.MovePosition(newRightLifterPosition);
+            leftLifter.MovePosition(leftLifter.position + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime);
+            rightLifter.MovePosition(rightLifter.position + Vector2.up * resetMovementSpeed * Time.fixedDeltaTime);
 
             yield return new WaitForEndOfFrame();
         }
 
         inputEnabled = true;
 
-        if (InfiniteHolesController.instance != null)
-        {
-            InfiniteHolesController.instance.SpawnHoles();
-        }
-        if (InfiniteBeesController.instance != null)
-        {
-            InfiniteBeesController.instance.SpawnBees();
-        }
-        if (InfiniteWormsController.instance != null)
-        {
-            InfiniteWormsController.instance.SpawnWorms();
-        }
-        if (InfinitePointsController.instance != null)
-        {
-            InfinitePointsController.instance.SpawnPoints();
-        }
-        if (InfiniteFruitsController.instance != null)
-        {
-            InfiniteFruitsController.instance.SpawnFruits();
-        }
+        InfiniteGameController.instance.SpawnObstacles();
 
         InfiniteGameController.instance.QuickResetFruit();
 
