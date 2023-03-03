@@ -167,5 +167,32 @@ public class CameraManager : MonoBehaviour
         isFocused = false;
         FocusTransition();
     }
+
+    public void ShakeCamera(float distanceToObstacle)
+    {
+        float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 2.5f; // Set a max force for the shake
+        print($"Shake force: {shakeForce}");
+        StartCoroutine(DoShakeCamera(shakeForce));
+    }
+
+    private IEnumerator DoShakeCamera(float shakeForce)
+    {
+        float elapsedTime = 0f;
+        Vector3 originalPosition = transform.position;
+
+        while (elapsedTime < 0.3f) // Shake for 0.3 seconds
+        {
+            float x = originalPosition.x + Random.Range(-shakeForce, shakeForce) * 0.05f;
+            float y = originalPosition.y + Random.Range(-shakeForce, shakeForce) * 0.05f;
+            float z = originalPosition.z + Random.Range(-shakeForce, shakeForce) * 0.05f;
+
+            transform.position = new Vector3(x, y, z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = originalPosition; // Reset the camera position to its original position
+    }
 }
 
