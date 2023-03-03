@@ -19,13 +19,15 @@ public class InfiniteBearAnimation : MonoBehaviour
     public float shadowMinScale = 0.25f;
 
     public float shadowMinAlpha = 100f;
-    public float shadowMaxAlpha = 255f;
+    public float shadowMaxAlpha = 150f;
 
     public float bearMinAlpha = 175f;
     public float bearMaxAlpha = 255f;
 
     private bool isCoroutineRunning = false;
     private BoxCollider2D bearCollider;
+
+    public GameObject impactVFX;
 
 
     private void Start()
@@ -90,10 +92,12 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         while (t < 1f)
         {
-            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-            bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, t);
+            float easedProgress = QuadraticEasing(t);
 
-            float bearAlpha = Mathf.Lerp(bearMinAlpha, bearMaxAlpha, t);
+            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
+            bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, easedProgress);
+
+            float bearAlpha = Mathf.Lerp(bearMinAlpha, bearMaxAlpha, easedProgress);
             Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
             bearColor.a = bearAlpha / 255f;
             bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
@@ -103,7 +107,15 @@ public class InfiniteBearAnimation : MonoBehaviour
         }
 
         bearCollider.enabled = true;
-        //bearCollider.isTrigger = true;
+
+        impactVFX.SetActive(true);
+        var mod = impactVFX.GetComponent<ParticleSystem>().main;
+        mod.simulationSpeed = 2f;
+        impactVFX.GetComponent<ParticleSystem>().Play();
+
+        distance = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
+        CameraManager.instance.ShakeCamera(distance);
+
         t = 0f;
 
         while (t < 1f)
@@ -124,20 +136,22 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         while (t < 1f)
         {
-            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
+            float easedProgress = QuadraticEasing(t);
 
-            float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, t);
+            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
+
+            float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, easedProgress);
             Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
             bearColor.a = bearAlpha / 255f;
             bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
 
-            float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, t);
+            float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, easedProgress);
             Color shadowColor = shadowImage.GetComponent<Image>().color;
             shadowColor.a = shadowAlpha / 255f;
             shadowImage.GetComponent<Image>().color = shadowColor;
 
-            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, t);
-            float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, t);
+            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, easedProgress);
+            float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, easedProgress);
             shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
 
             t += Time.deltaTime / delayBeforeDestroy;
@@ -149,5 +163,14 @@ public class InfiniteBearAnimation : MonoBehaviour
         Destroy(gameObject);
 
         isCoroutineRunning = false;
+    }
+
+    float QuadraticEasing(float t)
+    {
+        // Quadratic easing in and out
+        if (t < 0.5f)
+            return 2 * t * t;
+        else
+            return -1 + (4 - 2 * t) * t;
     }
 }
