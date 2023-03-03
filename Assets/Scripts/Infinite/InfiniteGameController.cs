@@ -219,7 +219,7 @@ public class InfiniteGameController : MonoBehaviour
 
         UpdateHUD();
 
-        elevatorControllerRef.MoveBarToStartPositionFunction();
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void ReadyForLevel()

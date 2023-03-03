@@ -131,7 +131,7 @@ public class LegacyGameController : MonoBehaviour
 
         LegacyMachineLight.SetActive(true);
 
-        elevatorControllerRef.MoveBarToStartPositionFunction();
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void ReadyForNextHole()
