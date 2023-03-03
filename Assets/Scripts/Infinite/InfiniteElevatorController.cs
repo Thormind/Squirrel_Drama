@@ -41,15 +41,15 @@ public class InfiniteElevatorController : MonoBehaviour
             Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
             movementOffset = input * Time.fixedDeltaTime * movementSpeed;
 
-            Vector2 newLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
-            Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
+            Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
+            Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
 
-            if (Mathf.Abs(newLeftLifterPosition.y - (newRightLifterPosition.y)) <= maxDifference)
+            if (Mathf.Abs(targetLeftLifterPosition.y - (targetRightLifterPosition.y)) <= maxDifference)
             {
-                float leftTargetY = Mathf.Clamp(newLeftLifterPosition.y, start.position.y, end.position.y);
-                float rightTargetY = Mathf.Clamp(newRightLifterPosition.y, start.position.y, end.position.y);
-                leftLifter.MovePosition(new Vector2(newLeftLifterPosition.x, leftTargetY));
-                rightLifter.MovePosition(new Vector2(newRightLifterPosition.x, rightTargetY));
+                float leftTargetY = Mathf.Clamp(targetLeftLifterPosition.y, start.position.y, end.position.y);
+                float rightTargetY = Mathf.Clamp(targetRightLifterPosition.y, start.position.y, end.position.y);
+                leftLifter.MovePosition(new Vector2(targetLeftLifterPosition.x, leftTargetY));
+                rightLifter.MovePosition(new Vector2(targetRightLifterPosition.x, rightTargetY));
             }
         }
     }

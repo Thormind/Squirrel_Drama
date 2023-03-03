@@ -14,19 +14,25 @@ public class InfiniteBearAnimation : MonoBehaviour
     private float warnCooldown;
 
     public float translationSpeed = 10f;
-    public float delayBeforeDestroy = 0.1f;
+    public float delayBeforeDestroy = 0.05f;
 
     public float shadowMinScale = 0.25f;
+
     public float shadowMinAlpha = 100f;
     public float shadowMaxAlpha = 255f;
 
+    public float bearMinAlpha = 175f;
+    public float bearMaxAlpha = 255f;
+
     private bool isCoroutineRunning = false;
-    private BoxCollider2D collider;
+    private BoxCollider2D bearCollider;
+
 
     private void Start()
     {
-        collider = GetComponent<BoxCollider2D>();
-        collider.enabled = false;
+        bearCollider = GetComponent<BoxCollider2D>();
+        bearCollider.enabled = false;
+
         bearPaw.SetActive(false);
     }
 
@@ -86,38 +92,59 @@ public class InfiniteBearAnimation : MonoBehaviour
         {
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
             bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, t);
+
+            float bearAlpha = Mathf.Lerp(bearMinAlpha, bearMaxAlpha, t);
+            Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
+            bearColor.a = bearAlpha / 255f;
+            bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
+
             t += Time.deltaTime / duration;
             yield return null;
         }
 
-        //collider.isTrigger = true;
-        collider.enabled = true;
+        bearCollider.enabled = true;
+        //bearCollider.isTrigger = true;
+        t = 0f;
 
         while (t < 1f)
         {
-            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-            t += Time.deltaTime / delayBeforeDestroy;
+            t += Time.deltaTime / 0.01f;
             yield return null;
         }
 
-        collider.enabled = false;
+        bearCollider.enabled = false;
 
         startPosition = bearPaw.transform.localPosition;
         endPosition = new Vector3(0f, 0f, -0.5f);
 
-        distance = Vector3.Distance(startPosition, endPosition);
-        duration = distance / translationSpeed;
+        //distance = Vector3.Distance(startPosition, endPosition);
+        //duration = distance / translationSpeed;
 
         t = 0f;
 
         while (t < 1f)
         {
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, t);
-            t += Time.deltaTime / duration;
+
+            float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, t);
+            Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
+            bearColor.a = bearAlpha / 255f;
+            bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
+
+            float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, t);
+            Color shadowColor = shadowImage.GetComponent<Image>().color;
+            shadowColor.a = shadowAlpha / 255f;
+            shadowImage.GetComponent<Image>().color = shadowColor;
+
+            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, t);
+            float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, t);
+            shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
+
+            t += Time.deltaTime / delayBeforeDestroy;
             yield return null;
         }
 
-        yield return new WaitForSeconds(delayBeforeDestroy);
+        //yield return new WaitForSeconds(delayBeforeDestroy);
 
         Destroy(gameObject);
 
