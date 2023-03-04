@@ -19,9 +19,13 @@ public class ScoreboardMenuManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject quitPanel;
 
+    [SerializeField] private GameObject firstSlected;
+
     // Start is called before the first frame update
     void Start()
     {
+        GlobalUIManager.instance.es.SetSelectedGameObject(replayButton.gameObject);
+
         replayButton.onClick.AddListener(() => HandleReplayButton());
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
@@ -36,12 +40,14 @@ public class ScoreboardMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(cancelHomeButton.gameObject);
     }
 
     private void HandleCancelButton()
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(replayButton.gameObject);
     }
 
     private void HandleReplayButton()

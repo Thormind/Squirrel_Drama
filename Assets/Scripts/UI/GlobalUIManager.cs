@@ -73,6 +73,26 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_MAIN);
     }
 
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (gameIsActive && es.enabled)
+            {
+                if (gameIsPaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
+            }
+        }
+
+    }
+
     public void OnPauseResume()
     {
         //(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && 

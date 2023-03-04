@@ -20,9 +20,13 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject retryPanel;
     public GameObject quitPanel;
 
+    [SerializeField] private GameObject firstSlected;
+
     // Start is called before the first frame update
     void Start()
     {
+        GlobalUIManager.instance.es.firstSelectedGameObject = firstSlected;
+
         resumeButton.onClick.AddListener(() => GlobalUIManager.instance.ResumeGame());
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
@@ -38,22 +42,26 @@ public class PauseMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             GlobalUIManager.instance.OnPauseResume();
         }
+        */
     }
 
     private void HandleRetryButton()
     {
         mainPanel.SetActive(false);
         retryPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(cancelRetryButton.gameObject);
     }
 
     private void HandleQuitButton()
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(cancelQuitButton.gameObject);
     }
 
     private void HandleCancelButton()
@@ -61,6 +69,7 @@ public class PauseMenuManager : MonoBehaviour
         retryPanel.SetActive(false);
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(replayButton.gameObject);
     }
 
     private void HandleReplayButton()

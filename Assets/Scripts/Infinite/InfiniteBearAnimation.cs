@@ -80,7 +80,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         bearPaw.SetActive(true);
 
         Vector3 startPosition = bearPaw.transform.localPosition;
-        Vector3 endPosition = new Vector3(0f, 0f, 0f);
+        Vector3 endPosition = new Vector3(0f, 0f, -0.05f);
 
         Quaternion startRotation = bearPaw.transform.localRotation;
         Quaternion endRotation = Quaternion.Euler(0, 0, 0);
@@ -114,7 +114,11 @@ public class InfiniteBearAnimation : MonoBehaviour
         impactVFX.GetComponent<ParticleSystem>().Play();
 
         distance = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-        CameraManager.instance.ShakeCamera(distance);
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.ShakeCamera(distance);
+        }
+
 
         t = 0f;
 

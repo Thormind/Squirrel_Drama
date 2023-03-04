@@ -46,16 +46,6 @@ public class HUDMenuManager : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-        {
-            GlobalUIManager.instance.OnPauseResume();
-        }
-    }
-
     public void SetInfiniteHUD()
     {
         legacyPanel.SetActive(false);

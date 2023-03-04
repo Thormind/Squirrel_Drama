@@ -23,9 +23,13 @@ public class SettingsMenuManager : MonoBehaviour
     public float musicVolume;
     public float sfxVolume;
 
+    [SerializeField] private GameObject firstSlected;
+
     // Start is called before the first frame update
     void Start()
     {
+        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
+
         exitButton.onClick.AddListener(() => GlobalUIManager.instance.SetLastMenu());
 
         masterVolumeSlider.onValueChanged.AddListener(delegate { HandleMasterVolumeInputData(masterVolumeSlider.value); });
@@ -45,10 +49,12 @@ public class SettingsMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             GlobalUIManager.instance.OnPauseResume();
         }
+        */
     }
 
     public void HandleMasterVolumeInputData(float volume)
@@ -73,16 +79,19 @@ public class SettingsMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         resetPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(cancelResetButton.gameObject);
     }
 
     private void HandleCancelButton()
     {
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
+        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
     }
 
     private void HandleConfirmResetButton()
     {
+        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
         SaveManager.instance.ResetBestScores();
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);

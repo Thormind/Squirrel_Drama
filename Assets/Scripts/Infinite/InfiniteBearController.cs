@@ -101,7 +101,7 @@ public class InfiniteBearController : MonoBehaviour
             bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
 
             float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 1f, BearWarnAnimationTime + 1f);
-            float randomImpactRange = Random.Range(BearImpactRange - 0.25f, BearImpactRange + 0.25f);
+            float randomImpactRange = Random.Range(BearImpactRange - 0.1f, BearImpactRange + 0.1f);
 
             bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
                 randomWarnAnimationTime, randomImpactRange);

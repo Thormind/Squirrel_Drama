@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.Controls;
-using TMPro;
 
 public class CreditsMenuManager : MonoBehaviour
 {
     public Keyboard keyboard;
 
+    [SerializeField] private Button anyKeyButton;
+
     // Start is called before the first frame update
     void Start()
     {
         keyboard = Keyboard.current;
+
+        anyKeyButton.onClick.AddListener(() => GlobalUIManager.instance.SetLastMenu());
+
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
     // Update is called once per frame
