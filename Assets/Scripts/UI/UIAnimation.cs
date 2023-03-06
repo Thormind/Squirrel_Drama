@@ -18,6 +18,8 @@ public class UIAnimation : MonoBehaviour
 
     private float startTime;
 
+    public float floatingHeight;
+
     public float easedProgress;
     public bool startVisible = false;
     public bool isVisible = false;
@@ -36,6 +38,7 @@ public class UIAnimation : MonoBehaviour
         targetPosition = panelRectTransform.localPosition;
 
         isGoingIn = true;
+        isVisible = false;
     }
 
     public void play()
@@ -50,6 +53,7 @@ public class UIAnimation : MonoBehaviour
         startTime = Time.realtimeSinceStartup;
 
         StopAllCoroutines();
+
         if (animationType == MENU_ANIMATION_TYPE.ELASTIC)
         {
             if (isGoingIn)
@@ -97,6 +101,8 @@ public class UIAnimation : MonoBehaviour
 
         isGoingIn = !isGoingIn;
 
+        isVisible = !isVisible;
+
     }
 
     private IEnumerator AnimateBouncing(Vector3 startPosition, Vector3 endPosition, bool p_isGoingIn)
@@ -124,6 +130,8 @@ public class UIAnimation : MonoBehaviour
 
         panelRectTransform.localPosition = endPosition;
         targetPosition = endPosition;
+
+        StartCoroutine(AnimateFloating());
 
     }
 
@@ -181,6 +189,26 @@ public class UIAnimation : MonoBehaviour
         panelRectTransform.localPosition = endPosition;
         targetPosition = endPosition;
 
+    }
+
+    private IEnumerator AnimateFloating()
+    {
+        float startY = panelRectTransform.anchoredPosition.y;
+        float time = 0f;
+
+        while (isVisible)
+        {
+            while (time < animationDuration)
+            {
+                float newY = startY + Mathf.Sin(time * Mathf.PI) * floatingHeight;
+                panelRectTransform.anchoredPosition = new Vector2(panelRectTransform.anchoredPosition.x, newY);
+
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            time = 0f;
+        }
     }
 
 
