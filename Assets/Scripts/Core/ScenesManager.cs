@@ -10,6 +10,12 @@ public enum GAME_MODE
 	LEGACY_MODE
 };
 
+public enum TIME_OF_DAY
+{
+	NOON,
+	NIGHT
+};
+
 public class ScenesManager : MonoBehaviour
 {
     public static ScenesManager instance;
@@ -18,8 +24,9 @@ public class ScenesManager : MonoBehaviour
     public float unloadProgress;
 
 	public GAME_MODE gameMode;
+	public TIME_OF_DAY timeOfDay;
 
-    private void Awake()
+	private void Awake()
     {
         if (instance == null)
         {
@@ -29,9 +36,6 @@ public class ScenesManager : MonoBehaviour
         {
             Destroy(this);
         }
-
-		LoadSceneAsync("ui");
-		LoadSceneAsync("world_scene");
 	}
 
 	private void Start()

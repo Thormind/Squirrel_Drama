@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 
 public class InfiniteElevatorController : MonoBehaviour
 {
-    private float bottomMovementSpeed = 60f;
-    private float startMovementSpeed = 45f;
-    private float movementSpeed = 30f;
-    private float resetMovementSpeed = 500f;
+    private float resetMovementSpeed = 100f;
+    private float bottomMovementSpeed = 1f;
+    private float startMovementSpeed = 1f;
+
+    private float movementSpeed = 0.5f;
+    private float maxDifference = 0.3f;
 
     public Transform bottom;
     public Transform start;
@@ -23,8 +25,6 @@ public class InfiniteElevatorController : MonoBehaviour
     private float leftDownInputValue;
     private float rightUpInputValue;
     private float rightDownInputValue;
-
-    private float maxDifference = 12f;
 
     private bool inputEnabled = false;
 

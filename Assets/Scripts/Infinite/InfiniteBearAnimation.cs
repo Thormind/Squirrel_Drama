@@ -19,9 +19,9 @@ public class InfiniteBearAnimation : MonoBehaviour
     public float shadowMinScale = 0.25f;
 
     public float shadowMinAlpha = 100f;
-    public float shadowMaxAlpha = 150f;
+    public float shadowMaxAlpha = 200f;
 
-    public float bearMinAlpha = 175f;
+    public float bearMinAlpha = 170f;
     public float bearMaxAlpha = 255f;
 
     private bool isCoroutineRunning = false;
@@ -77,10 +77,12 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         countdownText.text = "";
 
+        Time.timeScale = 0.3f;
+
         bearPaw.SetActive(true);
 
         Vector3 startPosition = bearPaw.transform.localPosition;
-        Vector3 endPosition = new Vector3(0f, 0f, -0.05f);
+        Vector3 endPosition = new Vector3(0f, 0f, 0f);
 
         Quaternion startRotation = bearPaw.transform.localRotation;
         Quaternion endRotation = Quaternion.Euler(0, 0, 0);
@@ -88,11 +90,17 @@ public class InfiniteBearAnimation : MonoBehaviour
         float distance = Vector3.Distance(startPosition, endPosition);
         float duration = distance / translationSpeed;
 
+        float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
+        float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f; // Set a max force for the shake
+        print($"{distanceFromFruit}");
+        print($"{slowMotion}");
+        Time.timeScale = slowMotion;
+
         float t = 0f;
 
-        while (t < 1f)
+        while (t < 1f && bearPaw.transform.localRotation.x <= endRotation.x)
         {
-            float easedProgress = QuadraticEasing(t);
+            float easedProgress = EaseInCirc(t);
 
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
             bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, easedProgress);
@@ -119,14 +127,15 @@ public class InfiniteBearAnimation : MonoBehaviour
             CameraManager.instance.ShakeCamera(distance);
         }
 
-
         t = 0f;
 
         while (t < 1f)
         {
-            t += Time.deltaTime / 0.01f;
+            t += Time.deltaTime / 0.05f;
             yield return null;
         }
+
+        Time.timeScale = 1f;
 
         bearCollider.enabled = false;
 
@@ -140,7 +149,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         while (t < 1f)
         {
-            float easedProgress = QuadraticEasing(t);
+            float easedProgress = EaseOutCirc(t);
 
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
 
@@ -176,5 +185,15 @@ public class InfiniteBearAnimation : MonoBehaviour
             return 2 * t * t;
         else
             return -1 + (4 - 2 * t) * t;
+    }
+
+    float EaseInCirc(float t)
+    {
+        return 1 - Mathf.Sqrt(1 - Mathf.Pow(t, 2));
+    }
+
+    float EaseOutCirc(float t)
+    {
+        return Mathf.Sqrt(1 - Mathf.Pow(t - 1, 2));
     }
 }

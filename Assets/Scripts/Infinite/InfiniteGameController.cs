@@ -147,6 +147,26 @@ public class InfiniteGameController : MonoBehaviour
         return fruitRef.gameObject.transform.localPosition;
     }
 
+    public Vector3 GetElevatorPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.position;
+    }
+
+    public Vector3 GetElevatorLocalPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition;
+    }
+
+    public float GetElevatorHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.position.y;
+    }
+
+    public float GetElevatorLocalHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition.y;
+    }
+
     // ========== ANIMATIONS ========== //
 
     public void ResetFruit()
@@ -226,7 +246,7 @@ public class InfiniteGameController : MonoBehaviour
     {
         if (CameraManager.instance != null)
         {
-            CameraManager.instance.SetFocus();
+            CameraManager.instance.Transition(true);
         }
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
@@ -240,7 +260,7 @@ public class InfiniteGameController : MonoBehaviour
 
         if (CameraManager.instance != null)
         {
-            CameraManager.instance.SetUnfocus();
+            CameraManager.instance.Transition(false);
         }
 
         UpdateHUD();

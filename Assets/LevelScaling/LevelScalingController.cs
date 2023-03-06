@@ -54,6 +54,36 @@ public class LevelScalingController : MonoBehaviour
         UpdateObstacleParameters(0);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteHolesController.instance.SpawnHoles();
+        }
+        if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteBeesController.instance.SpawnBees();
+        }
+        if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteWormsController.instance.RemoveWorms();
+            InfiniteWormsController.instance.SpawnWorm();
+        }
+        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteBearController.instance.RemoveBears();
+            InfiniteBearController.instance.SpawnBear();
+        }
+        if (Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfinitePointsController.instance.SpawnPoints();
+        }
+        if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteFruitsController.instance.SpawnFruits();
+        }
+    }
+
     private void OnDifficultyChanged(int value)
     {
         InfiniteGameController.instance.SetLevel(value + 1);

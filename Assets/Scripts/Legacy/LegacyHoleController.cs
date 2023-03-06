@@ -19,7 +19,7 @@ public class LegacyHoleController : MonoBehaviour
 
     public int holesQuantity = 50;
     public int maxTries = 100;
-    public float minDistance = 0.5f;
+    private float minDistance = 0.35f;
 
     public float holesIndicatorXMin = -1.75f;
     public float holesIndicatorXMax = 1.75f;
@@ -69,16 +69,15 @@ public class LegacyHoleController : MonoBehaviour
         for (int i = 0; i < holesQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
+
             if (spawnPosition == Vector3.zero)
             {
                 Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
-            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
-            holes.Add(holeInstantiated);
-            holeInstantiated.transform.parent = holesParent.transform;
 
-            _spawnedHolesPositions.Add(spawnPosition);
+            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
+            holes.Add(holeInstantiated);
         }
     }
 
@@ -92,17 +91,16 @@ public class LegacyHoleController : MonoBehaviour
         {
             float randomX = Random.Range(holesIndicatorXMin, holesIndicatorXMax);
 
-            Vector3 spawnPosition = new Vector3(randomX, currentY, 0);
+            Vector3 localPosition = new Vector3(randomX, currentY, 0);
+            Vector3 spawnPosition = holesParent.transform.TransformPoint(localPosition);
 
-            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
+            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
             holes.Add(holeInstantiated);
-            holeInstantiated.transform.parent = holesParent.transform;
 
-            GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, spawnPosition, Quaternion.identity);
+            GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, spawnPosition, Quaternion.identity, holesParent.transform);
             holeIndicatorList.Add(holeIndicatorInstantiated);
-            holeIndicatorInstantiated.transform.parent = holesParent.transform;
 
-            _spawnedHolesPositions.Add(spawnPosition);
+            _spawnedHolesPositions.Add(localPosition);
 
             holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i);
 
@@ -114,19 +112,31 @@ public class LegacyHoleController : MonoBehaviour
     private Vector3 GetRandomSpawnPosition()
     {
         Vector3 spawnPosition;
+        Vector3 localPosition;
+
         int tries = 0;
         do
         {
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
-            spawnPosition = new Vector3(x, y, 0);
+
+            localPosition = new Vector3(x, y, 0);
+            spawnPosition = holesParent.transform.TransformPoint(localPosition);
+
             tries++;
             if (tries >= maxTries)
             {
                 spawnPosition = Vector3.zero;
                 break;
             }
-        } while (!IsValidPosition(spawnPosition));
+        } while (!IsValidPosition(localPosition));
+
+
+        if (spawnPosition != Vector3.zero)
+        {
+            _spawnedHolesPositions.Add(localPosition);
+        }
+
         return spawnPosition;
     }
 

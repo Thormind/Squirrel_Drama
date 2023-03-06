@@ -117,14 +117,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36caa646ccb49f249b3e840b8f840817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationDuration: 1
-  animationInOut: 0
-  animationType: 3
-  startPosition: {x: 0, y: 0}
-  endPosition: {x: 0, y: 0}
-  startScale: {x: 0, y: 0, z: 0}
-  endScale: {x: 0, y: 0, z: 0}
+  animationDuration: 0
+  animationType: 0
   easedProgress: 0
+  startVisible: 0
+  isVisible: 0
+  isGoingIn: 1
+  targetScale: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  panelRectTransform: {fileID: 2827692435524207590}
 --- !u!114 &8294949613786799163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7958947338807609958
 RectTransform:
   m_ObjectHideFlags: 0
@@ -478,7 +479,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press any key to Start
+  m_text: Press Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
   m_sharedMaterial: {fileID: -757681918098489689, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}

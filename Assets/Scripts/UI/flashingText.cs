@@ -9,11 +9,21 @@ public class flashingText : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("Flash", 0, flashInterval);
+        StartFlash();
     }
 
     private void Flash()
     {
         objectToFlash.SetActive(!objectToFlash.activeSelf);
+    }
+
+    public void StartFlash()
+    {
+        InvokeRepeating("Flash", 0, flashInterval);
+    }
+
+    public void StopFlash()
+    {
+        CancelInvoke("Flash");
     }
 }

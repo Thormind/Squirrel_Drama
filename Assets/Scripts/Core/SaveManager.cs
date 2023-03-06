@@ -9,6 +9,7 @@ public class SaveManager : MonoBehaviour
 
     private Dictionary<string, int> bestScores = new Dictionary<string, int>();
     private Dictionary<string, float> audioSettings = new Dictionary<string, float>();
+    private TIME_OF_DAY timeOfDay;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class SaveManager : MonoBehaviour
 
         LoadBestScores();
         LoadAudioSettings();
+        LoadTimeOfDay();
     }
 
     // Best Scores Data
@@ -100,5 +102,42 @@ public class SaveManager : MonoBehaviour
     {
         string audioChannelName = audioChannel.ToString();
         return audioSettings[audioChannelName];
+    }
+
+    //TIME OF DAY SETTINGS
+    public TIME_OF_DAY TimeOfDay
+    {
+        get { return timeOfDay; }
+        set
+        {
+            timeOfDay = value;
+            SaveTimeOfDay();
+        }
+    }
+
+    private void SaveTimeOfDay()
+    {
+        if (timeOfDay == TIME_OF_DAY.NOON)
+        {
+            PlayerPrefs.SetInt("TimeOfDay_", 0);
+        }
+        if (TimeOfDay == TIME_OF_DAY.NIGHT)
+        {
+            PlayerPrefs.SetInt("TimeOfDay_", 1);
+        }
+    }
+
+    private void LoadTimeOfDay()
+    {
+        int tod = PlayerPrefs.GetInt("TimeOfDay_", 0);
+        if (tod == 0)
+        {
+            timeOfDay = TIME_OF_DAY.NOON;
+        }
+        if (tod == 1)
+        {
+            timeOfDay = TIME_OF_DAY.NIGHT;
+        }
+
     }
 }

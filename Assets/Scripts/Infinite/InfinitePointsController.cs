@@ -47,16 +47,6 @@ public class InfinitePointsController : MonoBehaviour
         isAllSpawned = false;
     }
 
-    private void Update()
-    {
-        
-        if (Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.R))
-        {
-            SpawnPoints();
-        }
-
-    }
-
     public void SpawnPoints()
     {
         RemovePoints();
@@ -76,9 +66,8 @@ public class InfinitePointsController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity);
+            GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity, pointsParent.transform);
             points.Add(pointInstantiated);
-            pointInstantiated.transform.parent = pointsParent.transform;
 
             _spawnedPointsPositions.Add(spawnPosition);
         }

@@ -18,8 +18,8 @@ public class InfiniteHolesController : MonoBehaviour
     private float[] _holesMinDistance = new float[9]; // { 2f, 2f, 2f, 1f, 1f, 1f, 0.5f, 0.5f, 0.5f } ;
 
     //Spawning Limits Parameters
-    private float xMin = -2.8f;
-    private float xMax = 2.8f;
+    private float xMin = -2.75f;
+    private float xMax = 2.75f;
 
     private float yMin = 2f;
     private float yMax = 38f;
@@ -44,15 +44,6 @@ public class InfiniteHolesController : MonoBehaviour
         isAllSpawned = false;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.R))
-        {
-            SpawnHoles();
-            InfiniteGameController.instance.SetLevel(InfiniteGameController.instance.currentLevel);
-        }
-    }
-
     public void SpawnHoles()
     {
         RemoveHoles();
@@ -72,9 +63,8 @@ public class InfiniteHolesController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
+            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
             holes.Add(holeInstantiated);
-            holeInstantiated.transform.parent = holesParent.transform;
         }
     }
 

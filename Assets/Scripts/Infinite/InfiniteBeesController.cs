@@ -46,15 +46,6 @@ public class InfiniteBeesController : MonoBehaviour
         isAllSpawned = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.R))
-        {
-            SpawnBees();
-        }
-    }
-
     public void SpawnBees()
     {
         RemoveBees();
@@ -80,12 +71,11 @@ public class InfiniteBeesController : MonoBehaviour
 
             Vector3 realPosition = beesParent.transform.TransformPoint(spawnPosition);
 
-            GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity);
+            GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity, beesParent.transform);
 
             float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.1f, BeesMovementSpeed + 0.1f);
             beeInstantiated.GetComponent<InfiniteBeeAnimation>().SetMovementSpeed(randomMovementSpeed);
 
-            beeInstantiated.transform.parent = beesParent.transform;
             _spawnedBeesPositions.Add(spawnPosition);
         }
     }

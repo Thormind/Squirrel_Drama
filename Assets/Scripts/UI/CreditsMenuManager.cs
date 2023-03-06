@@ -6,26 +6,83 @@ using UnityEngine.InputSystem;
 
 public class CreditsMenuManager : MonoBehaviour
 {
-    public Keyboard keyboard;
-
     [SerializeField] private Button anyKeyButton;
+    [SerializeField] private GameObject anyKeyText;
+
+    [SerializeField] private Toggle controlsToggle;
+    [SerializeField] private Toggle artsToggle;
+    [SerializeField] private Toggle creditsToggle;
+
+    [SerializeField] private GameObject keyboardControlsPanel;
+    [SerializeField] private GameObject gamepadControlsPanel;
+    [SerializeField] private GameObject artsPanel;
+    [SerializeField] private GameObject creditsPanel;
+
+    [SerializeField] private GameObject flashText;
+
+    private IEnumerator currentCoroutine = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        keyboard = Keyboard.current;
+        anyKeyButton.onClick.AddListener(() => HandleAnyKey());
 
-        anyKeyButton.onClick.AddListener(() => GlobalUIManager.instance.SetLastMenu());
+        controlsToggle.onValueChanged.AddListener(delegate { OnControlsToggleValueChanged(controlsToggle.isOn); });
+        creditsToggle.onValueChanged.AddListener(delegate { OnCreditsToggleValueChanged(creditsToggle.isOn); });
+        artsToggle.onValueChanged.AddListener(delegate { OnArtsToggleValueChanged(artsToggle.isOn); });
 
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HandleAnyKey()
     {
-        if (keyboard.anyKey.wasPressedThisFrame)
+        controlsToggle.isOn = false;
+        creditsToggle.isOn = false;
+        artsToggle.isOn = false;
+        anyKeyText.GetComponent<flashingText>().StopFlash();
+        anyKeyText.SetActive(false);
+        GlobalUIManager.instance.SetMainMenu();
+    }
+
+    public void OnControlsToggleValueChanged(bool value)
+    {
+        keyboardControlsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
+        gamepadControlsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
+
+    public void OnCreditsToggleValueChanged(bool value)
+    {
+        creditsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
+
+    public void OnArtsToggleValueChanged(bool value)
+    {
+        artsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
+
+    public void PlayAnimationCoroutine(IEnumerator coroutine)
+    {
+        if (currentCoroutine != null)
         {
-            GlobalUIManager.instance.SetLastMenu();
+            StartCoroutine(WaitForCoroutine(currentCoroutine, coroutine));
+        }
+        else
+        {
+            currentCoroutine = coroutine;
+            StartCoroutine(coroutine);
         }
     }
+
+    private IEnumerator WaitForCoroutine(IEnumerator previousCoroutine, IEnumerator nextCoroutine)
+    {
+        yield return StartCoroutine(previousCoroutine);
+        currentCoroutine = nextCoroutine;
+        yield return StartCoroutine(nextCoroutine);
+        currentCoroutine = null;
+    }
+
+
 }

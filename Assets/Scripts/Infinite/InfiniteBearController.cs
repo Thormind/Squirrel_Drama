@@ -64,12 +64,6 @@ public class InfiniteBearController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.R))
-        {
-            RemoveBears();
-            SpawnBear();
-        }
-
         if (isSpawning && Time.time >= _nextSpawnTime && Random.value < BearSpawnProbability && bearInstantiated == null)
         {
             SpawnBear();
@@ -96,12 +90,11 @@ public class InfiniteBearController : MonoBehaviour
         {
             NotifySpawnDebug(true);
 
-            //Vector3 worldPosition = bearParent.transform.TransformPoint(position);
             Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
             bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
 
             float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 1f, BearWarnAnimationTime + 1f);
-            float randomImpactRange = Random.Range(BearImpactRange - 0.1f, BearImpactRange + 0.1f);
+            float randomImpactRange = Random.Range(BearImpactRange, BearImpactRange);
 
             bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
                 randomWarnAnimationTime, randomImpactRange);
@@ -134,11 +127,8 @@ public class InfiniteBearController : MonoBehaviour
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
 
-            localPosition = new Vector3(x, y, 0.1f);
+            localPosition = new Vector3(x, y, 0.25f);
             spawnPosition = bearParent.transform.TransformPoint(localPosition);
-
-            //print($"Bear Local Position (from position finder) : {localPosition}");
-            //print($"Bear World Position (from position finder) : {spawnPosition}");
 
             tries++;
             if (tries >= maxTries)
@@ -155,13 +145,9 @@ public class InfiniteBearController : MonoBehaviour
     {
         Vector3 fruitPosition = InfiniteGameController.instance.GetFruitLocalPosition();
 
-        //print($"Bear Local Position (from position finder) : {position}");
-        //print($"Fruit Local Position (from position finder) : {fruitPosition}");
-
         float distance = Vector2.Distance(position, fruitPosition);
-        //print($"Distance: {distance}");
 
-        if (distance <= BearMaxDistance && position.y > fruitPosition.y && distance >= BearMinDistance)
+        if (distance <= BearMaxDistance && position.y > fruitPosition.y + BearMinDistance && distance >= BearMinDistance)
         {
             return true;
         }

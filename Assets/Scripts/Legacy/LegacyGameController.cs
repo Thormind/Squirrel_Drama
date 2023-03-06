@@ -39,13 +39,24 @@ public class LegacyGameController : MonoBehaviour
             Destroy(this);
         }
 
-        bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
+        if (SaveManager.instance != null)
+        {
+            bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
+        }
     }
-    
+
     public void UpdateHUD()
     {
-        HUDMenuManager.instance.UpdateLegacyHUD();
+        if (HUDMenuManager.instance != null)
+        {
+            HUDMenuManager.instance.UpdateLegacyHUD();
+        }
     }
+
+
+
+
+    // ========== SCORE FUNCTIONS ========== //
 
     private void RecalculateScore()
     {
@@ -55,7 +66,12 @@ public class LegacyGameController : MonoBehaviour
 
     private void RecalculateBestScore()
     {
-        SaveManager.instance.UpdateBestScore(GAME_MODE.LEGACY_MODE, score);
+
+        if (SaveManager.instance != null)
+        {
+            SaveManager.instance.UpdateBestScore(GAME_MODE.LEGACY_MODE, score);
+        }
+
         UpdateHUD();
     }
 
@@ -73,27 +89,12 @@ public class LegacyGameController : MonoBehaviour
         }
     }
 
-    public Vector3 GetBallPosition()
-    {
-        return ballRef.gameObject.transform.position;
-    }
 
-    public GameObject GetCurrentHole()
-    {
-        return LegacyHoleController.instance.holes[currentHoleIndex];
-    }
 
-    public void ResetBall()
-    {
-        ballRef.ResetBallPosition();
-    }
 
-    public void NextHole()
-    {
-        currentHoleIndex++;
-        bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
-        UpdateHUD();
-    }
+
+
+    // ========== LEVEL TRANSITIONS ========== //
 
     public void ResetGame()
     {
@@ -107,13 +108,11 @@ public class LegacyGameController : MonoBehaviour
 
         LegacyMachineLight.SetActive(false);
 
-        CameraManager.instance.SetUnfocus();
-
         LegacyHoleController.instance.RemoveHoles();
 
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
+        PrepareForHole();
 
-        CancelInvoke(nameof(DecreaseBonusScore));
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
 
         UpdateHUD();
     }
@@ -121,21 +120,36 @@ public class LegacyGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        //ResetGame();
-
         gameOverState = false;
 
         LegacyHoleController.instance.SpawnHoles();
 
-        CameraManager.instance.SetFocus();
-
         LegacyMachineLight.SetActive(true);
+
+        UpdateHUD();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
+    public void PrepareForHole()
+    {
+        CancelInvoke(nameof(DecreaseBonusScore));
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.Transition(false);
+        }
+
+        UpdateHUD();
+    }
+
     public void ReadyForNextHole()
     {
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.Transition(true);
+        }
+
         LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
@@ -143,9 +157,25 @@ public class LegacyGameController : MonoBehaviour
         UpdateHUD();
     }
 
+    public void NextHole()
+    {
+        currentHoleIndex++;
+        bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+        UpdateHUD();
+    }
+
+    public void ResetBall()
+    {
+        ballRef.ResetBallPosition();
+    }
+
+
+    // ========== OBSTACLES HANDLES ========== //
+
     public void HandleBallInHole(bool rightHole)
     {
         CancelInvoke(nameof(DecreaseBonusScore));
+
         if (rightHole)
         {
             LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
@@ -171,7 +201,10 @@ public class LegacyGameController : MonoBehaviour
 
                 LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
 
-                GlobalUIManager.instance.SetScoreBoardMenu();
+                if (GlobalUIManager.instance != null)
+                {
+                    GlobalUIManager.instance.SetScoreBoardMenu();
+                }
             }
             UpdateHUD();
         }
@@ -179,4 +212,43 @@ public class LegacyGameController : MonoBehaviour
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
+
+
+
+
+    // ========== GETTERS ========== //
+
+    public Vector3 GetBallPosition()
+    {
+        return ballRef.gameObject.transform.position;
+    }
+
+    public Vector3 GetFruitLocalPosition()
+    {
+        return ballRef.gameObject.transform.localPosition;
+    }
+    public Vector3 GetElevatorPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.position;
+    }
+
+    public Vector3 GetElevatorLocalPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition;
+    }
+
+    public float GetElevatorHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.position.y;
+    }
+
+    public float GetElevatorLocalHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition.y;
+    }
+
+    public GameObject GetCurrentHole()
+    {
+        return LegacyHoleController.instance.holes[currentHoleIndex];
+    }
 }

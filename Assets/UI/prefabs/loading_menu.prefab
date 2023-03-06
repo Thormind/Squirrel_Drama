@@ -657,11 +657,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36caa646ccb49f249b3e840b8f840817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationDuration: 1
+  animationDuration: 0
   animationInOut: 0
-  animationType: 3
+  animationType: 0
   startPosition: {x: 0, y: 0}
   endPosition: {x: 0, y: 0}
   startScale: {x: 0, y: 0, z: 0}
   endScale: {x: 0, y: 0, z: 0}
   easedProgress: 0
+  startVisible: 0
+  panelRectTransform: {fileID: 1167603137713687062}
+  isVisible: 0
+  targetScale: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}

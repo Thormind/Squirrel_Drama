@@ -1511,7 +1511,6 @@ MonoBehaviour:
   mainPanel: {fileID: 6359324843146713295}
   retryPanel: {fileID: 7838762061525719355}
   quitPanel: {fileID: 2553848438940392569}
-  firstSlected: {fileID: 7740912571116529042}
 --- !u!114 &945308617887873189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1524,14 +1523,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36caa646ccb49f249b3e840b8f840817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationDuration: 1
-  animationInOut: 0
-  animationType: 1
-  startPosition: {x: 0, y: 0}
-  endPosition: {x: 0, y: 0}
-  startScale: {x: 0, y: 0, z: 0}
-  endScale: {x: 0, y: 0, z: 0}
+  animationDuration: 0.5
+  animationType: 3
   easedProgress: 0
+  startVisible: 0
+  isVisible: 0
+  isGoingIn: 1
+  targetScale: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  panelRectTransform: {fileID: 8309960015511481116}
 --- !u!1 &5877478224415953228
 GameObject:
   m_ObjectHideFlags: 0

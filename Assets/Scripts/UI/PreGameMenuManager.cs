@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class PreGameMenuManager : MonoBehaviour
 {
-    public Keyboard keyboard;
-
     public GameObject infiniteText;
     public GameObject legacyText;
 
@@ -16,7 +14,7 @@ public class PreGameMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        keyboard = Keyboard.current;
+        GlobalUIManager.isPreGame = true;
 
         anyKeyButton.onClick.AddListener(() => HandleStartGame());
 
@@ -30,15 +28,6 @@ public class PreGameMenuManager : MonoBehaviour
         }
 
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (keyboard.anyKey.wasPressedThisFrame && !(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)))
-        {
-            HandleStartGame();
-        }
     }
 
     public void SetInfinitePregame()
@@ -55,6 +44,8 @@ public class PreGameMenuManager : MonoBehaviour
 
     public void HandleStartGame()
     {
+        GlobalUIManager.isPreGame = false;
+
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             GlobalUIManager.instance.SetHUDMenu();

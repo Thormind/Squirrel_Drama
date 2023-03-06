@@ -8,161 +8,184 @@ public enum MENU_ANIMATION_TYPE
     NO_TRANSITION,
     BOUNCING,
     QUADRATIC,
-    ACTIVE
+    ELASTIC,
 };
 
 public class UIAnimation : MonoBehaviour
 {
-    public float animationDuration = 1f;
-    public int animationInOut = 0;
+    [SerializeField] public float animationDuration = 1f;
+    [SerializeField] public MENU_ANIMATION_TYPE animationType;
 
-    public MENU_ANIMATION_TYPE animationType;
-
-    [SerializeField] public Vector2 startPosition;
-    [SerializeField] public Vector2 endPosition;
-
-    [SerializeField] public Vector3 startScale;
-    [SerializeField] public Vector3 endScale;
-
-    private RectTransform rectTransform;
     private float startTime;
 
-    private bool isPlaying = false;
-
     public float easedProgress;
+    public bool startVisible = false;
+    public bool isVisible = false;
+    public bool isGoingIn = true;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] public Vector3 targetScale;
+    [SerializeField] public Vector3 targetPosition;
+
+    private RectTransform rectTransform;
+    [SerializeField] private RectTransform panelRectTransform;
+
+    private void Awake()
     {
-        if (isPlaying)
-        {
-            playAnimationInternal();
-        }
+        //targetScale = startVisible ? Vector3.one : Vector3.zero;
+        targetScale = panelRectTransform.localScale;
+        targetPosition = panelRectTransform.localPosition;
+
+        isGoingIn = true;
     }
 
     public void play()
     {
         // Get the RectTransform component of the UI element
         rectTransform = GetComponent<RectTransform>();
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.anchoredPosition = Vector2.zero;
 
         // Set the start time for the animation
         startTime = Time.realtimeSinceStartup;
 
-        if(animationType == MENU_ANIMATION_TYPE.BOUNCING)
-            Debug.Log("start time:" + startTime);
-
-        isPlaying = true;
-    }
-
-    private void playAnimationInternal()
-    {
-        // Calculate the progress of the animation
-        float progress = (Time.realtimeSinceStartup - startTime) / animationDuration;
-
-        if (animationType == MENU_ANIMATION_TYPE.BOUNCING)
-            Debug.Log("progress:" + progress);
-
-        // Use the animation curve to ease the animation
-        if (animationType == MENU_ANIMATION_TYPE.NO_TRANSITION)
+        StopAllCoroutines();
+        if (animationType == MENU_ANIMATION_TYPE.ELASTIC)
         {
-            playNoAnimationInternal();
+            if (isGoingIn)
+            {
+                StartCoroutine(AnimateElastic(Vector3.zero, targetScale, isGoingIn));
+            }
+            else
+            {
+                StartCoroutine(AnimateElastic(targetScale, Vector3.zero, isGoingIn));
+            }
         }
         if (animationType == MENU_ANIMATION_TYPE.BOUNCING)
         {
-            easedProgress = BounceEasing(progress);
-            playBouncingAnimationInternal();
+            if (isGoingIn)
+            {
+                StartCoroutine(AnimateBouncing(new Vector2(0, -Screen.height), targetPosition, isGoingIn));
+            }
+            else
+            {
+                StartCoroutine(AnimateBouncing(targetPosition, new Vector2(0, -Screen.height), isGoingIn));
+            }
         }
         if (animationType == MENU_ANIMATION_TYPE.QUADRATIC)
         {
-            easedProgress = QuadraticEasing(progress);
-            playQuadraticAnimationInternal();
+            if (isGoingIn)
+            {
+                StartCoroutine(AnimateQuadratic(new Vector2(Screen.width, targetPosition.y), targetPosition, isGoingIn));
+            }
+            else
+            {
+                StartCoroutine(AnimateQuadratic(targetPosition, new Vector2(Screen.width, targetPosition.y), isGoingIn));
+            }
         }
-        if (animationType == MENU_ANIMATION_TYPE.ACTIVE)
+        if (animationType == MENU_ANIMATION_TYPE.NO_TRANSITION)
         {
-            playActiveAnimationInternal();
+            if (isGoingIn)
+            {
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
 
-        // If the animation has completed, stop it
-        if (progress >= 1f)
-        {
-            isPlaying = false;
-            //enabled = false;
-            //Destroy(this);
-        }
+        isGoingIn = !isGoingIn;
+
     }
 
-    private void playNoAnimationInternal()
+    private IEnumerator AnimateBouncing(Vector3 startPosition, Vector3 endPosition, bool p_isGoingIn)
     {
-        startPosition = Vector2.zero;
-        endPosition = Vector2.zero;
+        float startTime = Time.realtimeSinceStartup;
+        float endTime = startTime + animationDuration;
+        float easedTime;
 
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        while (Time.realtimeSinceStartup < endTime)
+        {
+            float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
 
-        // Set the position of the UI element based on the eased progress
-        if (animationInOut == 1)
-        {
-            rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedProgress);
+            if (p_isGoingIn)
+            {
+                easedTime = easeOutBack(t);
+            }
+            else
+            {
+                easedTime = easeInBack(t);
+            }
+
+            panelRectTransform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, easedTime);
+            yield return null;
         }
-        else
-        {
-            rectTransform.anchoredPosition = Vector2.Lerp(endPosition, startPosition, easedProgress);
-        }
+
+        panelRectTransform.localPosition = endPosition;
+        targetPosition = endPosition;
+
     }
 
-    private void playBouncingAnimationInternal()
+    private IEnumerator AnimateElastic(Vector3 startScale, Vector3 endScale, bool p_isGoingIn)
     {
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        float startTime = Time.realtimeSinceStartup;
+        float endTime = startTime + animationDuration;
+        float easedTime;
 
-        // Set the position of the UI element based on the eased progress
-        if (animationInOut == 1)
+        while (Time.realtimeSinceStartup < endTime)
         {
-            rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedProgress);
+            float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
+
+            if (p_isGoingIn)
+            {
+                easedTime = easeOutBack(t);
+            }
+            else
+            {
+                easedTime = easeInBack(t);
+            }
+
+            panelRectTransform.localScale = Vector3.LerpUnclamped(startScale, endScale, easedTime);
+            yield return null;
         }
-        else
-        {
-            rectTransform.anchoredPosition = Vector2.Lerp(endPosition, startPosition, easedProgress);
-        }
+
+        panelRectTransform.localScale = endScale;
+        targetScale = endScale;
+
     }
 
-    private void playQuadraticAnimationInternal()
+    private IEnumerator AnimateQuadratic(Vector3 startPostion, Vector3 endPosition, bool p_isGoingIn)
     {
-        startPosition = new Vector2(Screen.width/5, 0);  
-        endPosition = Vector2.zero; 
+        float startTime = Time.realtimeSinceStartup;
+        float endTime = startTime + animationDuration;
+        float easedTime;
 
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        while (Time.realtimeSinceStartup < endTime)
+        {
+            float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
 
-        // Set the position of the UI element based on the eased progress
-        if (animationInOut == 1)
-        {
-            rectTransform.anchoredPosition = Vector2.Lerp(startPosition, endPosition, easedProgress);
+            if (p_isGoingIn)
+            {
+                easedTime = easeOutBack(t);
+            }
+            else
+            {
+                easedTime = easeInBack(t);
+            }
+
+            panelRectTransform.localPosition = Vector3.LerpUnclamped(startPostion, endPosition, easedTime);
+            yield return null;
         }
-        else
-        {
-            rectTransform.anchoredPosition = Vector2.Lerp(endPosition, startPosition, easedProgress);
-        }
+
+        panelRectTransform.localPosition = endPosition;
+        targetPosition = endPosition;
+
     }
 
-    private void playActiveAnimationInternal()
-    {
 
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
-        rectTransform.anchoredPosition = Vector2.zero;
-
-        if (animationInOut == 1)
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
-
-    }
+    // ========== EASING FUNCTIONS ========== //
 
     float QuadraticEasing(float t)
     {
@@ -172,19 +195,6 @@ public class UIAnimation : MonoBehaviour
         else
             return -1 + (4 - 2 * t) * t;
     }
-
-    float SineEasing(float t)
-    {
-       return -Mathf.Cos(t * (Mathf.PI / 2)) + 1;
-    }
-
-    float ZoomingEasing(float t)
-    {
-        // Zooming in and out
-        float value = Mathf.PingPong(t, 1.0f);
-        return Mathf.SmoothStep(0.5f, 1.5f, value);
-    }
-
 
     float BounceEasing(float t)
     {
@@ -207,11 +217,44 @@ public class UIAnimation : MonoBehaviour
         }
     }
 
-    float BackEasing(float t)
+    public static float easeInElastic(float x)
     {
-        float t1 = 1.70158f;
-        float t2 = 2.70158f;
-        return t * t * (t2 * t - t1);
+        const float c4 = (2 * Mathf.PI) / 3;
 
+        if (x == 0)
+            return 0;
+        else if (x == 1)
+            return 1;
+        else
+            return -(Mathf.Pow(2, 10 * x - 10)) * Mathf.Sin((x * 10 - 10.75f) * c4);
     }
+
+    public static float easeOutElastic(float x)
+    {
+        const float c4 = (2 * Mathf.PI) / 3;
+
+        if (x == 0)
+            return 0;
+        else if (x == 1)
+            return 1;
+        else
+            return Mathf.Pow(2, -10 * x) * Mathf.Sin((x * 10 - 0.75f) * c4) + 1;
+    }
+
+    public float easeInBack(float x)
+    {
+        float c1 = 1.70158f;
+        float c3 = c1 + 1f;
+
+        return c3 * x * x * x - c1 * x * x;
+    }
+
+    float easeOutBack(float x)
+    {
+        float c1 = 1.70158f;
+        float c3 = c1 + 1f;
+
+        return 1f + c3 * Mathf.Pow(x - 1f, 3f) + c1 * Mathf.Pow(x - 1f, 2f);
+    }
+
 }

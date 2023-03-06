@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36caa646ccb49f249b3e840b8f840817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationDuration: 1
+  animationDuration: 0.5
   animationInOut: 0
   animationType: 1
   startPosition: {x: 0, y: 0}
@@ -1076,6 +1076,11 @@ MonoBehaviour:
   startScale: {x: 0, y: 0, z: 0}
   endScale: {x: 0, y: 0, z: 0}
   easedProgress: 0
+  startVisible: 0
+  panelRectTransform: {fileID: 3061401572725623851}
+  isVisible: 0
+  targetScale: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &3213366399815502816
 GameObject:
   m_ObjectHideFlags: 0

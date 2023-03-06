@@ -59,12 +59,6 @@ public class InfiniteWormsController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.R))
-        {
-            RemoveWorms();
-            SpawnWorm();
-        }
-
         if (isSpawning && Time.time >= _nextSpawnTime && Random.value < WormsSpawnProbability)
         {
             SpawnWorm();
@@ -93,10 +87,8 @@ public class InfiniteWormsController : MonoBehaviour
             holePosition = new Vector3(holePosition.x, holePosition.y, 1f);
 
             Vector3 worldPosition = wormsParent.transform.TransformPoint(holePosition);
-            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(-90, 0, 0));
+            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
             worms.Add(wormInstantiated);
-
-            wormInstantiated.transform.parent = wormsParent.transform;
 
             float randomInAnimationTime = Random.Range(WormsInAnimationTime - 1f, WormsInAnimationTime + 1f);
             float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 2f, WormsDerpAnimationTime + 2f);
@@ -139,12 +131,9 @@ public class InfiniteWormsController : MonoBehaviour
                     Vector2 tmpFruitPos = fruitPosition;
                     Vector2 tmpSpawnedPos = spawnedPosition;
                     float distance = Vector2.Distance(tmpFruitPos, tmpSpawnedPos);
-                    //print($"Hole Position (from position finder) : {spawnedPosition}");
-                    //print($"Distance: {distance}");
 
                     if (distance <= WormsMaxDistance && tmpSpawnedPos.y > fruitPosition.y && distance >= WormsMinDistance)
                     {
-                        //spawnPosition = wormsParent.transform.TransformPoint(spawnedPosition);
                         spawnPosition = tmpSpawnedPos;
                     }
                 }

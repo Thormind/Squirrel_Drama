@@ -6,14 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Core/always_loaded.unity
-    guid: 9bf49456349200944be46d7365dc851b
-  - enabled: 1
-    path: Assets/Scenes/Core/ui.unity
-    guid: 38a6f0f8258e65f4fa534110607e7ff4
-  - enabled: 1
-    path: Assets/Scenes/Core/world_scene.unity
-    guid: 42be2787592d83349b90dc63ee9ff32b
+    path: Assets/Scenes/Core/always_loaded_scene.unity
+    guid: 7ffcc00622861314781c368fe1cb3f96
   - enabled: 1
     path: Assets/Scenes/Core/infinite_game_scene.unity
     guid: dec6e4197c17e3a448b6f4eeecc0659a

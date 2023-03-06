@@ -5,7 +5,14 @@ using UnityEngine.InputSystem;
 
 public class LegacyElevatorController : MonoBehaviour
 {
-    public float movementSpeed = 1.75f;
+    private float movementSpeed = 0.02f;
+    private float maxDifference = 0.02f;
+
+    public Transform bottom;
+    public Transform start;
+    public Transform max;
+
+    private Vector2 movementOffset;
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
@@ -20,8 +27,6 @@ public class LegacyElevatorController : MonoBehaviour
     private float leftDownInputValue;
     private float rightUpInputValue;
     private float rightDownInputValue;
-
-    public float maxDifference = 1f;
 
     public float maxHeight;
     public float minHeight;
@@ -54,6 +59,46 @@ public class LegacyElevatorController : MonoBehaviour
     {
         if (inputEnabled)
         {
+
+            float leftRotationAmount = 0f;
+            float rightRotationAmount = 0f;
+
+            if (leftUpInputValue != 0)
+            {
+                leftRotationAmount = Mathf.Lerp(0, 20f, leftUpInputValue);
+            }
+            if (leftDownInputValue != 0)
+            {
+                leftRotationAmount = Mathf.Lerp(0, -20f, leftDownInputValue);
+            }
+            if (rightUpInputValue != 0)
+            {
+                rightRotationAmount = Mathf.Lerp(0, 20f, rightUpInputValue);
+            }
+            if (rightDownInputValue != 0)
+            {
+                rightRotationAmount = Mathf.Lerp(0, -20f, rightDownInputValue);
+            }
+
+            leftShaftTransform.localRotation = Quaternion.Euler(leftShaftInitialRotation.x + leftRotationAmount, leftShaftInitialRotation.y, 0f);
+            rightShaftTransform.localRotation = Quaternion.Euler(rightShaftInitialRotation.x + rightRotationAmount, rightShaftInitialRotation.y, 0f);
+
+
+            Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
+            movementOffset = input * Time.fixedDeltaTime * movementSpeed;
+
+            Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
+            Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
+
+            if (Mathf.Abs(targetLeftLifterPosition.y - (targetRightLifterPosition.y)) <= maxDifference)
+            {
+                float leftTargetY = Mathf.Clamp(targetLeftLifterPosition.y, start.position.y, max.position.y);
+                float rightTargetY = Mathf.Clamp(targetRightLifterPosition.y, start.position.y, max.position.y);
+                leftLifter.MovePosition(new Vector2(targetLeftLifterPosition.x, leftTargetY));
+                rightLifter.MovePosition(new Vector2(targetRightLifterPosition.x, rightTargetY));
+            }
+
+            /*
             movementOffsetLeft = Vector3.zero;
             movementOffsetRight = Vector3.zero;
 
@@ -105,11 +150,23 @@ public class LegacyElevatorController : MonoBehaviour
                     leftLifter.MovePosition(leftLifter.position + movementOffsetLeft);
                 }
             }
+            */
         }
     }
 
     IEnumerator MoveBarToStartPosition()
     {
+        while (leftLifter.position.y < start.position.y)
+        {
+            Vector2 newLifterPosition = leftLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime;
+            Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime;
+
+            leftLifter.MovePosition(newLifterPosition);
+            rightLifter.MovePosition(newRightLifterPosition);
+
+            yield return new WaitForEndOfFrame();
+        }
+        /*
         while (leftLifter.position.y < startPosition.y + startPositionVerticalOffset)
         {
             leftLifter.MovePosition(leftLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
@@ -117,9 +174,8 @@ public class LegacyElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+        */
         inputEnabled = true;
-
-        CameraManager.instance.SetFocus();
 
         LegacyGameController.instance.ReadyForNextHole();
 
@@ -128,6 +184,22 @@ public class LegacyElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToBottomPosition()
     {
+        while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
+        {
+
+            if (leftLifter.position.y > bottom.position.y)
+            {
+                leftLifter.MovePosition(leftLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
+            }
+            if (rightLifter.position.y > bottom.position.y)
+            {
+                rightLifter.MovePosition(rightLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
+            }
+
+            yield return new WaitForEndOfFrame();
+        } 
+
+        /*
         while (leftLifter.position.y > startPosition.y || rightLifter.position.y > startPosition.y)
         {
             if (leftLifter.position.y > startPosition.y)
@@ -141,6 +213,7 @@ public class LegacyElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
+        */
 
         LegacyGameController.instance.ResetBall();
 
@@ -148,43 +221,6 @@ public class LegacyElevatorController : MonoBehaviour
         {
             StartCoroutine(MoveBarToStartPosition());
         }
-
-        yield return null;
-    }
-
-    IEnumerator ResetStartPosition()
-    {
-        while (leftLifter.position.y < startPosition.y + startPositionVerticalOffset)
-        {
-            leftLifter.MovePosition(leftLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            rightLifter.MovePosition(rightLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
-
-            yield return new WaitForEndOfFrame();
-        }
-        inputEnabled = true;
-
-        yield return null;
-    }
-
-    IEnumerator ResetBottomPosition()
-    {
-        while (leftLifter.position.y > startPosition.y || rightLifter.position.y > startPosition.y)
-        {
-            if (leftLifter.position.y > startPosition.y)
-            {
-                leftLifter.MovePosition(leftLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            }
-            if (rightLifter.position.y > startPosition.y)
-            {
-                rightLifter.MovePosition(rightLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            }
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        ballRef.ResetBallPosition();
-
-        StartCoroutine(ResetStartPosition());
 
         yield return null;
     }
@@ -199,21 +235,7 @@ public class LegacyElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
-        CameraManager.instance.SetUnfocus();
         StartCoroutine(MoveBarToBottomPosition());
-    }
-
-    [ContextMenu("Reset Start Position")]
-    public void ResetStartPositionFunction()
-    {
-        StartCoroutine(ResetStartPosition());
-    }
-
-    [ContextMenu("Reset Bottom Position")]
-    public void ResetBottomPositionFunction()
-    {
-        inputEnabled = false;
-        StartCoroutine(ResetBottomPosition());
     }
 
     private void OnLeftEndUp(InputValue leftUpValue)

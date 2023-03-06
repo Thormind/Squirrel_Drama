@@ -46,16 +46,6 @@ public class InfiniteFruitsController : MonoBehaviour
         isAllSpawned = false;
     }
 
-    private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.R))
-        {
-            SpawnFruits();
-        }
-
-    }
-
     public void SpawnFruits()
     {
         RemoveFruits();
@@ -75,9 +65,8 @@ public class InfiniteFruitsController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            GameObject fruitInstantiated = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity);
+            GameObject fruitInstantiated = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity, fruitsParent.transform);
             fruits.Add(fruitInstantiated);
-            fruitInstantiated.transform.parent = fruitsParent.transform;
 
             _spawnedFruitsPositions.Add(spawnPosition);
         }

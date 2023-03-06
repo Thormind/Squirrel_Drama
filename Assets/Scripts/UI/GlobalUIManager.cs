@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 [System.Serializable]
 public enum MENU
 {
+    MENU_TITLE_SCREEN,
     MENU_MAIN,
     MENU_SETTINGS,
     MENU_PAUSE,
@@ -48,6 +50,10 @@ public class GlobalUIManager : MonoBehaviour
 
     public static bool gameIsActive = false;
     public static bool gameIsPaused = false;
+    public static bool isPreGame = false;
+
+    [SerializeField] private GameObject controllerIcon;
+    public static bool isControllerConnected = false;
 
     public void Awake()
     {
@@ -64,13 +70,17 @@ public class GlobalUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Subscribe to the onDeviceChange event
+        InputSystem.onDeviceChange += OnDeviceChange;
 
         foreach (MenuPrefab prefab in prefabsRef)
         {
             prefabsDictionary.Add(prefab.menuType, prefab);
         }
 
-        SetMenu(MENU.MENU_MAIN);
+        SetMenu(MENU.MENU_TITLE_SCREEN);
+
+        DetectController();
     }
 
     void Update()
@@ -80,37 +90,39 @@ public class GlobalUIManager : MonoBehaviour
         {
             if (gameIsActive && es.enabled)
             {
-                if (gameIsPaused)
+                if(isPreGame)
                 {
-                    ResumeGame();
+                    ReturnToMainMenu();
                 }
                 else
                 {
-                    PauseGame();
+                    if (gameIsPaused)
+                    {
+                        ResumeGame();
+                    }
+                    else
+                    {
+                        PauseGame();
+                    }
                 }
-            }
-        }
-
-    }
-
-    public void OnPauseResume()
-    {
-        //(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && 
-        if (gameIsActive && es.enabled)
-        {
-            if (gameIsPaused)
-            {
-                ResumeGame();
-            }
-            else
-            {
-                PauseGame();
             }
         }
     }
 
     private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
     {
+        StopAllCoroutines();
+
+        if (lastMenu != MENU.NONE)
+        {
+            if (!runtimeMenuRefs.ContainsKey(lastMenu))
+            {
+                GameObject menu = Instantiate(prefabsDictionary[lastMenu].prefabRef);
+                runtimeMenuRefs.Add(lastMenu, menu);
+                menu.transform.SetParent(gameObject.transform);
+                menu.transform.localPosition = new Vector2(Screen.width, Screen.height);
+            }
+        }
 
         if (!runtimeMenuRefs.ContainsKey(desiredMenu))
         {
@@ -120,18 +132,17 @@ public class GlobalUIManager : MonoBehaviour
             menu.transform.localPosition = new Vector2(Screen.width, Screen.height);
         }
 
-        foreach (var menu in runtimeMenuRefs)
+
+        if (lastMenu != MENU.NONE)
         {
-            if (menu.Key == desiredMenu)
-            {
-                StartCoroutine(SetAnimation(menu.Key, menu.Value, 1));
-            }
-            if (menu.Key == lastMenu)
-            {
-                StartCoroutine(SetAnimation(menu.Key, menu.Value, 0));
-            }
+            StartCoroutine(SetLastMenuAnimation(runtimeMenuRefs[lastMenu], runtimeMenuRefs[desiredMenu]));
+        }
+        else
+        {
+            StartCoroutine(SetMenuAnimation(runtimeMenuRefs[desiredMenu]));
         }
 
+        //print($"Current Menu : {desiredMenu}");
         //print($"Current Menu : {currentMenu}");
         //print($"Last Menu : {lastMenu}");
     }
@@ -183,37 +194,41 @@ public class GlobalUIManager : MonoBehaviour
         SetMenuInternal(menuStack.Peek());
     }
 
-    public IEnumerator SetAnimation(MENU menuType, GameObject menuObject, int animationInOut)
+    public IEnumerator SetLastMenuAnimation(GameObject lastMenuObject, GameObject currentMenuObject)
     {
 
-        if (menuType == MENU.MENU_CREDITS)
-        {
-            if (animationInOut == 1)
-            {
-                menuObject.SetActive(true);
-            }
-            else
-            {
-                menuObject.SetActive(false);
-            }
-        }
+        UIAnimation animation = lastMenuObject.GetComponent<UIAnimation>();
 
-        UIAnimation animation = menuObject.GetComponent<UIAnimation>();
-        animation.animationInOut = animationInOut;
-        animation.startPosition = new Vector2(0, Screen.height);  // Set the starting position for the animation
-        animation.endPosition = Vector2.zero;  // Set the ending position for the animation
         animation.play();
 
-        //yield return new WaitForSecondsRealtime(0.01f);
+        yield return new WaitForSecondsRealtime(animation.animationDuration);
+
+        StartCoroutine(SetMenuAnimation(currentMenuObject));
+    }
+
+    public IEnumerator SetMenuAnimation(GameObject currentMenuObject)
+    {
+
+        UIAnimation animation = currentMenuObject.GetComponent<UIAnimation>();
+        animation.play();
 
         yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
 
         ClearMenusException();
+
         es.enabled = true;
     }
 
+    public void SetTitleScreenMenu()
+    {
+        CameraManager.instance.Transition(false);
+        SetMenu(MENU.MENU_TITLE_SCREEN);
+    }
+
+
     public void SetMainMenu()
     {
+        CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
     }
 
@@ -244,6 +259,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetCreditsMenu()
     {
+        CameraManager.instance.TransitionToCredits();
         SetMenu(MENU.MENU_CREDITS);
     }
 
@@ -255,7 +271,9 @@ public class GlobalUIManager : MonoBehaviour
     public void ResumeGame()
     {
         SetMenu(MENU.MENU_HUD);
+
         Time.timeScale = 1f;
+
         gameIsPaused = false;
         StartCoroutine(PauseResumeCallback());
     }
@@ -263,7 +281,9 @@ public class GlobalUIManager : MonoBehaviour
     public void PauseGame()
     {
         SetMenu(MENU.MENU_PAUSE);
+
         Time.timeScale = 0f;
+
         gameIsPaused = true;
         StartCoroutine(PauseResumeCallback());
     }
@@ -304,6 +324,7 @@ public class GlobalUIManager : MonoBehaviour
         Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = true;
+        isPreGame = true;
     }
 
     public void ReturnToMainMenu()
@@ -328,6 +349,7 @@ public class GlobalUIManager : MonoBehaviour
         Time.timeScale = 1f;
         gameIsPaused = false;
         gameIsActive = false;
+        isPreGame = false;
     }
 
     public void QuitApplication()
@@ -367,7 +389,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         yield return null;
         ClearMenus();
-        CameraManager.instance.ModeTransition();
+        CameraManager.instance.Transition(false);
         SetMenu(MENU.MENU_PREGAME);
     }
 
@@ -375,7 +397,62 @@ public class GlobalUIManager : MonoBehaviour
     {
         yield return null;
         ClearMenus();
-        CameraManager.instance.ModeTransition();
+        CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
+    }
+
+
+    void DetectController()
+    {
+        //Get Joystick Names
+        string[] temp = Input.GetJoystickNames();
+
+        isControllerConnected = false;
+
+        //Check whether array contains any
+        if (temp.Length > 0)
+        {
+            //Iterate over every element
+            for (int i = 0; i < temp.Length; ++i)
+            {
+                //Check if the string is empty or not
+                if (!string.IsNullOrEmpty(temp[i]))
+                {
+                    isControllerConnected = true;
+                }
+            }
+        }
+
+        controllerIcon.SetActive(isControllerConnected);
+    }
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        // Check if the device type is a joystick or gamepad
+        if (device is Gamepad || device is Joystick)
+        {
+            // Check if the device has been connected or disconnected
+            if (change == InputDeviceChange.Added)
+            {
+                // A joystick or gamepad has been connected
+                isControllerConnected = true;
+            }
+            else if (change == InputDeviceChange.Removed)
+            {
+                // A joystick or gamepad has been disconnected
+
+                isControllerConnected = false;
+            }
+        }
+
+        controllerIcon.SetActive(isControllerConnected);
+    }
+
+    public void SetControllerFirstSelected (GameObject firstSelected)
+    {
+        if (isControllerConnected)
+        {
+            es.SetSelectedGameObject(firstSelected);
+        }
     }
 }

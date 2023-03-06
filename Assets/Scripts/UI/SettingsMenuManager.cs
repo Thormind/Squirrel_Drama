@@ -6,6 +6,9 @@ using TMPro;
 
 public class SettingsMenuManager : MonoBehaviour
 {
+    [SerializeField] private Button noonButton;
+    [SerializeField] private Button nightButton;
+
     [SerializeField] private Button resetButton;
     [SerializeField] private Button exitButton;
 
@@ -19,16 +22,11 @@ public class SettingsMenuManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject resetPanel;
 
-    public float masterVolume;
-    public float musicVolume;
-    public float sfxVolume;
-
-    [SerializeField] private GameObject firstSlected;
 
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(exitButton.gameObject);
 
         exitButton.onClick.AddListener(() => GlobalUIManager.instance.SetLastMenu());
 
@@ -44,6 +42,20 @@ public class SettingsMenuManager : MonoBehaviour
         masterVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MASTER);
         musicVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
         sfxVolumeSlider.value = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
+
+        noonButton.onClick.AddListener(() => HandleTimeOfDayButton());
+        nightButton.onClick.AddListener(() => HandleTimeOfDayButton());
+
+        if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
+        {
+            noonButton.gameObject.SetActive(true);
+            nightButton.gameObject.SetActive(false);
+        }
+        if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NIGHT)
+        {
+            nightButton.gameObject.SetActive(true);
+            noonButton.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -59,42 +71,61 @@ public class SettingsMenuManager : MonoBehaviour
 
     public void HandleMasterVolumeInputData(float volume)
     {
-        masterVolume = volume;
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MASTER, volume);
     }
 
     public void HandleMusicVolumeInputData(float volume)
     {
-        musicVolume = volume;
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MUSIC, volume);
     }
 
     public void HandleSFXVolumeInputData(float volume)
     {
-        sfxVolume = volume;
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.SFX, volume);
+
+        // Pour Get la value du channel updater partout dans le code
+        //SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
     }
 
     private void HandleResetButton()
     {
         mainPanel.SetActive(false);
         resetPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(cancelResetButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(cancelResetButton.gameObject);
     }
 
     private void HandleCancelButton()
     {
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(exitButton.gameObject);
     }
 
     private void HandleConfirmResetButton()
     {
-        GlobalUIManager.instance.es.SetSelectedGameObject(exitButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(exitButton.gameObject);
         SaveManager.instance.ResetBestScores();
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
     }
 
+    private void HandleTimeOfDayButton()
+    {
+        TIME_OF_DAY currentTOD = SaveManager.instance.TimeOfDay;
+
+        if (currentTOD == TIME_OF_DAY.NOON)
+        {
+            noonButton.gameObject.SetActive(false);
+            nightButton.gameObject.SetActive(true);
+            SaveManager.instance.TimeOfDay = TIME_OF_DAY.NIGHT;
+        }
+        if (currentTOD == TIME_OF_DAY.NIGHT)
+        {
+            nightButton.gameObject.SetActive(false);
+            noonButton.gameObject.SetActive(true);
+            SaveManager.instance.TimeOfDay = TIME_OF_DAY.NOON;
+        }
+
+        CameraManager.instance.SetTimeOfDay(SaveManager.instance.TimeOfDay);
+    }
 }

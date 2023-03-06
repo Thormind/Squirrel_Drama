@@ -20,18 +20,16 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject retryPanel;
     public GameObject quitPanel;
 
-    [SerializeField] private GameObject firstSlected;
-
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.instance.es.firstSelectedGameObject = firstSlected;
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
 
         resumeButton.onClick.AddListener(() => GlobalUIManager.instance.ResumeGame());
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
         replayButton.onClick.AddListener(() => HandleRetryButton());
-        confirmRetryButton.onClick.AddListener(() => HandleReplayButton());
+        confirmRetryButton.onClick.AddListener(() => HandleConfirmRetryButton());
         cancelRetryButton.onClick.AddListener(() => HandleCancelButton());
 
         homeButton.onClick.AddListener(() => HandleQuitButton());
@@ -39,29 +37,18 @@ public class PauseMenuManager : MonoBehaviour
         cancelQuitButton.onClick.AddListener(() => HandleCancelButton());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-        {
-            GlobalUIManager.instance.OnPauseResume();
-        }
-        */
-    }
-
     private void HandleRetryButton()
     {
         mainPanel.SetActive(false);
         retryPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(cancelRetryButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(cancelRetryButton.gameObject);
     }
 
     private void HandleQuitButton()
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(cancelQuitButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(cancelQuitButton.gameObject);
     }
 
     private void HandleCancelButton()
@@ -69,10 +56,10 @@ public class PauseMenuManager : MonoBehaviour
         retryPanel.SetActive(false);
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(replayButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
     }
 
-    private void HandleReplayButton()
+    private void HandleConfirmRetryButton()
     {
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {

@@ -9,34 +9,70 @@ public class CameraManager : MonoBehaviour
     public Transform target;
 
     public GameObject legacyMachine;
-    public Light exteriorLight;
-    private float exteriorLightIntensity = 1;
+
+    public Material skyboxNoonMaterial;
+    public Material skyboxNightMaterial;
+
+    public Light dayLight;
+    public Light nightLight;
+
+    public Light loungeLight;
+    public Light arcadeLight;
+
+    private float dayLightIntensity = 5f;
+    private float nightLightIntensity = 8f;
+    private float loungeLightIntensity = 0.75f;
+    private float arcadeLightIntensity = 0.75f;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
-    private float targetFOV;
+    private float targetSize;
     private float smoothSpeed;
 
-    private Vector3 menuPosition = new Vector3(0f, 0f, -900f);
-    private Vector3 launchPosition = new Vector3(0f, 200f, -7000f);
+    // MENU
+    private float menuFocusedSize = 3f;
+    private Vector3 menuFocusedPosition = new Vector3(0f, 19.2f, -20f);
+    private Quaternion menuFocusedRotation = Quaternion.Euler(20f, 10, 0);
 
-    private Vector3 legacyUnfocusedPosition = new Vector3(0f, -0.5f, -35f);
-    private Vector3 legacyFocusedPosition = new Vector3(0f, 0f, -15f);
+    private float menuUnfocusedSize = 6f;
+    private Vector3 menuUnfocusedPosition = new Vector3(0f, 1.5f, -20f);
+    private Quaternion menuUnfocusedRotation = Quaternion.Euler(-30, 0, 0);
 
-    private Vector3 infiniteUnfocusedPosition = new Vector3(0f, -260f, -2000f);
-    private Vector3 infiniteFocusedPosition = new Vector3(0f, -550f, -290f);
-    public float infiniteVerticalOffset = 20f;
+    private float menuFocusedSize2 = 3f;
+    private Vector3 menuFocusedPosition2 = new Vector3(0f, 14f, -20f);
+    private Quaternion menuFocusedRotation2 = Quaternion.Euler(5f, -10, 0);
 
-    private Quaternion menuRotation;
-    private Quaternion launchRotation;
-    private Quaternion legacyRotation;
-    private Quaternion infiniteRotation;
+    private float menuUnfocusedSize2 = 4f;
+    private Vector3 menuUnfocusedPosition2 = new Vector3(0f, 3f, -20f);
+    private Quaternion menuUnfocusedRotation2 = Quaternion.Euler(-25, 10, 0);
 
-    private float menuFOV = 20f;
-    private float unfocusedFOV = 30f;
-    private float focusedFOV = 40f;
+    private float menuCreditsSize = 1f;
+    private Vector3 menuCreditsPosition = new Vector3(0f, 0f, -20f);
+    private Quaternion menuCreditsRotation = Quaternion.Euler(-32, 0, 0);
 
-    private float focusUnfocusSpeed = 2.0f;
+    // LEGACY
+
+    private float legacyUnfocusedSize = 0.17f;
+    private Vector3 legacyUnfocusedPosition = new Vector3(0.1f, 13.05f, -20f);
+    private Quaternion legacyUnfocusedRotation = Quaternion.Euler(3, 0, 0);
+
+    private float legacyFocusedSize = 0.1f;
+    private Vector3 legacyFocusedPosition = new Vector3(0.1f, 13.05f, -20f);
+    private Quaternion legacyFocusedRotation = Quaternion.Euler(3, 0, 0);
+
+    // INFINITE
+
+    private float infiniteFocusedSize = 0.95f;
+    private Vector3 infiniteFocusedPosition = new Vector3(0f, 7f, -20f);
+    private Quaternion infiniteFocusedRotation = Quaternion.Euler(3, 0, 0);
+
+    private float infiniteUnfocusedSize = 7f;
+    private Vector3 infiniteUnfocusedPosition = new Vector3(0f, 9f, -20f);
+    private Quaternion infiniteUnfocusedRotation = Quaternion.Euler(5, 0, 0);
+
+    public float legacyVerticalOffset = 0.5f;
+    public float infiniteVerticalOffset = 0.5f;
+
     private float modeTransitionSpeed = 2.5f;
 
     public bool isFocused = false;
@@ -55,117 +91,188 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        menuRotation = Quaternion.Euler(0, 10, 0);
-        launchRotation = Quaternion.Euler(0, 0, 0);
-        legacyRotation = Quaternion.Euler(0, 0, 0);
-        infiniteRotation = Quaternion.Euler(0, 0, 0);
+        transform.position = menuUnfocusedPosition;
+        transform.rotation = menuUnfocusedRotation;
 
-        transform.position = launchPosition;
-        transform.rotation = launchRotation;
-
-        ModeTransition();
+        Transition(false);
+        SetTimeOfDay(SaveManager.instance.TimeOfDay);
     }
 
     void FixedUpdate()
-    {
+    {    
         if (isFocused)
         {
-            if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+            if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE && InfiniteGameController.instance != null)
             {
-                Vector3 desiredPosition = new Vector3(infiniteFocusedPosition.x, InfiniteGameController.instance.GetFruitPosition().y + infiniteVerticalOffset, infiniteFocusedPosition.z);
-                targetPosition = desiredPosition;
+                Vector3 targetPosition = InfiniteGameController.instance.GetElevatorPosition() + Vector3.up * infiniteVerticalOffset;
+                Vector3 targetDirection = targetPosition - transform.position;
+                targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
             }
-            if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+            if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE && LegacyGameController.instance != null)
             {
-                Vector3 targetDirection = new Vector3(0, LegacyGameController.instance.GetBallPosition().y, 0) - transform.position;
-                targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); 
+                Vector3 targetPosition = LegacyGameController.instance.GetElevatorPosition() + Vector3.up * legacyVerticalOffset;
+                Vector3 targetDirection = targetPosition - transform.position;
+                targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
             }
         }
-
+ 
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * smoothSpeed);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
-        Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, targetFOV, Time.fixedDeltaTime * smoothSpeed);
-        exteriorLight.intensity = Mathf.Lerp(exteriorLight.intensity, exteriorLightIntensity, Time.fixedDeltaTime * smoothSpeed);
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.fixedDeltaTime * smoothSpeed);
+        dayLight.intensity = Mathf.Lerp(dayLight.intensity, dayLightIntensity, Time.fixedDeltaTime * smoothSpeed);
+        nightLight.intensity = Mathf.Lerp(nightLight.intensity, nightLightIntensity, Time.fixedDeltaTime * smoothSpeed);
+        loungeLight.intensity = Mathf.Lerp(loungeLight.intensity, loungeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
+        arcadeLight.intensity = Mathf.Lerp(arcadeLight.intensity, arcadeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
+
     }
 
-    public void ModeTransition()
+    public void Transition(bool focused)
     {
-        isFocused = false;
         smoothSpeed = modeTransitionSpeed;
+
+        isFocused = focused;
 
         if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
-            exteriorLightIntensity = 1;
+            CheckTimeOfDay();
+            loungeLightIntensity = 0.75f;
+            arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
-            targetPosition = menuPosition;
-            targetRotation = menuRotation;
-            targetFOV = menuFOV;
+            if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
+            {
+                targetPosition = isFocused ? menuFocusedPosition : menuUnfocusedPosition;
+                targetRotation = isFocused ? menuFocusedRotation : menuUnfocusedRotation;
+                targetSize = isFocused ? menuFocusedSize : menuUnfocusedSize;
+
+            }
+            if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NIGHT)
+            {
+                targetPosition = isFocused ? menuFocusedPosition2 : menuUnfocusedPosition2;
+                targetRotation = isFocused ? menuFocusedRotation2 : menuUnfocusedRotation2;
+                targetSize = isFocused ? menuFocusedSize2 : menuUnfocusedSize2;
+            }
+
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
-            targetPosition = infiniteUnfocusedPosition;
-            targetRotation = infiniteRotation;
-            targetFOV = unfocusedFOV;
-        }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
-        {
-            exteriorLightIntensity = 0;
-            legacyMachine.SetActive(false);
+            CheckTimeOfDay();
+            loungeLightIntensity = 0.75f;
+            arcadeLightIntensity = 0;
+            legacyMachine.SetActive(true);
 
-            targetPosition = legacyUnfocusedPosition;
-            targetRotation = legacyRotation;
-            targetFOV = unfocusedFOV;
-        }
-    }
-
-    public void FocusTransition()
-    {
-        smoothSpeed = focusUnfocusSpeed;
-
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
-        {
             if (isFocused)
             {
-                Vector3 desiredPosition = new Vector3(infiniteFocusedPosition.x, InfiniteGameController.instance.GetFruitPosition().y + infiniteVerticalOffset, infiniteFocusedPosition.y);
+                targetSize = infiniteFocusedSize;
                 targetPosition = infiniteFocusedPosition;
-                targetFOV = focusedFOV;
+
+                if (InfiniteGameController.instance != null)
+                {
+                    Vector3 targetPosition = InfiniteGameController.instance.GetElevatorPosition() + Vector3.up * infiniteVerticalOffset;
+                    Vector3 targetDirection = targetPosition - transform.position;
+                    targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                }
             }
             else
             {
                 targetPosition = infiniteUnfocusedPosition;
-                targetRotation = infiniteRotation;
-                targetFOV = unfocusedFOV;
+                targetRotation = infiniteUnfocusedRotation;
+                targetSize = infiniteUnfocusedSize;
             }
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
+            CheckTimeOfDay();
+            loungeLightIntensity = 0;
+            arcadeLightIntensity = 0.75f;
+            legacyMachine.SetActive(false);
+
             if (isFocused)
             {
                 targetPosition = legacyFocusedPosition;
-                Vector3 targetDirection = LegacyGameController.instance.GetBallPosition() - transform.position;
-                targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); ;
-                targetFOV = focusedFOV;
+                targetSize = legacyFocusedSize;
+
+                if (LegacyGameController.instance != null)
+                {
+                    Vector3 targetPosition = LegacyGameController.instance.GetElevatorPosition() + Vector3.up * legacyVerticalOffset;
+                    Vector3 targetDirection = targetPosition - transform.position;
+                    targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                }
             }
             else
             {
                 targetPosition = legacyUnfocusedPosition;
-                targetRotation = legacyRotation;
-                targetFOV = unfocusedFOV;
+                targetRotation = legacyUnfocusedRotation;
+                targetSize = legacyUnfocusedSize;
             }
         }
     }
 
-    public void SetFocus()
+    public void TransitionToCredits()
     {
-        isFocused = true;
-        FocusTransition();
+        if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+        {
+            CheckTimeOfDay();
+            loungeLightIntensity = 0.75f;
+            arcadeLightIntensity = 0;
+            legacyMachine.SetActive(true);
+
+            targetPosition = menuCreditsPosition;
+            targetRotation = menuCreditsRotation;
+            targetSize = menuCreditsSize;
+        }
     }
 
-    public void SetUnfocus()
+    public void CheckTimeOfDay()
     {
-        isFocused = false;
-        FocusTransition();
+        if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
+        {
+            dayLightIntensity = 5f;
+            nightLightIntensity = 0f;
+        }
+        if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NIGHT)
+        {
+            dayLightIntensity = 0f;
+            nightLightIntensity = 8f;
+        }
+    }
+
+    public void SetTimeOfDay(TIME_OF_DAY tod)
+    {
+        if (tod == TIME_OF_DAY.NOON)
+        {
+            if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+            {
+                targetPosition = isFocused ? menuFocusedPosition : menuUnfocusedPosition;
+                targetRotation = isFocused ? menuFocusedRotation : menuUnfocusedRotation;
+                targetSize = isFocused ? menuFocusedSize : menuUnfocusedSize;
+            }
+            
+
+
+            dayLightIntensity = 5f;
+            nightLightIntensity = 0f;
+
+            Skybox skybox = Camera.main.GetComponent<Skybox>();
+            skybox.material = skyboxNoonMaterial;
+        }
+        if (tod == TIME_OF_DAY.NIGHT)
+        {
+            if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+            {
+                targetPosition = isFocused ? menuFocusedPosition2 : menuUnfocusedPosition2;
+                targetRotation = isFocused ? menuFocusedRotation2 : menuUnfocusedRotation2;
+                targetSize = isFocused ? menuFocusedSize2 : menuUnfocusedSize2;
+            }
+
+
+
+            dayLightIntensity = 0f;
+            nightLightIntensity = 8f;
+
+            Skybox skybox = Camera.main.GetComponent<Skybox>();
+            skybox.material = skyboxNightMaterial;
+        }
     }
 
     public void ShakeCamera(float distanceToObstacle)

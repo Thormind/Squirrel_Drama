@@ -16,6 +16,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Button creditsButton;
     [SerializeField] private Button playAnimationButton;
 
+    [SerializeField] private Button returnButton;
+
     [SerializeField] private Button quitButton;
     [SerializeField] private Button quitConfirmButton;
     [SerializeField] private Button quitCancelButton;
@@ -23,12 +25,10 @@ public class MainMenuManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject quitPanel;
 
-    [SerializeField] private GameObject firstSlected;
-
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.instance.es.firstSelectedGameObject = firstSlected;
+        GlobalUIManager.instance.SetControllerFirstSelected(playInfiniteButton.gameObject);
 
         playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.INFINITE_MODE));
         playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.LEGACY_MODE));
@@ -36,6 +36,8 @@ public class MainMenuManager : MonoBehaviour
         settingsButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
         creditsButton.onClick.AddListener(() => GlobalUIManager.instance.SetCreditsMenu());
         //playAnimationButton.onClick.AddListener(() => GlobalUIManager.instance.SetAnimationMenu());
+
+        returnButton.onClick.AddListener(() => GlobalUIManager.instance.SetTitleScreenMenu());
 
         quitButton.onClick.AddListener(() => HandleQuitButton());
         quitConfirmButton.onClick.AddListener(() => GlobalUIManager.instance.QuitApplication());
@@ -49,14 +51,14 @@ public class MainMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(quitCancelButton.gameObject); 
+        GlobalUIManager.instance.SetControllerFirstSelected(quitCancelButton.gameObject);
     }
 
     private void HandleCancelButton()
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.es.SetSelectedGameObject(quitButton.gameObject);
+        GlobalUIManager.instance.SetControllerFirstSelected(quitButton.gameObject);
     }
 
 }
