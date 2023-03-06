@@ -20,10 +20,12 @@ public class PreGameMenuManager : MonoBehaviour
 
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
+            AudioManager.instance.StopCurrentMusic();
             SetInfinitePregame();
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
+            AudioManager.instance.StopCurrentMusic();
             SetLegacyPregame();
         }
 
@@ -48,14 +50,16 @@ public class PreGameMenuManager : MonoBehaviour
 
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
+            AudioManager.instance.PlayInfinite();
             GlobalUIManager.instance.SetHUDMenu();
             InfiniteGameController.instance.StartGame();
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
+            AudioManager.instance.PlayLegacy();
             GlobalUIManager.instance.SetHUDMenu();
             LegacyGameController.instance.StartGame();
-
+            
         }
     }
 

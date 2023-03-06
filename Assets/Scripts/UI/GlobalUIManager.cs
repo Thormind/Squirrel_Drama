@@ -329,8 +329,8 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        AudioManager.instance.PlayUiMusic();
         SetMenu(MENU.MENU_LOADING);
-
         switch (ScenesManager.instance.gameMode)
         {
             case GAME_MODE.INFINITE_MODE:

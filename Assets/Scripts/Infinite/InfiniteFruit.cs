@@ -5,7 +5,7 @@ using UnityEngine;
 public class InfiniteFruit : MonoBehaviour
 {
     private float fruitFallingGravityScale = 50f;
-    private float fruitGravityScale = 108f;
+    private float fruitGravityScale = 50f;
 
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
