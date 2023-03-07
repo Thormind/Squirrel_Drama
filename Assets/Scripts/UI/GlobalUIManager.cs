@@ -304,8 +304,10 @@ public class GlobalUIManager : MonoBehaviour
 
     public void LoadGame(GAME_MODE gameMode)
     {
+        AudioManager.instance.PlaySound(SOUND.SWEEP);
+        
         SetMenu(MENU.MENU_LOADING);
-
+        
         ScenesManager.instance.gameMode = gameMode;
 
         switch (gameMode)
