@@ -277,7 +277,7 @@ public class CameraManager : MonoBehaviour
 
     public void ShakeCamera(float distanceToObstacle)
     {
-        float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 2.5f; // Set a max force for the shake
+        float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 1.25f; // Set a max force for the shake
         print($"Shake force: {shakeForce}");
         StartCoroutine(DoShakeCamera(shakeForce));
     }
@@ -287,13 +287,15 @@ public class CameraManager : MonoBehaviour
         float elapsedTime = 0f;
         Vector3 originalPosition = transform.position;
 
-        while (elapsedTime < 0.3f) // Shake for 0.3 seconds
+        while (elapsedTime < 0.5f) // Shake for 0.3 seconds
         {
             float x = originalPosition.x + Random.Range(-shakeForce, shakeForce) * 0.05f;
             float y = originalPosition.y + Random.Range(-shakeForce, shakeForce) * 0.05f;
             float z = originalPosition.z + Random.Range(-shakeForce, shakeForce) * 0.05f;
 
-            transform.position = new Vector3(x, y, z);
+            Vector3 newPos = new Vector3(x, y, z);
+
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 25f);
 
             elapsedTime += Time.deltaTime;
             yield return null;

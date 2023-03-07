@@ -171,7 +171,9 @@ public class InfiniteGameController : MonoBehaviour
 
     public void ResetFruit()
     {
-        fruitRef.ResetFruitPosition();
+        //   fruitRef.ResetFruitPosition();
+        Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.5f, 0);
+        fruitRef.ResetFruitPosition(positon);
     }
 
     public void LevelCompleted()

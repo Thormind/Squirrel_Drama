@@ -23122,7 +23122,7 @@ Rigidbody2D:
   m_Mass: 0.00664761
   m_LinearDrag: 0.1
   m_AngularDrag: 0.02
-  m_GravityScale: 4.57
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -23206,6 +23206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596f877d721dd6046ad273ceb4cb580b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fruitFallingGravityScale: 1
+  fruitGravityScale: 1
 --- !u!1001 &506954432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33350,6 +33352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b893e262e0a77d646a99ccf8153d8223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 0.6
   bottom: {fileID: 236103733}
   start: {fileID: 1450611958}
   end: {fileID: 149299623}

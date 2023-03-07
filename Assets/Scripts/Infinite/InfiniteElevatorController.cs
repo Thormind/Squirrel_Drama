@@ -9,7 +9,7 @@ public class InfiniteElevatorController : MonoBehaviour
     private float bottomMovementSpeed = 1f;
     private float startMovementSpeed = 1f;
 
-    private float movementSpeed = 0.5f;
+    public float movementSpeed = 0.6f;
     private float maxDifference = 0.3f;
 
     public Transform bottom;
@@ -123,7 +123,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public float CalculateMoveBarToBottomSpeed()
     {
-        return 40f + (transform.localPosition.y * 2.5f);
+        return Mathf.Abs(1f + transform.localPosition.y) * 0.5f;
     }
 
 

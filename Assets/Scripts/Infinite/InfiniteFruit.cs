@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InfiniteFruit : MonoBehaviour
 {
-    private float fruitFallingGravityScale = 50f;
-    private float fruitGravityScale = 50f;
+    public float fruitFallingGravityScale = 0.75f;
+    public float fruitGravityScale = 1f;
 
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
@@ -23,7 +23,7 @@ public class InfiniteFruit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startFruitPosition = transform.position;
+        startFruitPosition = transform.localPosition;
         startFruitScale = transform.localScale;
         fruitRigidbody.gravityScale = fruitGravityScale;
     }
@@ -150,9 +150,9 @@ public class InfiniteFruit : MonoBehaviour
 
     }
 
-    public void ResetFruitPosition()
+    public void ResetFruitPosition(Vector3 elevatorPostion)
     {
-        transform.position = startFruitPosition;
+        transform.localPosition = elevatorPostion;
         GetComponent<CircleCollider2D>().enabled = true;
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
