@@ -68,8 +68,8 @@ public class AudioManager : MonoBehaviour
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
     public void PlaySound(SOUND sound)
     {
-        //soundplayer.GetComponent<AudioSource>().clip = soundDictionary[sound];
-        //soundplayer.GetComponent<AudioSource>().Play();
+        soundplayer.GetComponent<AudioSource>().clip = soundDictionary[sound];
+        soundplayer.GetComponent<AudioSource>().Play();
     }
 
     public static AudioManager instance;
