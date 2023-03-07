@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class LegacyBall : MonoBehaviour
 {
+
+    public float ballGravityScale = 2.285f;
+
+    public float ballCollisionOffset = 0.05f;
+
     public float enterTheHoleTime = 5f;
 
     Rigidbody2D ballRigidbody;
@@ -20,12 +25,17 @@ public class LegacyBall : MonoBehaviour
     {
         startBallPosition = transform.position;
         startBallScale = transform.localScale;
+        ballRigidbody.gravityScale = ballGravityScale;
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.gameObject.tag == "Hole" || collision.transform.gameObject.tag == "Obstacles")
+        //Time.timeScale = 0.2f;
+        //print($"{Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition)}");
+        // && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= ballCollisionOffset
+
+        if (collision.transform.gameObject.tag == "Hole")
         {
             if (collision.transform.parent.gameObject == LegacyGameController.instance.GetCurrentHole())
             {
@@ -45,12 +55,12 @@ public class LegacyBall : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Transform holeTransform)
     {
         float t = 0;
-        Vector2 ballPosition = transform.position;
-        Vector2 holePosition = holeTransform.position;
+        Vector3 ballPosition = transform.localPosition;
+        Vector3 holePosition = new Vector3(holeTransform.localPosition.x, holeTransform.localPosition.y, holeTransform.localPosition.z + 1f);
 
         while (t <= 1)
         {
-            transform.position = Vector2.Lerp(ballPosition, holePosition, t);
+            transform.localPosition = Vector3.Lerp(ballPosition, holePosition, t);
             transform.localScale = startBallScale * Mathf.Lerp(1, 0.75f, t);
 
             t += Time.deltaTime / enterTheHoleTime;
@@ -58,12 +68,12 @@ public class LegacyBall : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        transform.position = holeTransform.position;
+        transform.localPosition = holePosition;
 
         GetComponent<CircleCollider2D>().enabled = false;
         ballRigidbody.simulated = true;
 
-        ballRigidbody.gravityScale = 2.5f;
+        ballRigidbody.gravityScale = ballGravityScale * 0.5f;
         ballRigidbody.velocity = Vector2.zero;
         ballRigidbody.angularVelocity = 0;
 
@@ -77,6 +87,6 @@ public class LegacyBall : MonoBehaviour
         ballRigidbody.angularVelocity = 0;
         transform.localScale = startBallScale;
 
-        ballRigidbody.gravityScale = 4.57f;
+        ballRigidbody.gravityScale = ballGravityScale;
     }
 }

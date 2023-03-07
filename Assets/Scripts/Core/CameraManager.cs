@@ -30,44 +30,44 @@ public class CameraManager : MonoBehaviour
     private float smoothSpeed;
 
     // MENU
-    private float menuFocusedSize = 3f;
-    private Vector3 menuFocusedPosition = new Vector3(0f, 19.2f, -20f);
-    private Quaternion menuFocusedRotation = Quaternion.Euler(20f, 10, 0);
+    private float menuFocusedSize = 75f;
+    private Vector3 menuFocusedPosition = new Vector3(0f, 480f, -500f);
+    private Quaternion menuFocusedRotation = Quaternion.Euler(20f, 10f, 0);
 
-    private float menuUnfocusedSize = 6f;
-    private Vector3 menuUnfocusedPosition = new Vector3(0f, 1.5f, -20f);
+    private float menuUnfocusedSize = 150f;
+    private Vector3 menuUnfocusedPosition = new Vector3(0f, 37.5f, -500f);
     private Quaternion menuUnfocusedRotation = Quaternion.Euler(-30, 0, 0);
 
-    private float menuFocusedSize2 = 3f;
-    private Vector3 menuFocusedPosition2 = new Vector3(0f, 14f, -20f);
+    private float menuFocusedSize2 = 75f;
+    private Vector3 menuFocusedPosition2 = new Vector3(0f, 350f, -500f);
     private Quaternion menuFocusedRotation2 = Quaternion.Euler(5f, -10, 0);
 
-    private float menuUnfocusedSize2 = 4f;
-    private Vector3 menuUnfocusedPosition2 = new Vector3(0f, 3f, -20f);
-    private Quaternion menuUnfocusedRotation2 = Quaternion.Euler(-25, 10, 0);
+    private float menuUnfocusedSize2 = 120f;
+    private Vector3 menuUnfocusedPosition2 = new Vector3(-25f, 75f, -500f);
+    private Quaternion menuUnfocusedRotation2 = Quaternion.Euler(-25, 15, 0);
 
-    private float menuCreditsSize = 1f;
-    private Vector3 menuCreditsPosition = new Vector3(0f, 0f, -20f);
+    private float menuCreditsSize = 25f;
+    private Vector3 menuCreditsPosition = new Vector3(0f, 0f, -500f);
     private Quaternion menuCreditsRotation = Quaternion.Euler(-32, 0, 0);
 
     // LEGACY
 
-    private float legacyUnfocusedSize = 0.17f;
-    private Vector3 legacyUnfocusedPosition = new Vector3(0.1f, 13.05f, -20f);
-    private Quaternion legacyUnfocusedRotation = Quaternion.Euler(3, 0, 0);
-
-    private float legacyFocusedSize = 0.1f;
-    private Vector3 legacyFocusedPosition = new Vector3(0.1f, 13.05f, -20f);
+    private float legacyFocusedSize = 2.5f;
+    private Vector3 legacyFocusedPosition = new Vector3(2.5f, 326.25f, -500f);
     private Quaternion legacyFocusedRotation = Quaternion.Euler(3, 0, 0);
+
+    private float legacyUnfocusedSize = 4.25f;
+    private Vector3 legacyUnfocusedPosition = new Vector3(2.5f, 326.25f, -500f);
+    private Quaternion legacyUnfocusedRotation = Quaternion.Euler(3, 0, 0);
 
     // INFINITE
 
-    private float infiniteFocusedSize = 0.95f;
-    private Vector3 infiniteFocusedPosition = new Vector3(0f, 7f, -20f);
-    private Quaternion infiniteFocusedRotation = Quaternion.Euler(3, 0, 0);
+    private float infiniteFocusedSize = 23.75f;
+    private Vector3 infiniteFocusedPosition = new Vector3(0f, 175f, -500f);
+    private Quaternion infiniteFocusedRotation = Quaternion.Euler(0, 0, 0);
 
-    private float infiniteUnfocusedSize = 7f;
-    private Vector3 infiniteUnfocusedPosition = new Vector3(0f, 9f, -20f);
+    private float infiniteUnfocusedSize = 175f;
+    private Vector3 infiniteUnfocusedPosition = new Vector3(0f, 230f, -500f);
     private Quaternion infiniteUnfocusedRotation = Quaternion.Euler(5, 0, 0);
 
     public float legacyVerticalOffset = 0.5f;

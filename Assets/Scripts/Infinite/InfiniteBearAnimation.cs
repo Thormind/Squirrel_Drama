@@ -125,7 +125,10 @@ public class InfiniteBearAnimation : MonoBehaviour
         if (CameraManager.instance != null)
         {
             CameraManager.instance.ShakeCamera(distance);
+
         }
+
+        Time.timeScale = 1f;
 
         t = 0f;
 
@@ -135,7 +138,7 @@ public class InfiniteBearAnimation : MonoBehaviour
             yield return null;
         }
 
-        Time.timeScale = 1f;
+ 
 
         bearCollider.enabled = false;
 

@@ -260,6 +260,8 @@ public class InfiniteGameController : MonoBehaviour
     {
         CancelInvoke(nameof(DecreaseBonusScore));
 
+        Time.timeScale = 1f;
+
         if (CameraManager.instance != null)
         {
             CameraManager.instance.Transition(false);

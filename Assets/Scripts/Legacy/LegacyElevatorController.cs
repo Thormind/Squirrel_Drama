@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class LegacyElevatorController : MonoBehaviour
 {
-    private float movementSpeed = 0.02f;
-    private float maxDifference = 0.02f;
+    public float movementSpeed = 1f;
+    public float maxDifference = 0.5f;
 
     public Transform bottom;
     public Transform start;
@@ -21,8 +21,6 @@ public class LegacyElevatorController : MonoBehaviour
 
     private Vector3 startPosition;
 
-    private Vector2 movementOffsetLeft = new Vector2();
-    private Vector2 movementOffsetRight = new Vector2();
     private float leftUpInputValue;
     private float leftDownInputValue;
     private float rightUpInputValue;
@@ -97,60 +95,6 @@ public class LegacyElevatorController : MonoBehaviour
                 leftLifter.MovePosition(new Vector2(targetLeftLifterPosition.x, leftTargetY));
                 rightLifter.MovePosition(new Vector2(targetRightLifterPosition.x, rightTargetY));
             }
-
-            /*
-            movementOffsetLeft = Vector3.zero;
-            movementOffsetRight = Vector3.zero;
-
-            float leftRotationAmount = 0f;
-            float rightRotationAmount = 0f;
-
-            if (leftUpInputValue != 0)
-            {
-                movementOffsetLeft += leftUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
-                leftRotationAmount = Mathf.Lerp(0, 20f, leftUpInputValue);
-            }
-            if (leftDownInputValue != 0)
-            {
-                movementOffsetLeft += leftDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
-                leftRotationAmount = Mathf.Lerp(0, -20f, leftDownInputValue);
-            }
-            if (rightUpInputValue != 0)
-            {
-                movementOffsetRight += rightUpInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.up;
-                rightRotationAmount = Mathf.Lerp(0, 20f, rightUpInputValue);
-            }
-            if (rightDownInputValue != 0)
-            {
-                movementOffsetRight += rightDownInputValue * Time.fixedDeltaTime * movementSpeed * Vector2.down;
-                rightRotationAmount = Mathf.Lerp(0, -20f, rightDownInputValue);
-            }
-
-            float ballHeight = Mathf.Clamp(ballTransformRef.position.y, minHeight, maxHeight);
-            float y_offset = Mathf.Lerp(-0.1f, 0.1f, (ballHeight - minHeight) / (maxHeight - minHeight));
-            material.SetTextureOffset("_MainTex", new Vector2(0, y_offset));
-
-            leftShaftTransform.localRotation = Quaternion.Euler(leftShaftInitialRotation.x + leftRotationAmount, leftShaftInitialRotation.y, 0f);
-            rightShaftTransform.localRotation = Quaternion.Euler(rightShaftInitialRotation.x + rightRotationAmount, rightShaftInitialRotation.y, 0f);
-
-            if (Mathf.Abs(leftLifter.position.y - (rightLifter.position.y + movementOffsetRight.y)) <= maxDifference)
-            {
-                if (rightLifter.position.y + movementOffsetRight.y >= minHeight
-                    && rightLifter.position.y + movementOffsetRight.y <= maxHeight)
-                {
-                    rightLifter.MovePosition(rightLifter.position + movementOffsetRight);
-                }
-            }
-
-            if (Mathf.Abs((leftLifter.position.y + movementOffsetLeft.y) - rightLifter.position.y) <= maxDifference)
-            {
-                if (leftLifter.position.y + movementOffsetLeft.y >= minHeight
-                     && leftLifter.position.y + movementOffsetLeft.y <= maxHeight)
-                {
-                    leftLifter.MovePosition(leftLifter.position + movementOffsetLeft);
-                }
-            }
-            */
         }
     }
 

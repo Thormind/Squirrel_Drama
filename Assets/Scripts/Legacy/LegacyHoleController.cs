@@ -19,13 +19,13 @@ public class LegacyHoleController : MonoBehaviour
 
     public int holesQuantity = 50;
     public int maxTries = 100;
-    private float minDistance = 0.35f;
+    public float minDistance = 0.45f;
 
     public float holesIndicatorXMin = -1.75f;
     public float holesIndicatorXMax = 1.75f;
 
-    public float holesIndicatorYMin = -3f;
-    public float holesIndicatorYMax = 3f;
+    public float holesIndicatorYMin = -2.75f;
+    public float holesIndicatorYMax = 2.75f;
 
     public float minHolesIndicatorYDistance = 0.6f;
     public float maxHolesIndicatorYDistance = 0.9f;
@@ -33,8 +33,8 @@ public class LegacyHoleController : MonoBehaviour
     public float xMin = -2.25f;
     public float xMax = 2.25f;
 
-    public float yMin = -4f;
-    public float yMax = 4f;
+    public float yMin = -3.75f;
+    public float yMax = 3.75f;
 
 
     private List<Vector3> _spawnedHolesPositions = new List<Vector3>();

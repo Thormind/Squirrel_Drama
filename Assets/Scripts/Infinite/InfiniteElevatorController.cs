@@ -7,10 +7,10 @@ public class InfiniteElevatorController : MonoBehaviour
 {
     private float resetMovementSpeed = 100f;
     private float bottomMovementSpeed = 1f;
-    private float startMovementSpeed = 1f;
 
+    public float startMovementSpeed = 1f;
     public float movementSpeed = 0.6f;
-    private float maxDifference = 0.3f;
+    public float maxDifference = 0.3f;
 
     public Transform bottom;
     public Transform start;
