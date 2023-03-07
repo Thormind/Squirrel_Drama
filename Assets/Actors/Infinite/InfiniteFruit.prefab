@@ -44,7 +44,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.88446933, b: 0.5882353, a: 1}
-  m_Intensity: 0
+  m_Intensity: 0.3450973
   m_Range: 6
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -5092,7 +5092,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.25
+  m_Radius: 0.5
 --- !u!114 &9053382538488673188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9832,8 +9832,8 @@ MonoBehaviour:
   - light: {fileID: 4441226001657902964}
     loop: 1
     animateIntensity: 1
-    intensityStart: 0.05
-    intensityEnd: 0.1
+    intensityStart: 1
+    intensityEnd: 5
     intensityDuration: 0.5
     intensityCurve:
       serializedVersion: 2

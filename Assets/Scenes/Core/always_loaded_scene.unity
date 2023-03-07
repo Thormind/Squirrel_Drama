@@ -15,11 +15,11 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 1, g: 0.43005908, b: 0.24313724, a: 1}
+  m_FogColor: {r: 1, g: 0.514151, b: 0.7672824, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.04
   m_LinearFogStart: 500
-  m_LinearFogEnd: 3750
+  m_LinearFogEnd: 5000
   m_AmbientSkyColor: {r: 0, g: 0.3333335, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 1, g: 0.71392024, b: 0, a: 1}
   m_AmbientGroundColor: {r: 0.03773582, g: 0, b: 0.0038901065, a: 1}
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1349242040}
-  m_IndirectSpecularColor: {r: 0.29929656, g: 0.6148224, b: 1.656696, a: 1}
+  m_IndirectSpecularColor: {r: 0.32004204, g: 0.6735718, b: 1.6491416, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9023,7 +9023,7 @@ MonoBehaviour:
   loungeLight: {fileID: 236809816}
   arcadeLight: {fileID: 1363506189}
   legacyVerticalOffset: 1
-  infiniteVerticalOffset: 0.5
+  infiniteVerticalOffset: 10
   isFocused: 0
 --- !u!1001 &463589135
 PrefabInstance:
@@ -26020,14 +26020,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229584172}
-  m_LocalRotation: {x: 0.09770998, y: -0.4795064, z: 0.053827606, w: 0.87041885}
+  m_LocalRotation: {x: 0.13040192, y: 0.043246232, z: -0.005693473, w: 0.9905012}
   m_LocalPosition: {x: 1, y: 200, z: -200}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1045162883}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 12.81, y: -57.7, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 5, z: 0}
 --- !u!114 &1229584174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28483,7 +28483,7 @@ Light:
     m_Type: 2
     m_Resolution: 3
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.8
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -28531,14 +28531,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349242039}
-  m_LocalRotation: {x: 0.26511073, y: -0.32267466, z: 0.9036794, w: 0.09466246}
+  m_LocalRotation: {x: 0.17216258, y: 0.12854317, z: -0.022665627, w: 0.9763827}
   m_LocalPosition: {x: 1, y: 200, z: -200}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1045162883}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 140.7, y: -147.3, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: 15, z: 0}
 --- !u!114 &1349242042
 MonoBehaviour:
   m_ObjectHideFlags: 0
