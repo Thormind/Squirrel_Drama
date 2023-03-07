@@ -115,9 +115,9 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown("space"))
-        {
-            PlaySound(SOUND.SWEEP);
-        }
+        //if(Input.GetKeyDown("space"))
+        //{
+        //    PlaySound(SOUND.SWEEP);
+        //}
     }
 }
