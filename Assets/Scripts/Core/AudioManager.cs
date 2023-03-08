@@ -83,7 +83,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        AudioManager.instance.mixer.SetFloat("musicVol", volume);
+        //mixer.SetFloat("musicVol", volume);
     }
     public void AdjustSfx()
     {
@@ -96,7 +96,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        AudioManager.instance.mixer.SetFloat("sfxVol", volume);
+        //mixer.SetFloat("sfxVol", volume);
     }
     public void AdjustMaster()
     {
@@ -109,7 +109,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        AudioManager.instance.mixer.SetFloat("masterVol", volume);
+        //mixer.SetFloat("masterVol", volume);
     }
 
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);

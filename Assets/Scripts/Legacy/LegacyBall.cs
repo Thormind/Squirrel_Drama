@@ -37,7 +37,7 @@ public class LegacyBall : MonoBehaviour
 
         if (collision.transform.gameObject.tag == "Hole")
         {
-            if (collision.transform.parent.gameObject == LegacyGameController.instance.GetCurrentHole())
+            if (collision.transform.gameObject == LegacyGameController.instance.GetCurrentHole())
             {
                 Debug.Log("RIGHT HOLE");
                 LegacyGameController.instance.HandleBallInHole(true);

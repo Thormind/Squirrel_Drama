@@ -82,7 +82,6 @@ public class LegacyGameController : MonoBehaviour
         else
         {
             bonusScore = 0;
-            UpdateHUD(GAME_DATA.BONUS_SCORE);
         }
     }
 
@@ -193,10 +192,10 @@ public class LegacyGameController : MonoBehaviour
         else
         {
             currentBallNumber--;
+            UpdateHUD(GAME_DATA.LIFE);
 
             if (currentBallNumber <= 0)
             {
-                UpdateHUD(GAME_DATA.LIFE);
 
                 gameOverState = true;
 
