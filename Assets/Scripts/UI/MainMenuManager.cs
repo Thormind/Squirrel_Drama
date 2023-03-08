@@ -45,6 +45,7 @@ public class MainMenuManager : MonoBehaviour
 
         infiniteBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
         legacyBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
+
     }
 
     private void HandleQuitButton()

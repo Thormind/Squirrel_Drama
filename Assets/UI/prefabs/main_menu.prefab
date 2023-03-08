@@ -823,18 +823,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationDuration: 0.5
-  animationInOut: 0
   animationType: 1
-  startPosition: {x: 0, y: 0}
-  endPosition: {x: 0, y: 0}
-  startScale: {x: 0, y: 0, z: 0}
-  endScale: {x: 0, y: 0, z: 0}
+  floatingHeight: 0
   easedProgress: 0
   startVisible: 0
-  panelRectTransform: {fileID: 2227615216702041025}
   isVisible: 0
+  isGoingIn: 1
   targetScale: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  panelRectTransform: {fileID: 2227615216702041025}
 --- !u!1 &3072200380998570022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,7 +1573,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3072200381308014255}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5966362846766075393
 MonoBehaviour:
   m_ObjectHideFlags: 0

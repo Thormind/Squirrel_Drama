@@ -7,6 +7,8 @@ public class InfiniteFruit : MonoBehaviour
     public float fruitFallingGravityScale = 0.75f;
     public float fruitGravityScale = 1f;
 
+    public float MinCollisionDistance = 0.12f;
+
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
 
@@ -30,8 +32,15 @@ public class InfiniteFruit : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.gameObject.tag == "Hole")
+  
+        print($"DISTANCE: {Mathf.Abs(collision.transform.localPosition.y - fruitRigidbody.transform.localPosition.y)}");
+        // && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= ballCollisionOffset
+
+        if (collision.transform.gameObject.tag == "Hole" 
+            && (Mathf.Abs(collision.transform.localPosition.y - fruitRigidbody.transform.localPosition.y) <= MinCollisionDistance
+                && Mathf.Abs(collision.transform.localPosition.x - fruitRigidbody.transform.localPosition.x) <= MinCollisionDistance))
         {
+            Time.timeScale = 0.2f;
             InfiniteGameController.instance.HandleFruitInHole();
 
             fruitRigidbody.simulated = false;
