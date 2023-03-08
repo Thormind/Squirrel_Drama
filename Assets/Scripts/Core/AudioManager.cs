@@ -50,6 +50,8 @@ public class AudioManager : MonoBehaviour
         public AudioClip clip;
     }
 
+    public UnityEngine.Audio.AudioMixerGroup sfx;
+
     private void FillSoundDictionary()
     {
         foreach (SoundAudioClip soundAudioClip in soundAudioClipArray)
@@ -68,8 +70,32 @@ public class AudioManager : MonoBehaviour
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
     public void PlaySound(SOUND sound)
     {
-        soundplayer.GetComponent<AudioSource>().clip = soundDictionary[sound];
-        soundplayer.GetComponent<AudioSource>().Play();
+        AudioSource audioSource = soundplayer.GetComponent<AudioSource>();
+        if (!audioSource.isPlaying)
+        {
+            audioSource.clip = soundDictionary[sound];
+            audioSource.Play();
+        }
+
+        else
+        {
+            AudioSource[] sources = soundplayer.GetComponents<AudioSource>();
+            foreach (AudioSource source in sources)
+            {
+                if (!source.isPlaying)
+                {
+                    source.clip = soundDictionary[sound];   
+                    source.Play();
+                    return;
+                }
+            }
+            AudioSource newSource = soundplayer.AddComponent<AudioSource>();
+            newSource.outputAudioMixerGroup = sfx;
+            newSource.loop = false;
+            newSource.playOnAwake = false;
+            newSource.clip = soundDictionary[sound];
+            newSource.Play();
+        }    
     }
 
     public static AudioManager instance;
@@ -115,9 +141,9 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(Input.GetKeyDown("space"))
-        //{
-        //    PlaySound(SOUND.SWEEP);
-        //}
+        if(Input.GetKeyDown("space"))
+        {
+            PlaySound(SOUND.MOUSEOVER);
+        }
     }
 }
