@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Audio;
 
 public class SettingsMenuManager : MonoBehaviour
 {
@@ -72,19 +73,20 @@ public class SettingsMenuManager : MonoBehaviour
     public void HandleMasterVolumeInputData(float volume)
     {
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MASTER, volume);
+        AudioManager.instance.AdjustMaster();
     }
 
     public void HandleMusicVolumeInputData(float volume)
     {
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.MUSIC, volume);
+        AudioManager.instance.AdjustMusic();
+
     }
 
     public void HandleSFXVolumeInputData(float volume)
     {
         SaveManager.instance.UpdateAudioSettings(AUDIO_CHANNEL.SFX, volume);
-
-        // Pour Get la value du channel updater partout dans le code
-        //SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
+        AudioManager.instance.AdjustSfx();
     }
 
     private void HandleResetButton()
