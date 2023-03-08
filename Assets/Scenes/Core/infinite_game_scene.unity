@@ -17768,7 +17768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596f877d721dd6046ad273ceb4cb580b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitFallingGravityScale: 1
+  fruitFallingGravityScale: 30
   fruitGravityScale: 45.7
 --- !u!1001 &506426109
 PrefabInstance:

@@ -19,10 +19,10 @@ public class CameraManager : MonoBehaviour
     public Light loungeLight;
     public Light arcadeLight;
 
-    private float dayLightIntensity = 5f;
+    private float dayLightIntensity = 4f;
     private float nightLightIntensity = 8f;
-    private float loungeLightIntensity = 0.75f;
-    private float arcadeLightIntensity = 0.75f;
+    private float loungeLightIntensity = 2000f;
+    private float arcadeLightIntensity = 175f;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
@@ -135,7 +135,7 @@ public class CameraManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
             CheckTimeOfDay();
-            loungeLightIntensity = 0.75f;
+            loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
@@ -157,7 +157,7 @@ public class CameraManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             CheckTimeOfDay();
-            loungeLightIntensity = 0.75f;
+            loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
@@ -184,7 +184,7 @@ public class CameraManager : MonoBehaviour
         {
             CheckTimeOfDay();
             loungeLightIntensity = 0;
-            arcadeLightIntensity = 0.75f;
+            arcadeLightIntensity = 175f;
             legacyMachine.SetActive(false);
 
             if (isFocused)
@@ -213,7 +213,7 @@ public class CameraManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
             CheckTimeOfDay();
-            loungeLightIntensity = 0.75f;
+            loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
@@ -227,7 +227,7 @@ public class CameraManager : MonoBehaviour
     {
         if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
         {
-            dayLightIntensity = 5f;
+            dayLightIntensity = 4f;
             nightLightIntensity = 0f;
         }
         if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NIGHT)
@@ -250,7 +250,7 @@ public class CameraManager : MonoBehaviour
             
 
 
-            dayLightIntensity = 5f;
+            dayLightIntensity = 4f;
             nightLightIntensity = 0f;
 
             Skybox skybox = Camera.main.GetComponent<Skybox>();

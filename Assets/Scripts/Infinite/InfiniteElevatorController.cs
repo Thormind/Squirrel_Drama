@@ -123,7 +123,19 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public float CalculateMoveBarToBottomSpeed()
     {
-        return Mathf.Abs(1f + transform.localPosition.y) * 0.5f;
+        // Ensure height is within the range of 0 to 40
+        float height = Mathf.Clamp(leftLifter.transform.localPosition.y, 0f, 40f);
+
+        // Calculate the slope of the line
+        float m = (75f - 25f) / 40f;
+
+        // Calculate the y-intercept of the line
+        float b = 25f;
+
+        // Calculate the speed using the linear equation y = mx + b
+        float speed = m * height + b;
+
+        return speed;
     }
 
 
