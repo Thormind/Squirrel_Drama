@@ -45,11 +45,11 @@ public class LegacyGameController : MonoBehaviour
         }
     }
 
-    public void UpdateHUD()
+    public void UpdateHUD(GAME_DATA gameData)
     {
         if (HUDMenuManager.instance != null)
         {
-            HUDMenuManager.instance.UpdateLegacyHUD();
+            HUDMenuManager.instance.UpdateLegacyHUD(gameData);
         }
     }
 
@@ -61,18 +61,15 @@ public class LegacyGameController : MonoBehaviour
     private void RecalculateScore()
     {
         score += bonusScore;
-        UpdateHUD();
+        UpdateHUD(GAME_DATA.SCORE);
     }
 
     private void RecalculateBestScore()
     {
-
         if (SaveManager.instance != null)
         {
             SaveManager.instance.UpdateBestScore(GAME_MODE.LEGACY_MODE, score);
         }
-
-        UpdateHUD();
     }
 
     private void DecreaseBonusScore()
@@ -80,12 +77,12 @@ public class LegacyGameController : MonoBehaviour
         if (bonusScore >= bonusScoreDecrement)
         {
             bonusScore -= bonusScoreDecrement;
-            UpdateHUD();
+            UpdateHUD(GAME_DATA.BONUS_SCORE);
         }
         else
         {
             bonusScore = 0;
-            UpdateHUD();
+            UpdateHUD(GAME_DATA.BONUS_SCORE);
         }
     }
 
@@ -99,9 +96,14 @@ public class LegacyGameController : MonoBehaviour
     public void ResetGame()
     {
         currentBallNumber = numberOfBallsPerGame;
+        UpdateHUD(GAME_DATA.LIFE); 
+
         score = 0;
+        UpdateHUD(GAME_DATA.SCORE);
+
         currentHoleIndex = 0;
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
 
         gameCompletedState = false;
         gameOverState = true;
@@ -114,7 +116,7 @@ public class LegacyGameController : MonoBehaviour
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
 
-        UpdateHUD();
+
     }
 
     [ContextMenu("Start Game")]
@@ -125,8 +127,6 @@ public class LegacyGameController : MonoBehaviour
         LegacyHoleController.instance.SpawnHoles();
 
         LegacyMachineLight.SetActive(true);
-
-        UpdateHUD();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -140,7 +140,7 @@ public class LegacyGameController : MonoBehaviour
             CameraManager.instance.Transition(false);
         }
 
-        UpdateHUD();
+        //UpdateHUD();
     }
 
     public void ReadyForNextHole()
@@ -154,14 +154,14 @@ public class LegacyGameController : MonoBehaviour
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
 
-        UpdateHUD();
+        //UpdateHUD();
     }
 
     public void NextHole()
     {
         currentHoleIndex++;
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
-        UpdateHUD();
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
     public void ResetBall()
@@ -193,8 +193,11 @@ public class LegacyGameController : MonoBehaviour
         else
         {
             currentBallNumber--;
+
             if (currentBallNumber <= 0)
             {
+                UpdateHUD(GAME_DATA.LIFE);
+
                 gameOverState = true;
 
                 RecalculateBestScore();
@@ -206,7 +209,6 @@ public class LegacyGameController : MonoBehaviour
                     GlobalUIManager.instance.SetScoreBoardMenu();
                 }
             }
-            UpdateHUD();
         }
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();

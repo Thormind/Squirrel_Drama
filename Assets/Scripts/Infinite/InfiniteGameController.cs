@@ -19,12 +19,20 @@ public class InfiniteGameController : MonoBehaviour
     public int currentLevel;
     public int currentFruitNumber = 3;
 
-    public float timePerDecrement;
     public int bonusScoreIncrement;
     public int bonusScoreDecrement;
+    private int maxBonusScore;
 
     public int fruitScoreIncrement;
     public int pointsScoreIncrement;
+
+    public float gameTime;
+
+    private float startTime;
+    private float elapsedTime;
+    public float timePerDecrement;
+    public float maxTimeBeforeDecrement;
+    private bool timerRunning = false;
 
     public bool levelCompletedState;
     public bool gameOverState;
@@ -47,14 +55,17 @@ public class InfiniteGameController : MonoBehaviour
         difficultyLevel = 1;
 
         bonusScoreIncrement = 1000;
-        bonusScoreDecrement = 10;
-        timePerDecrement = 2.0f;
+        bonusScoreDecrement = 100;
+        timePerDecrement = 5.0f;
+        maxTimeBeforeDecrement = 20f;
+        maxBonusScore = 1000;
 
         fruitScoreIncrement = 500;
         pointsScoreIncrement = 25;
 
         score = 0;
-        bonusScore = currentLevel * bonusScoreIncrement;
+
+        bonusScore = 0;
 
         if (SaveManager.instance != null)
         {
@@ -63,32 +74,106 @@ public class InfiniteGameController : MonoBehaviour
 
     }
 
-    public void UpdateHUD()
+    private void Update()
+    {
+        UpdateTimer();
+    }
+
+    public void UpdateHUD(GAME_DATA gameData)
     {
         if (HUDMenuManager.instance != null)
         {
-            HUDMenuManager.instance.UpdateInfiniteHUD();
+            HUDMenuManager.instance.UpdateInfiniteHUD(gameData);
         }
     }
 
+    // ========== TIME FUNCTIONS ========== //
+
+    // Call this method to start or resume the timer
+    public void StartTimer()
+    {
+        if (!timerRunning)
+        {
+            startTime = Time.time - elapsedTime;
+            timerRunning = true;
+        }
+    }
+
+    // Call this method to pause the timer
+    public void PauseTimer()
+    {
+        if (timerRunning)
+        {
+            elapsedTime = Time.time - startTime;
+            timerRunning = false;
+        }
+    }
+  
+    // Call this method to reset the timer to 0
+    public void ResetTimer()
+    {
+        elapsedTime = 0f;
+        timerRunning = false;
+
+        if (HUDMenuManager.instance != null)
+        {
+            HUDMenuManager.instance.ResetInfiniteTimer();
+        }
+    }
+
+    // Call this method to reset the timer to 0
+    public void UpdateTimer()
+    {
+        if (timerRunning)
+        {
+            gameTime = Time.timeSinceLevelLoad - startTime;
+
+            if (HUDMenuManager.instance != null)
+            {
+                HUDMenuManager.instance.UpdateInfiniteTimer(gameTime);
+            }
+
+        }
+    }
+
+
     // ========== SCORE FUNCTIONS ========== //
 
-    private void RecalculateScore()
+    private void RecalculateBonusScore()
     {
+        int timerBonus = CalculateTimerBonusScore();
+
+        if (HUDMenuManager.instance != null)
+        {
+            HUDMenuManager.instance.RecalculateInfiniteBonusScore(bonusScore, bonusScore + timerBonus);
+        }
+
+        bonusScore += timerBonus;
+    }
+
+    public void RecalculateScore()
+    {
+        if (HUDMenuManager.instance != null)
+        {
+            HUDMenuManager.instance.RecalculateInfiniteScore(bonusScore, 0, score, score + bonusScore);
+        }
         score += bonusScore;
-        UpdateHUD();
+        UpdateHUD(GAME_DATA.SCORE);
+        bonusScore = 0;
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
-    private void PointsScoreIncrement()
+
+    private void PointsBonusScoreIncrement()
     {
-        score += pointsScoreIncrement;
-        UpdateHUD();
+        bonusScore += pointsScoreIncrement;
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
-    private void FruitScoreIncrement()
+    private void FruitBonusScoreIncrement()
     {
-        score += fruitScoreIncrement;
-        UpdateHUD();
+        bonusScore += fruitScoreIncrement;
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
     private void RecalculateBestScore()
@@ -97,20 +182,25 @@ public class InfiniteGameController : MonoBehaviour
         {
             SaveManager.instance.UpdateBestScore(GAME_MODE.INFINITE_MODE, score);
         }
-        UpdateHUD();
     }
 
-    private void DecreaseBonusScore()
+    // Call this method to calculate the bonus score
+    public int CalculateTimerBonusScore()
     {
-        if (bonusScore >= bonusScoreDecrement)
+        float totalTime = Time.time - startTime;
+
+        print($"Time: {totalTime}");
+
+        if (totalTime <= 20f)
         {
-            bonusScore -= bonusScoreDecrement;
-            UpdateHUD();
+            return maxBonusScore * currentLevel;
         }
         else
         {
-            bonusScore = 0;
-            UpdateHUD();
+            float timeAbove20 = totalTime - maxTimeBeforeDecrement;
+            int bonusScore = maxBonusScore - Mathf.FloorToInt(timeAbove20 / timePerDecrement) * bonusScoreDecrement;
+            bonusScore = Mathf.Max(bonusScore, 0); // ensure the bonus score is not negative
+            return bonusScore * currentLevel;
         }
     }
 
@@ -118,21 +208,21 @@ public class InfiniteGameController : MonoBehaviour
 
     private void FruitNumberIncrement()
     {
-        if (currentFruitNumber < 3)
-        {
-            currentFruitNumber++;
-        }
-
-        UpdateHUD();
+        currentFruitNumber++;
+        UpdateHUD(GAME_DATA.LIFE);
     }
 
     private void FruitNumberDecrement()
     {
         currentFruitNumber--;
+        UpdateHUD(GAME_DATA.LIFE);
 
         GameOverCheck();
+    }
 
-        UpdateHUD();
+    private void EnableFruitCollision(bool enableCollision)
+    {
+        fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
     }
 
     // ========== GETTERS ========== //
@@ -171,7 +261,6 @@ public class InfiniteGameController : MonoBehaviour
 
     public void ResetFruit()
     {
-        //   fruitRef.ResetFruitPosition();
         Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.5f, 0);
         fruitRef.ResetFruitPosition(positon);
     }
@@ -180,29 +269,29 @@ public class InfiniteGameController : MonoBehaviour
     {
         levelCompletedState = true;
 
-        CancelInvoke(nameof(DecreaseBonusScore));
+        PauseTimer();
 
-        //Play Level completed animation
-        NextLevel();
+        ResetTimer();
+
+        RecalculateBonusScore();
+
+        //NextLevel();
     }
 
     // ========== LEVEL TRANSITIONS ========== //
 
     public void NextLevel()
     {
-        RecalculateScore();
-
         currentLevel++;
+        UpdateHUD(GAME_DATA.LEVEL);
+
         difficultyLevel++;
-        
         if (difficultyLevel > 9)
         {
             difficultyLevel = 9;
         }
 
-        bonusScore = currentLevel * bonusScoreIncrement;
-
-        UpdateHUD();
+        // ==================== //
 
         RemoveObstacles();
 
@@ -214,21 +303,31 @@ public class InfiniteGameController : MonoBehaviour
     public void ResetGame()
     {
         currentFruitNumber = 3;
+        UpdateHUD(GAME_DATA.LIFE);
+
         score = 0;
+        UpdateHUD(GAME_DATA.SCORE);
+
+        bonusScore = 0;
+        UpdateHUD(GAME_DATA.BONUS_SCORE);
+
         currentLevel = 1;
+        UpdateHUD(GAME_DATA.LEVEL);
+
         difficultyLevel = 1;
-        bonusScore = currentLevel * bonusScoreIncrement;
 
         levelCompletedState = false;
         gameOverState = true;
 
+        // ==================== //
+
         RemoveObstacles();
+
+        ResetTimer();
 
         PrepareForLevel();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
-
-        UpdateHUD();
     }
 
     [ContextMenu("Start Game")]
@@ -239,7 +338,7 @@ public class InfiniteGameController : MonoBehaviour
 
         SpawnObstacles();
 
-        UpdateHUD();
+        //UpdateHUD();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -251,23 +350,27 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.Transition(true);
         }
 
-        InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
+        EnableFruitCollision(true);
 
-        UpdateHUD();
+        StartTimer();
+
+        //UpdateHUD();
     }
 
     public void PrepareForLevel()
     {
-        CancelInvoke(nameof(DecreaseBonusScore));
+        PauseTimer();
 
         Time.timeScale = 1f;
+
+        EnableFruitCollision(false);
 
         if (CameraManager.instance != null)
         {
             CameraManager.instance.Transition(false);
         }
 
-        UpdateHUD();
+        //UpdateHUD();
     }
 
     public void GameOverCheck()
@@ -325,14 +428,19 @@ public class InfiniteGameController : MonoBehaviour
 
     public void HandleFruitInPoints()
     {
-        PointsScoreIncrement();
+        PointsBonusScoreIncrement();
     }
 
     public void HandleFruitInFruit()
     {
-        FruitScoreIncrement();
-
-        FruitNumberIncrement();
+        if (currentFruitNumber < 3)
+        {
+            FruitNumberIncrement();
+        }
+        if (currentFruitNumber >= 3)
+        {
+            FruitBonusScoreIncrement();
+        }
     }
 
     public void SpawnObstacles()

@@ -12,9 +12,10 @@ public class InfiniteFruit : MonoBehaviour
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
 
+    public bool collisionEnabled;
+
     Rigidbody2D fruitRigidbody;
 
-    private Vector3 startFruitPosition;
     private Vector3 startFruitScale;
 
     private void Awake()
@@ -25,70 +26,71 @@ public class InfiniteFruit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startFruitPosition = transform.localPosition;
         startFruitScale = transform.localScale;
         fruitRigidbody.gravityScale = fruitGravityScale;
+
+        collisionEnabled = true;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.transform.gameObject.tag == "Hole"
+            && Vector2.Distance(collision.transform.localPosition, fruitRigidbody.transform.localPosition) <= MinCollisionDistance
+            && collisionEnabled)
+        {
+            collision.isTrigger = false;
+
+            InfiniteGameController.instance.HandleFruitInHole();
+            StartCoroutine(MoveToHoleCoroutine(collision));
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-  
-        print($"DISTANCE: {Mathf.Abs(collision.transform.localPosition.y - fruitRigidbody.transform.localPosition.y)}");
-        // && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= ballCollisionOffset
-
-        if (collision.transform.gameObject.tag == "Hole" 
-            && (Mathf.Abs(collision.transform.localPosition.y - fruitRigidbody.transform.localPosition.y) <= MinCollisionDistance
-                && Mathf.Abs(collision.transform.localPosition.x - fruitRigidbody.transform.localPosition.x) <= MinCollisionDistance))
+        if (collisionEnabled)
         {
-            Time.timeScale = 0.2f;
-            InfiniteGameController.instance.HandleFruitInHole();
+            if (collision.transform.gameObject.tag == "Bee")
+            {
+                InfiniteGameController.instance.HandleFruitInBee();
+                StartCoroutine(FallFromTreeCoroutine(collision.transform));
+            }
 
-            fruitRigidbody.simulated = false;
-            StartCoroutine(MoveToHoleCoroutine(collision.transform));
-        }
+            if (collision.transform.gameObject.tag == "Worm")
+            {
+                InfiniteGameController.instance.HandleFruitInWorm();
 
-        if (collision.transform.gameObject.tag == "Bee")
-        {
-            InfiniteGameController.instance.HandleFruitInBee();
+                StartCoroutine(FallFromTreeCoroutine(collision.transform));
+            }
 
-            fruitRigidbody.simulated = false;
-            StartCoroutine(FallFromTreeCoroutine(collision.transform));
-        }
+            if (collision.transform.gameObject.tag == "Bear")
+            {
+                InfiniteGameController.instance.HandleFruitInBear();
 
-        if (collision.transform.gameObject.tag == "Worm")
-        {
-            InfiniteGameController.instance.HandleFruitInWorm();
 
-            fruitRigidbody.simulated = false;
-            StartCoroutine(FallFromTreeCoroutine(collision.transform));
-        }
+                StartCoroutine(CrushedCoroutine(collision.transform));
+            }
 
-        if (collision.transform.gameObject.tag == "Bear")
-        {
-            InfiniteGameController.instance.HandleFruitInBear();
+            if (collision.transform.gameObject.tag == "Points")
+            {
+                collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
+                InfiniteGameController.instance.HandleFruitInPoints();
+            }
 
-            fruitRigidbody.simulated = false;
-            StartCoroutine(CrushedCoroutine(collision.transform));
-        }
-
-        if (collision.transform.gameObject.tag == "Points")
-        {
-            collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
-            InfiniteGameController.instance.HandleFruitInPoints();
-        }
-
-        if (collision.transform.gameObject.tag == "Fruit")
-        {
-            collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
-            InfiniteGameController.instance.HandleFruitInFruit();
+            if (collision.transform.gameObject.tag == "Fruit")
+            {
+                collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
+                InfiniteGameController.instance.HandleFruitInFruit();
+            }
         }
     }
 
-    IEnumerator MoveToHoleCoroutine(Transform holeTransform)
+    IEnumerator MoveToHoleCoroutine(Collider2D holeTransform)
     {
+        fruitRigidbody.simulated = false;
+
         float t = 0;
         Vector3 fruitPosition = transform.localPosition;
-        Vector3 holePosition = new Vector3(holeTransform.localPosition.x, holeTransform.localPosition.y, holeTransform.localPosition.z + 2f);
+        Vector3 holePosition = new Vector3(holeTransform.transform.localPosition.x, holeTransform.transform.localPosition.y, holeTransform.transform.localPosition.z + 2f);
 
         while (t <= 1)
         {
@@ -109,10 +111,14 @@ public class InfiniteFruit : MonoBehaviour
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
 
+        holeTransform.isTrigger = true;
+
     }
 
     IEnumerator FallFromTreeCoroutine(Transform obstacleTransform)
     {
+        fruitRigidbody.simulated = false;
+
         float t = 0;
         Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z - 1f);
         Vector3 fruitPosition = transform.localPosition;
@@ -137,6 +143,8 @@ public class InfiniteFruit : MonoBehaviour
 
     IEnumerator CrushedCoroutine(Transform bearTransform)
     {
+        fruitRigidbody.simulated = false;
+
         float t = 0;
         Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 5f);
         Vector3 fruitPosition = transform.localPosition;
@@ -161,8 +169,9 @@ public class InfiniteFruit : MonoBehaviour
 
     public void ResetFruitPosition(Vector3 elevatorPostion)
     {
-        transform.localPosition = elevatorPostion;
         GetComponent<CircleCollider2D>().enabled = true;
+
+        transform.localPosition = elevatorPostion;
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
         transform.localScale = startFruitScale;

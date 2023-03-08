@@ -35,6 +35,7 @@ public class InfiniteElevatorController : MonoBehaviour
             if (leftLifter.position.y >= end.position.y
                 || rightLifter.position.y >= end.position.y)
             {
+                inputEnabled = false;
                 InfiniteGameController.instance.LevelCompleted();
             }
 
