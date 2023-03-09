@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 
+
+// ===== STRUCTS & ENUMS ===== //
+
 public enum AUDIO_CHANNEL
 {
     MASTER,
@@ -35,11 +38,14 @@ public enum SOUND
     // Legacy mode
 };
 
-
+//CLASS AUDIOMANAGER
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
+
+
+    // ===== VARIABLES DECLARATIONS ===== //
 
     public AudioSource uiMusic;
     public AudioSource infiniteMusic;
@@ -48,18 +54,6 @@ public class AudioManager : MonoBehaviour
     public GameObject soundplayer;
     public SoundAudioClip[] soundAudioClipArray;
     public Dictionary<SOUND, AudioClip> soundDictionary = new Dictionary<SOUND, AudioClip>();
-
-    public void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(this);
-        }
-    }
 
     [System.Serializable]
     public class SoundAudioClip
@@ -72,11 +66,18 @@ public class AudioManager : MonoBehaviour
     public UnityEngine.Audio.AudioMixerGroup music;
     public AudioMixer mixer;
 
-    private void FillSoundDictionary()
+
+    // ===== AWAKE, START, UPDATE ===== //
+
+    public void Awake()
     {
-        foreach (SoundAudioClip soundAudioClip in soundAudioClipArray)
+        if (instance == null)
         {
-            soundDictionary.Add(soundAudioClip.sound, soundAudioClip.clip);
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(this);
         }
     }
 
@@ -96,6 +97,17 @@ public class AudioManager : MonoBehaviour
         //{
         //    PlaySound(SOUND.MOUSEOVER);
         //}
+    }
+
+
+    // ===== METHODS ===== //
+
+    private void FillSoundDictionary()
+    {
+        foreach (SoundAudioClip soundAudioClip in soundAudioClipArray)
+        {
+            soundDictionary.Add(soundAudioClip.sound, soundAudioClip.clip);
+        }
     }
 
     public void AdjustMusic()
