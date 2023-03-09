@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -17646,6 +17646,7 @@ GameObject:
   - component: {fileID: 506127049}
   - component: {fileID: 506127048}
   - component: {fileID: 506127052}
+  - component: {fileID: 506127053}
   m_Layer: 7
   m_Name: Fruit
   m_TagString: Untagged
@@ -17772,6 +17773,14 @@ MonoBehaviour:
   fruitGravityScale: 45.7
   MinCollisionDistance: 0.11
   collisionEnabled: 0
+--- !u!81 &506127053
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506127045}
+  m_Enabled: 1
 --- !u!1001 &506426109
 PrefabInstance:
   m_ObjectHideFlags: 0
