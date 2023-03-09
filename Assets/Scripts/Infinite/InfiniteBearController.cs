@@ -13,13 +13,7 @@ public class InfiniteBearController : MonoBehaviour
     public List<GameObject> bears;
 
     //Difficulty Parameters
-    private float[] _bearMinDistance = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearMaxDistance = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearMinSpawningInterval = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearMaxSpawningInterval = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearSpawnProbability = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearWarnAnimationTime = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
-    private float[] _bearImpactRange = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    [SerializeField] private BearParametersSO _bearParameters;
 
 
     //Spawning Limits Parameters
@@ -45,14 +39,6 @@ public class InfiniteBearController : MonoBehaviour
         {
             Destroy(this);
         }
-
-        LoadBearMinDistance();
-        LoadBearMaxDistance();
-        LoadBearMinSpawningInterval();
-        LoadBearMaxSpawningInterval();
-        LoadBearSpawnProbability();
-        LoadBearWarnAnimationTime();
-        LoadBearImpactRange();
 
         isAllSpawned = false;
     }
@@ -93,7 +79,7 @@ public class InfiniteBearController : MonoBehaviour
             Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
             bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
 
-            float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 1f, BearWarnAnimationTime + 1f);
+            float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 0.5f, BearWarnAnimationTime + 0.5f);
 
             bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
                 randomWarnAnimationTime, BearImpactRange);
@@ -167,196 +153,79 @@ public class InfiniteBearController : MonoBehaviour
     //MIN DISTANCE
     public float BearMinDistance
     {
-        get { return _bearMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearMinDistance();
+            _bearParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
-        }
-    }
-
-    private void SaveBearMinDistance()
-    {
-        for (int i = 0; i < _bearMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearMinDistance_Level_" + (i + 1), _bearMinDistance[i]);
-        }
-    }
-
-    private void LoadBearMinDistance()
-    {
-        for (int i = 0; i < _bearMinDistance.Length; i++)
-        {
-            _bearMinDistance[i] = PlayerPrefs.GetFloat("BearMinDistance_Level_" + (i + 1), 50);
         }
     }
 
     //MAX DISTANCE
     public float BearMaxDistance
     {
-        get { return _bearMaxDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetMaxDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearMaxDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearMaxDistance();
+            _bearParameters.SetMaxDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
-        }
-    }
-
-    private void SaveBearMaxDistance()
-    {
-        for (int i = 0; i < _bearMaxDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearMaxDistance_Level_" + (i + 1), _bearMaxDistance[i]);
-        }
-    }
-
-    private void LoadBearMaxDistance()
-    {
-        for (int i = 0; i < _bearMaxDistance.Length; i++)
-        {
-            _bearMaxDistance[i] = PlayerPrefs.GetFloat("BearMaxDistance_Level_" + (i + 1), 50);
         }
     }
 
     //MIN SPAWNING INTERVAL
     public float BearMinSpawningInterval
     {
-        get { return _bearMinSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetMinSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearMinSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearMinSpawningInterval();
+            _bearParameters.SetMinSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
-        }
-    }
-
-    private void SaveBearMinSpawningInterval()
-    {
-        for (int i = 0; i < _bearMinSpawningInterval.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearMinSpawningInterval_Level_" + (i + 1), _bearMinSpawningInterval[i]);
-        }
-    }
-
-    private void LoadBearMinSpawningInterval()
-    {
-        for (int i = 0; i < _bearMinSpawningInterval.Length; i++)
-        {
-            _bearMinSpawningInterval[i] = PlayerPrefs.GetFloat("BearMinSpawningInterval_Level_" + (i + 1), 50);
         }
     }
 
     //MAX SPAWNING INTERVAL
     public float BearMaxSpawningInterval
     {
-        get { return _bearMaxSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetMaxSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearMaxSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearMaxSpawningInterval();
+            _bearParameters.SetMaxSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
         }
     }
 
-    private void SaveBearMaxSpawningInterval()
-    {
-        for (int i = 0; i < _bearMaxSpawningInterval.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearMaxSpawningInterval_Level_" + (i + 1), _bearMaxSpawningInterval[i]);
-        }
-    }
-
-    private void LoadBearMaxSpawningInterval()
-    {
-        for (int i = 0; i < _bearMaxSpawningInterval.Length; i++)
-        {
-            _bearMaxSpawningInterval[i] = PlayerPrefs.GetFloat("BearMaxSpawningInterval_Level_" + (i + 1), 50);
-        }
-    }
 
     //SPAWNING PROBABILITY
     public float BearSpawnProbability
     {
-        get { return _bearSpawnProbability[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetSpawnProbabilityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearSpawnProbability[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearSpawnProbability();
+            _bearParameters.SetSpawnProbabilityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
         }
     }
 
-    private void SaveBearSpawnProbability()
-    {
-        for (int i = 0; i < _bearSpawnProbability.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearSpawnProbability_Level_" + (i + 1), _bearSpawnProbability[i]);
-        }
-    }
-
-    private void LoadBearSpawnProbability()
-    {
-        for (int i = 0; i < _bearSpawnProbability.Length; i++)
-        {
-            _bearSpawnProbability[i] = PlayerPrefs.GetFloat("BearSpawnProbability_Level_" + (i + 1), 50);
-        }
-    }
 
     //WARN ANIMATION TIME
     public float BearWarnAnimationTime
     {
-        get { return _bearWarnAnimationTime[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetWarnAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearWarnAnimationTime[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearWarnAnimationTime();
+            _bearParameters.SetWarnAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
-        }
-    }
-
-    private void SaveBearWarnAnimationTime()
-    {
-        for (int i = 0; i < _bearWarnAnimationTime.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearWarnAnimationTime_Level_" + (i + 1), _bearWarnAnimationTime[i]);
-        }
-    }
-
-    private void LoadBearWarnAnimationTime()
-    {
-        for (int i = 0; i < _bearWarnAnimationTime.Length; i++)
-        {
-            _bearWarnAnimationTime[i] = PlayerPrefs.GetFloat("BearWarnAnimationTime_Level_" + (i + 1), 50);
         }
     }
 
     //IMPACT RANGE
     public float BearImpactRange
     {
-        get { return _bearImpactRange[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _bearParameters.GetImpactRangeForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _bearImpactRange[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBearImpactRange();
+            _bearParameters.SetImpactRangeForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBears();
-        }
-    }
-
-    private void SaveBearImpactRange()
-    {
-        for (int i = 0; i < _bearImpactRange.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BearImpactRange_Level_" + (i + 1), _bearImpactRange[i]);
-        }
-    }
-
-    private void LoadBearImpactRange()
-    {
-        for (int i = 0; i < _bearImpactRange.Length; i++)
-        {
-            _bearImpactRange[i] = PlayerPrefs.GetFloat("BearImpactRange_Level_" + (i + 1), 50);
         }
     }
 }

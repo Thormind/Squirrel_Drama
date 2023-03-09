@@ -132,7 +132,6 @@ public class InfiniteGameController : MonoBehaviour
             {
                 HUDMenuManager.instance.UpdateInfiniteTimer(gameTime);
             }
-
         }
     }
 
@@ -269,13 +268,13 @@ public class InfiniteGameController : MonoBehaviour
     {
         levelCompletedState = true;
 
+        RemoveObstacles();
+
         PauseTimer();
 
         ResetTimer();
 
         RecalculateBonusScore();
-
-        //NextLevel();
     }
 
     // ========== LEVEL TRANSITIONS ========== //
@@ -292,8 +291,6 @@ public class InfiniteGameController : MonoBehaviour
         }
 
         // ==================== //
-
-        RemoveObstacles();
 
         PrepareForLevel();
 

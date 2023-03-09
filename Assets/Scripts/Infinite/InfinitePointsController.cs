@@ -15,8 +15,7 @@ public class InfinitePointsController : MonoBehaviour
     private List<Vector3> _spawnedPointsPositions = new List<Vector3>();
 
     //Difficulty Parameters
-    private int[] _pointsQuantity = new int[9]; // { 10, 15, 20, 25, 30, 35, 40, 50, 60 };
-    private float[] _pointsMinDistance = new float[9]; // { 1.5f, 1f, 1f, 1f, 1f, 1f, 0.5f, 0.5f, 0.5f };
+    [SerializeField] private PointsParametersSO _pointsParameters;
 
     //Spawning Limits Parameters
     private float xMin = -2.5f;
@@ -41,9 +40,6 @@ public class InfinitePointsController : MonoBehaviour
             Destroy(this);
         }
 
-        LoadPointsQuantity();
-        LoadPointsMinDistance();
-
         isAllSpawned = false;
     }
 
@@ -51,9 +47,9 @@ public class InfinitePointsController : MonoBehaviour
     {
         RemovePoints();
 
-        int randomPointsQuantity = Random.Range(PointsQuantity - 5, PointsQuantity + 5);
+        //int randomPointsQuantity = Random.Range(PointsQuantity - 5, PointsQuantity + 5);
 
-        for (int i = 0; i < randomPointsQuantity; i++)
+        for (int i = 0; i < PointsQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
 
@@ -159,56 +155,22 @@ public class InfinitePointsController : MonoBehaviour
     //POINTS QUANTITY
     public int PointsQuantity
     {
-        get { return _pointsQuantity[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _pointsParameters.GetQuantityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _pointsQuantity[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SavePointsQuantity();
+            _pointsParameters.SetQuantityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnPoints();
-        }
-    }
-
-    private void SavePointsQuantity()
-    {
-        for (int i = 0; i < _pointsQuantity.Length; i++)
-        {
-            PlayerPrefs.SetInt("PointsQuantity_Level_" + (i + 1), _pointsQuantity[i]);
-        }
-    }
-
-    private void LoadPointsQuantity()
-    {
-        for (int i = 0; i < _pointsQuantity.Length; i++)
-        {
-            _pointsQuantity[i] = PlayerPrefs.GetInt("PointsQuantity_Level_" + (i + 1), 50);
         }
     }
 
     //MIN DISTANCE
     public float PointsMinDistance
     {
-        get { return _pointsMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _pointsParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _pointsMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SavePointsMinDistance();
+            _pointsParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnPoints();
-        }
-    }
-
-    private void SavePointsMinDistance()
-    {
-        for (int i = 0; i < _pointsMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("PointsMinDistance_Level_" + (i + 1), _pointsMinDistance[i]);
-        }
-    }
-
-    private void LoadPointsMinDistance()
-    {
-        for (int i = 0; i < _pointsMinDistance.Length; i++)
-        {
-            _pointsMinDistance[i] = PlayerPrefs.GetFloat("PointsMinDistance_Level_" + (i + 1), 50);
         }
     }
 

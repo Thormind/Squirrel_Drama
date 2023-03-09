@@ -13,9 +13,9 @@ public class InfiniteHolesController : MonoBehaviour
     public List<GameObject> holes;
     private List<Vector3> _spawnedHolesPositions = new List<Vector3>();
 
+
     //Difficulty Parameters
-    private int[] _holesQuantity = new int[9]; //{ 20, 40, 50, 60, 70, 80, 90, 100, 150} 
-    private float[] _holesMinDistance = new float[9]; // { 2f, 2f, 2f, 1f, 1f, 1f, 0.5f, 0.5f, 0.5f } ;
+    [SerializeField] private HolesParametersSO _holesParameters;
 
     //Spawning Limits Parameters
     private float xMin = -2.75f;
@@ -38,9 +38,6 @@ public class InfiniteHolesController : MonoBehaviour
             Destroy(this);
         }
 
-        LoadHolesQuantity();
-        LoadHolesMinDistance();
-
         isAllSpawned = false;
     }
 
@@ -48,9 +45,9 @@ public class InfiniteHolesController : MonoBehaviour
     {
         RemoveHoles();
 
-        int randomHolesQuantity = Random.Range(HolesQuantity-5, HolesQuantity+5);
+        //int randomHolesQuantity = Random.Range(HolesQuantity-5, HolesQuantity+5);
 
-        for (int i = 0; i < randomHolesQuantity; i++)
+        for (int i = 0; i < HolesQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
 
@@ -156,57 +153,22 @@ public class InfiniteHolesController : MonoBehaviour
     //HOLES QUANTITY
     public int HolesQuantity
     {
-        get { return _holesQuantity[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _holesParameters.GetQuantityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _holesQuantity[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveHolesQuantity();
+            _holesParameters.SetQuantityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnHoles();
-        }
-    }
-
-    private void SaveHolesQuantity()
-    {
-        for (int i = 0; i < _holesQuantity.Length; i++)
-        {
-            PlayerPrefs.SetInt("HolesQuantity_Level_" + (i + 1), _holesQuantity[i]);
-        }
-    }
-
-    private void LoadHolesQuantity()
-    {
-        for (int i = 0; i < _holesQuantity.Length; i++)
-        {
-            _holesQuantity[i] = PlayerPrefs.GetInt("HolesQuantity_Level_" + (i + 1), 50);
         }
     }
 
     //MIN DISTANCE
     public float HolesMinDistance
     {
-        get { return _holesMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _holesParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _holesMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveHolesMinDistance();
+            _holesParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnHoles();
         }
     }
-
-    private void SaveHolesMinDistance()
-    {
-        for (int i = 0; i < _holesMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("HolesMinDistance_Level_" + (i + 1), _holesMinDistance[i]);
-        }
-    }
-
-    private void LoadHolesMinDistance()
-    {
-        for (int i = 0; i < _holesMinDistance.Length; i++)
-        {
-            _holesMinDistance[i] = PlayerPrefs.GetFloat("HolesMinDistance_Level_" + (i + 1), 50);
-        }
-    }
-
 }

@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74359006e890525448a8be46565c3daa, type: 3}
+  m_Name: BearParameters
+  m_EditorClassIdentifier: 
+  _bearMinDistance:
+  - 2
+  - 2
+  - 2
+  - 1.75
+  - 1.75
+  - 1.75
+  - 1.5
+  - 1.5
+  - 1.5
+  _bearMaxDistance:
+  - 6
+  - 6
+  - 6
+  - 5
+  - 5
+  - 5
+  - 4
+  - 4
+  - 4
+  _bearMinSpawningInterval:
+  - 8
+  - 8
+  - 8
+  - 7
+  - 7
+  - 7
+  - 6
+  - 6
+  - 6
+  _bearMaxSpawningInterval:
+  - 12
+  - 12
+  - 12
+  - 10
+  - 10
+  - 10
+  - 8
+  - 8
+  - 8
+  _bearSpawnProbability:
+  - 0.15
+  - 0.25
+  - 0.35
+  - 0.45
+  - 0.55
+  - 0.55
+  - 0.55
+  - 0.55
+  - 0.55
+  _bearWarnAnimationTime:
+  - 3.5
+  - 3.5
+  - 3.5
+  - 2.5
+  - 2.5
+  - 2.5
+  - 1.5
+  - 1.5
+  - 1.5
+  _bearImpactRange:
+  - 3
+  - 3
+  - 3
+  - 4
+  - 4
+  - 4
+  - 5
+  - 5
+  - 5
