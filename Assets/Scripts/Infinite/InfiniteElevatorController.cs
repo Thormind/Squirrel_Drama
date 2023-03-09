@@ -142,25 +142,21 @@ public class InfiniteElevatorController : MonoBehaviour
 
     private void OnLeftEndUp(InputValue leftUpValue)
     {
-        //print("UP");
         leftUpInputValue = leftUpValue.Get<float>();
     }
 
     private void OnLeftEndDown(InputValue leftDownValue)
     {
-        //print("DOWN");
         leftDownInputValue = leftDownValue.Get<float>();
     }
 
     private void OnRightEndUp(InputValue rightUpValue)
     {
-        //print("UP");
         rightUpInputValue = rightUpValue.Get<float>();
     }
 
     private void OnRightEndDown(InputValue rightDownValue)
     {
-        //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
     }
 
