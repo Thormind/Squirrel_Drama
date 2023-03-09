@@ -39,10 +39,27 @@ public enum SOUND
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
+
+    public AudioSource uiMusic;
+    public AudioSource infiniteMusic;
+    public AudioSource legacyMusic;
 
     public GameObject soundplayer;
     public SoundAudioClip[] soundAudioClipArray;
     public Dictionary<SOUND, AudioClip> soundDictionary = new Dictionary<SOUND, AudioClip>();
+
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(this);
+        }
+    }
 
     [System.Serializable]
     public class SoundAudioClip
@@ -72,6 +89,15 @@ public class AudioManager : MonoBehaviour
         uiMusic.Play();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        //if(Input.GetKeyDown("space"))
+        //{
+        //    PlaySound(SOUND.MOUSEOVER);
+        //}
+    }
+
     public void AdjustMusic()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
@@ -83,7 +109,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        //mixer.SetFloat("musicVol", volume);
+        mixer.SetFloat("musicVol", volume);
     }
     public void AdjustSfx()
     {
@@ -96,7 +122,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        //mixer.SetFloat("sfxVol", volume);
+        mixer.SetFloat("sfxVol", volume);
     }
     public void AdjustMaster()
     {
@@ -109,7 +135,7 @@ public class AudioManager : MonoBehaviour
         {
             volume = -80;
         }
-        //mixer.SetFloat("masterVol", volume);
+        mixer.SetFloat("masterVol", volume);
     }
 
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
@@ -144,23 +170,6 @@ public class AudioManager : MonoBehaviour
         }    
     }
 
-    public static AudioManager instance;
-
-    public AudioSource uiMusic;
-    public AudioSource infiniteMusic;
-    public AudioSource legacyMusic;
-
-    public void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(this);
-        }
-    }
     public void StopCurrentMusic()
     {
         uiMusic.Stop();
@@ -184,12 +193,5 @@ public class AudioManager : MonoBehaviour
         infiniteMusic.Play();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if(Input.GetKeyDown("space"))
-        //{
-        //    PlaySound(SOUND.MOUSEOVER);
-        //}
-    }
+
 }

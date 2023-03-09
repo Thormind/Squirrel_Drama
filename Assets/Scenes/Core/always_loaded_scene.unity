@@ -13734,6 +13734,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48efe2f197fd924ca1a970f8ea10253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiMusic: {fileID: 648093558}
+  infiniteMusic: {fileID: 648093557}
+  legacyMusic: {fileID: 648093556}
   soundplayer: {fileID: 54590822}
   soundAudioClipArray:
   - sound: 2
@@ -13741,11 +13744,8 @@ MonoBehaviour:
   - sound: 0
     clip: {fileID: 8300000, guid: 9eb4de0425f63eb438530b6b8df101e9, type: 3}
   sfx: {fileID: 9147869589709987069, guid: a4457ffe3ebaf974996da388d6a43729, type: 2}
-  music: {fileID: 0}
-  mixer: {fileID: 0}
-  uiMusic: {fileID: 648093558}
-  infiniteMusic: {fileID: 648093557}
-  legacyMusic: {fileID: 648093556}
+  music: {fileID: 1994687802012974149, guid: a4457ffe3ebaf974996da388d6a43729, type: 2}
+  mixer: {fileID: 24100000, guid: a4457ffe3ebaf974996da388d6a43729, type: 2}
 --- !u!4 &648093560
 Transform:
   m_ObjectHideFlags: 0
