@@ -26,6 +26,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
     void Update()
     {
         transform.Rotate(Vector3.up * Time.fixedDeltaTime * rotationSpeed, Space.World);
+        Debug.Log(Vector3.up * Time.fixedDeltaTime * rotationSpeed);
     }
 
     public void HandleFruitInFruitFunction()
