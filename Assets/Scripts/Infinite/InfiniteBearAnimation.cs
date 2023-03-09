@@ -54,6 +54,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         isCoroutineRunning = true;
 
+        // ============== WARN ANIMATION ============== //
         float remainingCooldown = warnCooldown;
 
         while (remainingCooldown > 0f)
@@ -77,6 +78,8 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         countdownText.text = "";
 
+
+        // ============== SLOW MOTION BEFORE IMPACT ANIMATION ============== //
         Time.timeScale = 0.3f;
 
         bearPaw.SetActive(true);
@@ -91,9 +94,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         float duration = distance / translationSpeed;
 
         float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-        float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f; // Set a max force for the shake
-        print($"{distanceFromFruit}");
-        print($"{slowMotion}");
+        float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f;
         Time.timeScale = slowMotion;
 
         float t = 0f;
@@ -114,6 +115,9 @@ public class InfiniteBearAnimation : MonoBehaviour
             yield return null;
         }
 
+
+
+        // ============== IMPACT ANIMATION ============== //
         bearCollider.enabled = true;
 
         impactVFX.SetActive(true);
@@ -138,15 +142,14 @@ public class InfiniteBearAnimation : MonoBehaviour
             yield return null;
         }
 
- 
 
+
+
+        // ============== POST IMPACT ANIMATION ============== //
         bearCollider.enabled = false;
 
         startPosition = bearPaw.transform.localPosition;
         endPosition = new Vector3(0f, 0f, -0.5f);
-
-        //distance = Vector3.Distance(startPosition, endPosition);
-        //duration = distance / translationSpeed;
 
         t = 0f;
 
@@ -181,14 +184,13 @@ public class InfiniteBearAnimation : MonoBehaviour
         isCoroutineRunning = false;
     }
 
-    float QuadraticEasing(float t)
-    {
-        // Quadratic easing in and out
-        if (t < 0.5f)
-            return 2 * t * t;
-        else
-            return -1 + (4 - 2 * t) * t;
-    }
+
+
+
+
+    // ====================================== //
+    // ========== EASING FUNCTIONS ========== //
+    // ====================================== //
 
     float EaseInCirc(float t)
     {

@@ -75,6 +75,13 @@ public class HUDMenuManager : MonoBehaviour
         UpdateLegacyHUD(GAME_DATA.NONE);
     }
 
+
+
+
+    // =============================================== //
+    // ========== MAIN ANIMATION CONTROLLER ========== //
+    // =============================================== //
+
     public void UpdateLegacyHUD(GAME_DATA gameData)
     {
         switch (gameData)
@@ -138,41 +145,15 @@ public class HUDMenuManager : MonoBehaviour
         }
     }
 
-    public void UpdateInfiniteTimer(float gameTime)
-    {
-        // get the total full seconds.
-        var t0 = (int)gameTime;
-
-        // get the number of minutes.
-        var m = t0 / 60;
-
-        // get the remaining seconds.
-        var s = (t0 - m * 60);
-
-        // get the 2 most significant values of the milliseconds.
-        var ms = (int)((gameTime - t0) * 100);
-
-        string timerString = $"{m:00}:{s:00}:{ms:00}";
-
-        infiniteTimerText.text = timerString;
-    }
-
-    public void ResetInfiniteTimer()
-    {
-        StartCoroutine(AnimateInfiniteTimerReset());
-    }
-
-    public void RecalculateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
-    {
-        StartCoroutine(AnimateInfiniteBonusScore(currentBonusScore, newBonusScore));
-    }
-
-    public void RecalculateInfiniteScore(int currentBonusScore, int newBonusScore,int currentScore, int newScore)
-    {
-        StartCoroutine(AnimateInfiniteScore(currentBonusScore, newBonusScore, currentScore, newScore));
-    }
 
 
+
+
+
+
+    // ===================================== //
+    // ========== TEXT ANIMATIONS ========== //
+    // ===================================== //
     private IEnumerator AnimateText(TMP_Text text, string textToUpdate)
     {
         Vector3 startScale = text.transform.localScale;
@@ -213,6 +194,42 @@ public class HUDMenuManager : MonoBehaviour
 
     }
 
+
+
+
+
+
+
+
+
+    // ====================================== //
+    // ========== TIMER ANIMATIONS ========== //
+    // ====================================== //
+
+    public void UpdateInfiniteTimer(float gameTime)
+    {
+        // get the total full seconds.
+        var t0 = (int)gameTime;
+
+        // get the number of minutes.
+        var m = t0 / 60;
+
+        // get the remaining seconds.
+        var s = (t0 - m * 60);
+
+        // get the 2 most significant values of the milliseconds.
+        var ms = (int)((gameTime - t0) * 100);
+
+        string timerString = $"{m:00}:{s:00}:{ms:00}";
+
+        infiniteTimerText.text = timerString;
+    }
+
+    public void ResetInfiniteTimer()
+    {
+        StartCoroutine(AnimateInfiniteTimerReset());
+    }
+
     private IEnumerator AnimateInfiniteTimerReset()
     {
         // Get the duration of the animation
@@ -244,6 +261,49 @@ public class HUDMenuManager : MonoBehaviour
 
         // Set the final timer string to "00:00:00"
         infiniteTimerText.text = resetTimerString;
+    }
+
+
+    private string GetAnimatedTimerString(string startTimerString, string endTimerString, float t)
+    {
+        // Split the start and end timer strings into their components
+        string[] startTimerComponents = startTimerString.Split(':');
+        string[] endTimerComponents = endTimerString.Split(':');
+
+        // Convert the components to integers
+        int startMinutes = int.Parse(startTimerComponents[0]);
+        int startSeconds = int.Parse(startTimerComponents[1]);
+        int startMilliseconds = int.Parse(startTimerComponents[2]);
+        int endMinutes = int.Parse(endTimerComponents[0]);
+        int endSeconds = int.Parse(endTimerComponents[1]);
+        int endMilliseconds = int.Parse(endTimerComponents[2]);
+
+        // Calculate the current timer components based on the animation progress
+        int currentMinutes = Mathf.RoundToInt(Mathf.Lerp(startMinutes, endMinutes, t));
+        int currentSeconds = Mathf.RoundToInt(Mathf.Lerp(startSeconds, endSeconds, t));
+        int currentMilliseconds = Mathf.RoundToInt(Mathf.Lerp(startMilliseconds, endMilliseconds, t));
+
+        // Format the current timer components into a timer string
+        return string.Format("{0:00}:{1:00}:{2:00}", currentMinutes, currentSeconds, currentMilliseconds);
+    }
+
+
+
+
+
+
+    // ==================================================== //
+    // ========== SCORE & BONUS SCORE ANIMATIONS ========== //
+    // ==================================================== //
+
+    public void RecalculateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
+    {
+        StartCoroutine(AnimateInfiniteBonusScore(currentBonusScore, newBonusScore));
+    }
+
+    public void RecalculateInfiniteScore(int currentBonusScore, int newBonusScore,int currentScore, int newScore)
+    {
+        StartCoroutine(AnimateInfiniteScore(currentBonusScore, newBonusScore, currentScore, newScore));
     }
 
     private IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
@@ -305,28 +365,16 @@ public class HUDMenuManager : MonoBehaviour
         InfiniteGameController.instance.NextLevel();
     }
 
-    private string GetAnimatedTimerString(string startTimerString, string endTimerString, float t)
-    {
-        // Split the start and end timer strings into their components
-        string[] startTimerComponents = startTimerString.Split(':');
-        string[] endTimerComponents = endTimerString.Split(':');
 
-        // Convert the components to integers
-        int startMinutes = int.Parse(startTimerComponents[0]);
-        int startSeconds = int.Parse(startTimerComponents[1]);
-        int startMilliseconds = int.Parse(startTimerComponents[2]);
-        int endMinutes = int.Parse(endTimerComponents[0]);
-        int endSeconds = int.Parse(endTimerComponents[1]);
-        int endMilliseconds = int.Parse(endTimerComponents[2]);
 
-        // Calculate the current timer components based on the animation progress
-        int currentMinutes = Mathf.RoundToInt(Mathf.Lerp(startMinutes, endMinutes, t));
-        int currentSeconds = Mathf.RoundToInt(Mathf.Lerp(startSeconds, endSeconds, t));
-        int currentMilliseconds = Mathf.RoundToInt(Mathf.Lerp(startMilliseconds, endMilliseconds, t));
 
-        // Format the current timer components into a timer string
-        return string.Format("{0:00}:{1:00}:{2:00}", currentMinutes, currentSeconds, currentMilliseconds);
-    }
+
+
+
+
+    // ====================================== //
+    // ========== EASING FUNCTIONS ========== //
+    // ====================================== //
 
     float EaseOutQuint(float x)
     {

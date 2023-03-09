@@ -138,8 +138,6 @@ public class LegacyGameController : MonoBehaviour
         {
             CameraManager.instance.Transition(false);
         }
-
-        //UpdateHUD();
     }
 
     public void ReadyForNextHole()
@@ -152,8 +150,6 @@ public class LegacyGameController : MonoBehaviour
         LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
-
-        //UpdateHUD();
     }
 
     public void NextHole()

@@ -110,15 +110,7 @@ public class LegacyElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
-        /*
-        while (leftLifter.position.y < startPosition.y + startPositionVerticalOffset)
-        {
-            leftLifter.MovePosition(leftLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            rightLifter.MovePosition(rightLifter.position + Vector2.up * movementSpeed * Time.fixedDeltaTime);
 
-            yield return new WaitForEndOfFrame();
-        }
-        */
         inputEnabled = true;
 
         LegacyGameController.instance.ReadyForNextHole();
@@ -142,22 +134,6 @@ public class LegacyElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         } 
-
-        /*
-        while (leftLifter.position.y > startPosition.y || rightLifter.position.y > startPosition.y)
-        {
-            if (leftLifter.position.y > startPosition.y)
-            {
-                leftLifter.MovePosition(leftLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            }
-            if (rightLifter.position.y > startPosition.y)
-            {
-                rightLifter.MovePosition(rightLifter.position - Vector2.up * movementSpeed * Time.fixedDeltaTime);
-            }
-
-            yield return new WaitForEndOfFrame();
-        }
-        */
 
         LegacyGameController.instance.ResetBall();
 
@@ -184,25 +160,25 @@ public class LegacyElevatorController : MonoBehaviour
 
     private void OnLeftEndUp(InputValue leftUpValue)
     {
-        print("UP");
+        //print("UP");
         leftUpInputValue = leftUpValue.Get<float>();
     }
 
     private void OnLeftEndDown(InputValue leftDownValue)
     {
-        print("DOWN");
+        //print("DOWN");
         leftDownInputValue = leftDownValue.Get<float>();
     }
 
     private void OnRightEndUp(InputValue rightUpValue)
     {
-        print("UP");
+        //print("UP");
         rightUpInputValue = rightUpValue.Get<float>();
     }
 
     private void OnRightEndDown(InputValue rightDownValue)
     {
-        print("DOWN");
+        //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
     }
 

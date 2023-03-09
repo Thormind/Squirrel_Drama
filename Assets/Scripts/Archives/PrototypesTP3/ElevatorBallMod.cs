@@ -9,25 +9,8 @@ public class ElevatorBallMod : MonoBehaviour
 {
     public ElevatorController elevatorControllerRef;
 
-    [SerializeField] private float elevatorSpeed = 1.75f;
     public TMP_Text elevatorSpeedTxt;
     public Slider elevatorSpeedSlider;
-
-    /*
-    public Rigidbody2D elevatorRB;
-    [SerializeField] private float elevatorMass = 1f;
-    public TMP_Text elevatorMassTxt;
-    public Slider elevatorMassSlider;
-    [SerializeField] private float elevatorLinear = 0f;
-    public TMP_Text elevatorLinearTxt;
-    public Slider elevatorLinearSlider;
-    [SerializeField] private float elevatorAngular = 0.05f;
-    public TMP_Text elevatorAngularTxt;
-    public Slider elevatorAngularSlider;
-    [SerializeField] private float elevatorGravityScale = 6f;
-    public TMP_Text elevatorGravityScaleTxt;
-    public Slider elevatorGravityScaleSlider;
-    */
 
     public Rigidbody2D ballRB;
 

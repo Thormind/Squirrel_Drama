@@ -7,7 +7,7 @@ public class LegacyBall : MonoBehaviour
 
     public float ballGravityScale = 2.285f;
 
-    public float ballCollisionOffset = 0.05f;
+    public float MinCollisionDistance = 0.12f;
 
     public float enterTheHoleTime = 5f;
 
@@ -15,6 +15,8 @@ public class LegacyBall : MonoBehaviour
 
     private Vector3 startBallPosition;
     private Vector3 startBallScale;
+
+    public bool collisionEnabled;
 
     private void Awake()
     {
@@ -26,17 +28,18 @@ public class LegacyBall : MonoBehaviour
         startBallPosition = transform.position;
         startBallScale = transform.localScale;
         ballRigidbody.gravityScale = ballGravityScale;
+
+        collisionEnabled = true;
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        //Time.timeScale = 0.2f;
-        //print($"{Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition)}");
-        // && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= ballCollisionOffset
-
-        if (collision.transform.gameObject.tag == "Hole")
+        print($"{ Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition)}");
+        if (collision.transform.gameObject.tag == "Hole"
+            && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= MinCollisionDistance
+            && collisionEnabled)
         {
+            collisionEnabled = false;
             if (collision.transform.gameObject == LegacyGameController.instance.GetCurrentHole())
             {
                 Debug.Log("RIGHT HOLE");
@@ -82,6 +85,9 @@ public class LegacyBall : MonoBehaviour
     public void ResetBallPosition()
     {
         transform.position = startBallPosition;
+
+        collisionEnabled = true;
+
         GetComponent<CircleCollider2D>().enabled = true;
         ballRigidbody.velocity = Vector2.zero;
         ballRigidbody.angularVelocity = 0;

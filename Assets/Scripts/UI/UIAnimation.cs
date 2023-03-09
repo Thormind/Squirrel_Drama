@@ -41,6 +41,14 @@ public class UIAnimation : MonoBehaviour
         isVisible = false;
     }
 
+
+
+
+
+    // =============================================== //
+    // ========== MAIN ANIMATION CONTROLLER ========== //
+    // =============================================== //
+
     public void play()
     {
         // Get the RectTransform component of the UI element
@@ -104,6 +112,18 @@ public class UIAnimation : MonoBehaviour
         isVisible = !isVisible;
 
     }
+
+
+
+
+
+
+
+
+    // ==================================================== //
+    // ========== ANIMATION COROUTINES FUNCTIONS ========== //
+    // ==================================================== //
+
 
     private IEnumerator AnimateBouncing(Vector3 startPosition, Vector3 endPosition, bool p_isGoingIn)
     {
@@ -213,7 +233,12 @@ public class UIAnimation : MonoBehaviour
 
 
 
+
+
+
+    // ====================================== //
     // ========== EASING FUNCTIONS ========== //
+    // ====================================== //
 
     float QuadraticEasing(float t)
     {

@@ -51,16 +51,6 @@ public class LegacyHoleController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SpawnHoles();
-        }
-
-    }
-
     public void SpawnHoles()
     {
         RemoveHoles();
@@ -169,25 +159,5 @@ public class LegacyHoleController : MonoBehaviour
         holes.Clear();
 
         _spawnedHolesPositions.Clear();
-    }
-
-    [ContextMenu("Asign Hole Indicators")]
-    void AsignHoleIndicators()
-    {
-        foreach (GameObject g in holeIndicatorList)
-        {
-            DestroyImmediate(g);
-        }
-
-        holeIndicatorList.Clear();
-
-        for (int i = 0; i < holes.Count; i++)
-        {
-            GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, holes[i].transform.position, Quaternion.identity);
-            holeIndicatorList.Add(holeIndicatorInstantiated);
-
-            holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i + 1);
-        }
-
     }
 }

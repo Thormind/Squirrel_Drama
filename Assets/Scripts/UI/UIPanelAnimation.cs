@@ -18,6 +18,11 @@ public class UIPanelAnimation : MonoBehaviour
         targetScale = startVisible ? Vector3.one : Vector3.zero;
     }
 
+
+    // =============================================== //
+    // ========== MAIN ANIMATION CONTROLLER ========== //
+    // =============================================== //
+
     public void AnimateFunction(bool isIn)
     {
         isInAnimation = isIn;
@@ -32,6 +37,15 @@ public class UIPanelAnimation : MonoBehaviour
             StartCoroutine(Animate(targetScale, Vector3.zero));
         }
     }
+
+
+
+
+
+
+    // ==================================================== //
+    // ========== ANIMATION COROUTINES FUNCTIONS ========== //
+    // ==================================================== //
 
     private IEnumerator Animate(Vector3 startScale, Vector3 endScale)
     {
@@ -69,7 +83,17 @@ public class UIPanelAnimation : MonoBehaviour
             rectTransform.localScale = targetScale;
         }
     }
-  
+
+
+
+
+
+
+
+    // ====================================== //
+    // ========== EASING FUNCTIONS ========== //
+    // ====================================== //
+
 
     public static float easeInElastic(float x)
     {
