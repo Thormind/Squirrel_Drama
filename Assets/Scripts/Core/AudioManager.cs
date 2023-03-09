@@ -44,7 +44,6 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
-
     // ===== VARIABLES DECLARATIONS ===== //
 
     public AudioSource uiMusic;
