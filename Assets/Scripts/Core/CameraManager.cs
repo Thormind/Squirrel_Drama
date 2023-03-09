@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -135,10 +134,6 @@ public class CameraManager : MonoBehaviour
 
         if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
-            if(GetComponent<AudioListener>() == null)
-            {
-                gameObject.AddComponent<AudioListener>();
-            }
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
@@ -161,7 +156,6 @@ public class CameraManager : MonoBehaviour
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
-            Destroy(GetComponent<AudioListener>());
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
