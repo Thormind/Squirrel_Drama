@@ -32,6 +32,8 @@ public class CreditsMenuManager : MonoBehaviour
         artsToggle.onValueChanged.AddListener(delegate { OnArtsToggleValueChanged(artsToggle.isOn); });
 
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+
+        anyKeyText.GetComponent<flashingText>().StartFlash();
     }
 
     public void HandleAnyKey()
@@ -84,5 +86,11 @@ public class CreditsMenuManager : MonoBehaviour
         currentCoroutine = null;
     }
 
+    private void OnEnable()
+    {
+        anyKeyText.SetActive(true);
+        anyKeyText.GetComponent<flashingText>().StartFlash();
 
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
 }

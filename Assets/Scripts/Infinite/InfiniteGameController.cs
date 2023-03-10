@@ -142,9 +142,13 @@ public class InfiniteGameController : MonoBehaviour
     {
         int timerBonus = CalculateTimerBonusScore();
 
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && AnimationManager.instance != null)
         {
-            HUDMenuManager.instance.RecalculateInfiniteBonusScore(bonusScore, bonusScore + timerBonus);
+            AnimationManager.instance.PlayAnimation(
+                HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus), 
+                () => { RecalculateScore(); 
+            });
+
         }
 
         bonusScore += timerBonus;
@@ -154,7 +158,10 @@ public class InfiniteGameController : MonoBehaviour
     {
         if (HUDMenuManager.instance != null)
         {
-            HUDMenuManager.instance.RecalculateInfiniteScore(bonusScore, 0, score, score + bonusScore);
+            AnimationManager.instance.PlayAnimation(
+                HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore),
+                () => { NextLevel();
+            });
         }
         score += bonusScore;
         UpdateHUD(GAME_DATA.SCORE);
@@ -268,6 +275,8 @@ public class InfiniteGameController : MonoBehaviour
     {
         levelCompletedState = true;
 
+        GlobalUIManager.instance.EnableInputs(false);
+
         RemoveObstacles();
 
         PauseTimer();
@@ -291,6 +300,8 @@ public class InfiniteGameController : MonoBehaviour
         }
 
         // ==================== //
+
+        GlobalUIManager.instance.EnableInputs(true);
 
         PrepareForLevel();
 

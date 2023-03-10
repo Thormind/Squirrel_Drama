@@ -14,6 +14,8 @@ public class TitleScreenMenuManager : MonoBehaviour
     {
         anyKeyButton.onClick.AddListener(() => HandleAnyKey());
 
+        anyKeyText.GetComponent<flashingText>().StartFlash();
+
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
@@ -22,5 +24,12 @@ public class TitleScreenMenuManager : MonoBehaviour
         anyKeyText.GetComponent<flashingText>().StopFlash();
         anyKeyText.SetActive(false);
         GlobalUIManager.instance.SetMainMenu();
+    }
+
+    private void OnEnable()
+    {
+        anyKeyText.SetActive(true);
+        anyKeyText.GetComponent<flashingText>().StartFlash();
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 }

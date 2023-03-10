@@ -51,12 +51,15 @@ public class InfiniteFruit : MonoBehaviour
         {
             if (collision.transform.gameObject.tag == "Bee")
             {
+
                 InfiniteGameController.instance.HandleFruitInBee();
+
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
             }
 
             if (collision.transform.gameObject.tag == "Worm")
             {
+
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -64,20 +67,22 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Bear")
             {
-                InfiniteGameController.instance.HandleFruitInBear();
 
+                InfiniteGameController.instance.HandleFruitInBear();
 
                 StartCoroutine(CrushedCoroutine(collision.transform));
             }
 
             if (collision.transform.gameObject.tag == "Points")
             {
+                collision.enabled = false;
                 collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
                 InfiniteGameController.instance.HandleFruitInPoints();
             }
 
             if (collision.transform.gameObject.tag == "Fruit")
             {
+                collision.enabled = false;
                 collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
                 InfiniteGameController.instance.HandleFruitInFruit();
             }

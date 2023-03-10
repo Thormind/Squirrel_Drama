@@ -135,11 +135,12 @@ public class GlobalUIManager : MonoBehaviour
 
         if (lastMenu != MENU.NONE)
         {
-            StartCoroutine(SetLastMenuAnimation(runtimeMenuRefs[lastMenu], runtimeMenuRefs[desiredMenu]));
+            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[lastMenu], false));
+            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
         else
         {
-            StartCoroutine(SetMenuAnimation(runtimeMenuRefs[desiredMenu]));
+            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
 
         //print($"Current Menu : {desiredMenu}");
@@ -149,7 +150,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetMenu(MENU desiredMenu)
     {
-        es.enabled = false;
+        EnableInputs(false);
 
         if (menuStack.Count > 0)
         {
@@ -171,7 +172,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetLastMenu()
     {
-        es.enabled = false;
+        EnableInputs(false);
 
         if (menuStackSize <= 1)
         {
@@ -194,29 +195,20 @@ public class GlobalUIManager : MonoBehaviour
         SetMenuInternal(menuStack.Peek());
     }
 
-    public IEnumerator SetLastMenuAnimation(GameObject lastMenuObject, GameObject currentMenuObject)
+    public IEnumerator SetMenuAnimation(GameObject currentMenuObject, bool isGoingIn)
     {
-
-        UIAnimation animation = lastMenuObject.GetComponent<UIAnimation>();
-
-        animation.play();
-
-        yield return new WaitForSecondsRealtime(animation.animationDuration);
-
-        StartCoroutine(SetMenuAnimation(currentMenuObject));
-    }
-
-    public IEnumerator SetMenuAnimation(GameObject currentMenuObject)
-    {
-
         UIAnimation animation = currentMenuObject.GetComponent<UIAnimation>();
+        animation.isGoingIn = isGoingIn;
         animation.play();
 
-        yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
-
-        ClearMenusException();
-
-        es.enabled = true;
+        if (isGoingIn)
+        {
+            yield return new WaitForSecondsRealtime(animation.animationDuration);
+        }
+        else
+        {
+            yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
+        }
     }
 
     public void SetTitleScreenMenu()
@@ -450,6 +442,11 @@ public class GlobalUIManager : MonoBehaviour
         }
 
         controllerIcon.SetActive(isControllerConnected);
+    }
+
+    public void EnableInputs(bool isEnabled)
+    {
+        es.enabled = isEnabled;
     }
 
     public void SetControllerFirstSelected (GameObject firstSelected)

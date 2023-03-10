@@ -77,4 +77,12 @@ public class ScoreboardMenuManager : MonoBehaviour
             BestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
         }
     }
+
+    private void OnEnable()
+    {
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
+        SetFinalScore();
+    }
 }

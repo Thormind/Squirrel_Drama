@@ -72,4 +72,12 @@ public class PauseMenuManager : MonoBehaviour
             GlobalUIManager.instance.ReplayGame();
         }
     }
+
+    private void OnEnable()
+    {
+        retryPanel.SetActive(false);
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
+    }
 }

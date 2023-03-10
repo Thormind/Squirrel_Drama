@@ -21,8 +21,6 @@ public class UIAnimation : MonoBehaviour
     public float floatingHeight;
 
     public float easedProgress;
-    public bool startVisible = false;
-    public bool isVisible = false;
     public bool isGoingIn = true;
 
     [SerializeField] public Vector3 targetScale;
@@ -33,12 +31,10 @@ public class UIAnimation : MonoBehaviour
 
     private void Awake()
     {
-        //targetScale = startVisible ? Vector3.one : Vector3.zero;
         targetScale = panelRectTransform.localScale;
         targetPosition = panelRectTransform.localPosition;
 
         isGoingIn = true;
-        isVisible = false;
     }
 
 
@@ -66,37 +62,43 @@ public class UIAnimation : MonoBehaviour
         {
             if (isGoingIn)
             {
-                StartCoroutine(AnimateElastic(Vector3.zero, targetScale, isGoingIn));
+                gameObject.SetActive(true);
+                StartCoroutine(AnimateElastic(Vector3.zero, targetScale));
             }
             else
             {
-                StartCoroutine(AnimateElastic(targetScale, Vector3.zero, isGoingIn));
+                StartCoroutine(AnimateElastic(targetScale, Vector3.zero));
             }
         }
         if (animationType == MENU_ANIMATION_TYPE.BOUNCING)
         {
             if (isGoingIn)
             {
-                StartCoroutine(AnimateBouncing(new Vector2(0, -Screen.height), targetPosition, isGoingIn));
+                gameObject.SetActive(true);
+                StartCoroutine(AnimateBouncing(new Vector2(0, -Screen.height), targetPosition));
             }
             else
             {
-                StartCoroutine(AnimateBouncing(targetPosition, new Vector2(0, -Screen.height), isGoingIn));
+                StartCoroutine(AnimateBouncing(targetPosition, new Vector2(0, -Screen.height)));
             }
         }
         if (animationType == MENU_ANIMATION_TYPE.QUADRATIC)
         {
             if (isGoingIn)
             {
-                StartCoroutine(AnimateQuadratic(new Vector2(Screen.width, targetPosition.y), targetPosition, isGoingIn));
+                gameObject.SetActive(true);
+                StartCoroutine(AnimateQuadratic(new Vector2(Screen.width, targetPosition.y), targetPosition));
             }
             else
             {
-                StartCoroutine(AnimateQuadratic(targetPosition, new Vector2(Screen.width, targetPosition.y), isGoingIn));
+                StartCoroutine(AnimateQuadratic(targetPosition, new Vector2(Screen.width, targetPosition.y)));
             }
         }
         if (animationType == MENU_ANIMATION_TYPE.NO_TRANSITION)
         {
+
+            gameObject.SetActive(isGoingIn);
+            /*
             if (isGoingIn)
             {
                 gameObject.SetActive(true);
@@ -105,12 +107,8 @@ public class UIAnimation : MonoBehaviour
             {
                 gameObject.SetActive(false);
             }
+            */
         }
-
-        isGoingIn = !isGoingIn;
-
-        isVisible = !isVisible;
-
     }
 
 
@@ -125,7 +123,7 @@ public class UIAnimation : MonoBehaviour
     // ==================================================== //
 
 
-    private IEnumerator AnimateBouncing(Vector3 startPosition, Vector3 endPosition, bool p_isGoingIn)
+    private IEnumerator AnimateBouncing(Vector3 startPosition, Vector3 endPosition)
     {
         float startTime = Time.realtimeSinceStartup;
         float endTime = startTime + animationDuration;
@@ -135,7 +133,7 @@ public class UIAnimation : MonoBehaviour
         {
             float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
 
-            if (p_isGoingIn)
+            if (isGoingIn)
             {
                 easedTime = easeOutBack(t);
             }
@@ -149,13 +147,20 @@ public class UIAnimation : MonoBehaviour
         }
 
         panelRectTransform.localPosition = endPosition;
-        targetPosition = endPosition;
 
-        StartCoroutine(AnimateFloating());
-
+        if (!isGoingIn) 
+        {  
+            gameObject.SetActive(isGoingIn);  
+        }
+        /*
+        else
+        {
+            //StartCoroutine(AnimateFloating());
+        }
+        */
     }
 
-    private IEnumerator AnimateElastic(Vector3 startScale, Vector3 endScale, bool p_isGoingIn)
+    private IEnumerator AnimateElastic(Vector3 startScale, Vector3 endScale)
     {
         float startTime = Time.realtimeSinceStartup;
         float endTime = startTime + animationDuration;
@@ -165,7 +170,7 @@ public class UIAnimation : MonoBehaviour
         {
             float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
 
-            if (p_isGoingIn)
+            if (isGoingIn)
             {
                 easedTime = easeOutBack(t);
             }
@@ -178,12 +183,13 @@ public class UIAnimation : MonoBehaviour
             yield return null;
         }
 
+        if (!isGoingIn) { gameObject.SetActive(isGoingIn); }
+
         panelRectTransform.localScale = endScale;
-        targetScale = endScale;
 
     }
 
-    private IEnumerator AnimateQuadratic(Vector3 startPostion, Vector3 endPosition, bool p_isGoingIn)
+    private IEnumerator AnimateQuadratic(Vector3 startPostion, Vector3 endPosition)
     {
         float startTime = Time.realtimeSinceStartup;
         float endTime = startTime + animationDuration;
@@ -193,7 +199,7 @@ public class UIAnimation : MonoBehaviour
         {
             float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
 
-            if (p_isGoingIn)
+            if (isGoingIn)
             {
                 easedTime = easeOutBack(t);
             }
@@ -206,28 +212,38 @@ public class UIAnimation : MonoBehaviour
             yield return null;
         }
 
-        panelRectTransform.localPosition = endPosition;
-        targetPosition = endPosition;
+        if (!isGoingIn) { gameObject.SetActive(isGoingIn); }
 
+        panelRectTransform.localPosition = endPosition;
     }
 
     private IEnumerator AnimateFloating()
     {
         float startY = panelRectTransform.anchoredPosition.y;
-        float time = 0f;
+        float startX = panelRectTransform.anchoredPosition.x;
 
-        while (isVisible)
+        Vector2 targetPos = new Vector2();
+
+        while (isGoingIn)
         {
-            while (time < animationDuration)
-            {
-                float newY = startY + Mathf.Sin(time * Mathf.PI) * floatingHeight;
-                panelRectTransform.anchoredPosition = new Vector2(panelRectTransform.anchoredPosition.x, newY);
+            float time = Time.realtimeSinceStartup;
+            float animationD = startTime + Random.Range(0f, Mathf.PI * 2f);
 
-                time += Time.deltaTime;
+            float newX = startX + Mathf.Sin(time * 2f + Random.Range(0f, Mathf.PI)) * floatingHeight;
+            float newY = startY + Mathf.Sin(time * 2f + Random.Range(0f, Mathf.PI)) * floatingHeight;
+            targetPos.x = newX;
+            targetPos.y = newY;
+
+            while (Time.realtimeSinceStartup < animationD)
+            {
+                float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
+
+                panelRectTransform.localPosition = Vector2.Lerp(panelRectTransform.localPosition, targetPos, t);
+
                 yield return null;
             }
 
-            time = 0f;
+            yield return null;
         }
     }
 

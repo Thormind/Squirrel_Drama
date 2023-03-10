@@ -62,4 +62,11 @@ public class MainMenuManager : MonoBehaviour
         GlobalUIManager.instance.SetControllerFirstSelected(quitButton.gameObject);
     }
 
+    private void OnEnable()
+    {
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetControllerFirstSelected(playInfiniteButton.gameObject);
+    }
+
 }

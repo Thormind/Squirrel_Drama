@@ -63,4 +63,22 @@ public class PreGameMenuManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        GlobalUIManager.isPreGame = true;
+
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            AudioManager.instance.StopCurrentMusic();
+            SetInfinitePregame();
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            AudioManager.instance.StopCurrentMusic();
+            SetLegacyPregame();
+        }
+
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
+
 }

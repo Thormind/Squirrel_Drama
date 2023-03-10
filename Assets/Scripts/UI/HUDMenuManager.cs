@@ -306,8 +306,10 @@ public class HUDMenuManager : MonoBehaviour
         StartCoroutine(AnimateInfiniteScore(currentBonusScore, newBonusScore, currentScore, newScore));
     }
 
-    private IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
+    public IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
     {
+        print($"CURRENT BONUS SCORE: {currentBonusScore}");
+        print($"NEW BONUS SCORE WITH TIMER: {newBonusScore}");
         // Get the duration of the animation
         float animationDuration = 1.75f;
 
@@ -329,12 +331,14 @@ public class HUDMenuManager : MonoBehaviour
         infiniteBonusText.text = newBonusScore.ToString();
 
         yield return new WaitForSeconds(2f);
-
-        InfiniteGameController.instance.RecalculateScore();
     }
 
-    private IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
+    public IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
     {
+        print($"NEW BONUS SCORE WITH TIMER: {currentBonusScore}");
+        print($"BONUS SCORE RESET: {newBonusScore}");
+        print($"CURRENT SCORE: {currentScore}");
+        print($"NEW SCORE WITH BONUS SCORE: {newScore}");
         // Get the duration of the animation
         float animationDuration = 1.75f;
 
@@ -361,8 +365,6 @@ public class HUDMenuManager : MonoBehaviour
         infiniteScoreText.text = newScore.ToString();
 
         yield return new WaitForSeconds(2f);
-
-        InfiniteGameController.instance.NextLevel();
     }
 
 
