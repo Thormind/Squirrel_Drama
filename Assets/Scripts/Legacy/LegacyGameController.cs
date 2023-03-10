@@ -47,7 +47,7 @@ public class LegacyGameController : MonoBehaviour
 
     public void UpdateHUD(GAME_DATA gameData)
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
             HUDMenuManager.instance.UpdateLegacyHUD(gameData);
         }

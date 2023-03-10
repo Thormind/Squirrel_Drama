@@ -135,12 +135,12 @@ public class GlobalUIManager : MonoBehaviour
 
         if (lastMenu != MENU.NONE)
         {
-            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[lastMenu], false));
-            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[lastMenu], false));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
         else
         {
-            AnimationManager.instance.PlayAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
 
         //print($"Current Menu : {desiredMenu}");
@@ -262,6 +262,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        AnimationManager.instance.ResumeInGameAnimations();
         SetMenu(MENU.MENU_HUD);
 
         Time.timeScale = 1f;
@@ -272,6 +273,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void PauseGame()
     {
+        AnimationManager.instance.PauseInGameAnimations();
         SetMenu(MENU.MENU_PAUSE);
 
         Time.timeScale = 0f;
@@ -384,7 +386,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator LoadGameCompletedCallback()
     {
         yield return null;
-        ClearMenus();
+        //ClearMenus();
         CameraManager.instance.Transition(false);
         SetMenu(MENU.MENU_PREGAME);
     }
@@ -392,7 +394,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
-        ClearMenus();
+        //ClearMenus();
         CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
     }

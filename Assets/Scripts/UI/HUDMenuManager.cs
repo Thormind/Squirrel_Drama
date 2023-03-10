@@ -59,6 +59,18 @@ public class HUDMenuManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            SetInfiniteHUD();
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            SetLegacyHUD();
+        }
+    }
+
     public void SetInfiniteHUD()
     {
         legacyPanel.SetActive(false);

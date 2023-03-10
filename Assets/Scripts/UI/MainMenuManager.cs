@@ -66,6 +66,10 @@ public class MainMenuManager : MonoBehaviour
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
+
+        infiniteBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
+        legacyBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
+
         GlobalUIManager.instance.SetControllerFirstSelected(playInfiniteButton.gameObject);
     }
 

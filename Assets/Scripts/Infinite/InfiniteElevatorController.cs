@@ -101,7 +101,7 @@ public class InfiniteElevatorController : MonoBehaviour
         {
             InfiniteGameController.instance.StartGame();
         }
-        if (!InfiniteGameController.instance.gameOverState)
+        if (!InfiniteGameController.instance.gameOverState && !GlobalUIManager.isPreGame)
         {
             StartCoroutine(MoveBarToStartPosition());
         }

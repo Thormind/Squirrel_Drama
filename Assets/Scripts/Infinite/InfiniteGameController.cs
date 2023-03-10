@@ -81,7 +81,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public void UpdateHUD(GAME_DATA gameData)
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
             HUDMenuManager.instance.UpdateInfiniteHUD(gameData);
         }
@@ -115,7 +115,7 @@ public class InfiniteGameController : MonoBehaviour
         elapsedTime = 0f;
         timerRunning = false;
 
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
             HUDMenuManager.instance.ResetInfiniteTimer();
         }
@@ -128,7 +128,7 @@ public class InfiniteGameController : MonoBehaviour
         {
             gameTime = Time.timeSinceLevelLoad - startTime;
 
-            if (HUDMenuManager.instance != null)
+            if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
             {
                 HUDMenuManager.instance.UpdateInfiniteTimer(gameTime);
             }
@@ -142,9 +142,9 @@ public class InfiniteGameController : MonoBehaviour
     {
         int timerBonus = CalculateTimerBonusScore();
 
-        if (HUDMenuManager.instance != null && AnimationManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
         {
-            AnimationManager.instance.PlayAnimation(
+            AnimationManager.instance.PlayInGameAnimation(
                 HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus), 
                 () => { RecalculateScore(); 
             });
@@ -156,9 +156,9 @@ public class InfiniteGameController : MonoBehaviour
 
     public void RecalculateScore()
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
-            AnimationManager.instance.PlayAnimation(
+            AnimationManager.instance.PlayInGameAnimation(
                 HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore),
                 () => { NextLevel();
             });
@@ -346,8 +346,6 @@ public class InfiniteGameController : MonoBehaviour
 
         SpawnObstacles();
 
-        //UpdateHUD();
-
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
@@ -361,8 +359,6 @@ public class InfiniteGameController : MonoBehaviour
         EnableFruitCollision(true);
 
         StartTimer();
-
-        //UpdateHUD();
     }
 
     public void PrepareForLevel()
