@@ -375,12 +375,15 @@ public class HUDMenuManager : MonoBehaviour
             timer += Time.deltaTime;
         }
 
+        StartCoroutine(AnimateText(infiniteBonusText, newBonusScore.ToString()));
+        StartCoroutine(AnimateText(infiniteTimerText, resetTimerString));
+
+        yield return new WaitForSeconds(2f);
+
         infiniteBonusText.text = newBonusScore.ToString();
 
         // Set the final timer string to "00:00:00"
         infiniteTimerText.text = resetTimerString;
-
-        yield return new WaitForSeconds(2f);
     }
 
     public IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
