@@ -8,6 +8,8 @@ public class InfiniteGameController : MonoBehaviour
 {
     public static InfiniteGameController instance = null;
 
+    [SerializeField] private InfiniteElevatorParametersSO elevatorParameters;
+
     public InfiniteElevatorController elevatorControllerRef;
     public InfiniteFruit fruitRef;
 
@@ -47,7 +49,10 @@ public class InfiniteGameController : MonoBehaviour
         {
             Destroy(this);
         }
+    }
 
+    private void Start()
+    {
         gameOverState = false;
         levelCompletedState = false;
 
@@ -72,11 +77,21 @@ public class InfiniteGameController : MonoBehaviour
             bestScore = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE);
         }
 
+
+        elevatorControllerRef.SetElevatorMovementSpeed(ElevatorMovementSpeed);
+        elevatorControllerRef.SetElevatorStartMovementSpeed(ElevatorStartMovementSpeed);
+        elevatorControllerRef.SetElevatorMaxDifference(ElevatorMaxDifference);
+
+        fruitRef.SetFruitGravityScale(FruitGravityScale);
+        fruitRef.SetFruitFallingGravityScale(FruitFallingGravityScale);
+        fruitRef.SetFruitMinCollisionDistance(FruitMinCollisionDistance);
+
     }
 
     private void Update()
     {
         UpdateTimer();
+        UpdateHUD(GAME_DATA.MAP);
     }
 
     public void UpdateHUD(GAME_DATA gameData)
@@ -129,7 +144,6 @@ public class InfiniteGameController : MonoBehaviour
             }
         }
     }
-
 
     // ========== SCORE FUNCTIONS ========== //
 
@@ -236,6 +250,11 @@ public class InfiniteGameController : MonoBehaviour
     public Vector3 GetFruitLocalPosition()
     {
         return fruitRef.gameObject.transform.localPosition;
+    }
+
+    public float GetFruitHeightForMap()
+    {
+        return Mathf.Max(0f, fruitRef.gameObject.transform.localPosition.y);
     }
 
     public Vector3 GetElevatorPosition()
@@ -492,6 +511,66 @@ public class InfiniteGameController : MonoBehaviour
         if (InfiniteFruitsController.instance != null)
         {
             InfiniteFruitsController.instance.RemoveFruits();
+        }
+    }
+
+    //ElevatorMovementSpeed
+    public float ElevatorMovementSpeed
+    {
+        get { return elevatorParameters.GetMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetMovementSpeed(value);
+        }
+    }
+
+    //ElevatorStartMovementSpeed
+    public float ElevatorStartMovementSpeed
+    {
+        get { return elevatorParameters.GetStartMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetStartMovementSpeed(value);
+        }
+    }
+
+    //ElevatorMaxDifference
+    public float ElevatorMaxDifference
+    {
+        get { return elevatorParameters.GetMaxDifference(); }
+        set
+        {
+            elevatorParameters.SetMaxDifference(value);
+        }
+    }
+
+    //FruitGravityScale
+    public float FruitGravityScale
+    {
+        get { return elevatorParameters.GetFruitGravityScale(); }
+        set
+        {
+            elevatorParameters.SetFruitGravityScale(value);
+        }
+    }
+
+    //FruitFallingGravityScale
+    public float FruitFallingGravityScale
+    {
+        get { return elevatorParameters.GetFruitFallingGravityScale(); }
+        set
+        {
+            elevatorParameters.SetFruitFallingGravityScale(value);
+        }
+    }
+
+    //FruitMinCollisionDistance
+    public float FruitMinCollisionDistance
+    {
+        get { return elevatorParameters.GetFruitMinCollisionDistance(); }
+        set
+        {
+            elevatorParameters.SetFruitMinCollisionDistance(value);
         }
     }
 

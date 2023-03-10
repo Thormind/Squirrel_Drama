@@ -28,6 +28,8 @@ public class LegacyGameController : MonoBehaviour
     public bool gameCompletedState = false;
     public bool gameOverState = false;
 
+    [SerializeField] private LegacyElevatorParametersSO elevatorParameters;
+
     private void Awake()
     {
         if (instance == null)
@@ -38,16 +40,27 @@ public class LegacyGameController : MonoBehaviour
         {
             Destroy(this);
         }
+    }
 
+    private void Start()
+    {
         if (SaveManager.instance != null)
         {
             bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
         }
 
-
         currentHoleIndex = 0;
         score = 0;
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+
+        elevatorControllerRef.SetElevatorMovementSpeed(ElevatorMovementSpeed);
+        elevatorControllerRef.SetElevatorMaxDifference(ElevatorMaxDifference);
+
+        ballRef.SetBallGravityScale(BallGravityScale);
+        ballRef.SetBallMinCollisionDistance(BallMinCollisionDistance);
+
+        LegacyHoleController.instance.SetHolesQuantity(HolesQuantity);
+        LegacyHoleController.instance.SetHolesMinDistance(HolesMinDistance);
     }
 
     public void UpdateHUD(GAME_DATA gameData)
@@ -273,4 +286,69 @@ public class LegacyGameController : MonoBehaviour
     {
         return LegacyHoleController.instance.holes[currentHoleIndex];
     }
+
+
+
+    //ElevatorMovementSpeed
+    public float ElevatorMovementSpeed
+    {
+        get { return elevatorParameters.GetMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetMovementSpeed(value); 
+        }
+    }
+
+    //ElevatorMaxDifference
+    public float ElevatorMaxDifference
+    {
+        get { return elevatorParameters.GetMaxDifference(); }
+        set
+        {
+            elevatorParameters.SetMaxDifference(value);
+        }
+    }
+
+    //BallGravityScale
+    public float BallGravityScale
+    {
+        get { return elevatorParameters.GetBallGravityScale(); }
+        set
+        {
+            elevatorParameters.SetBallGravityScale(value);
+        }
+    }
+
+    //BallMinCollisionDistance
+    public float BallMinCollisionDistance
+    {
+        get { return elevatorParameters.GetBallMinCollisionDistance(); }
+        set
+        {
+            elevatorParameters.SetBallMinCollisionDistance(value);
+        }
+    }
+
+    //Holes Quantity
+    public int HolesQuantity
+    {
+        get { return elevatorParameters.GetHolesQuantity(); }
+        set
+        {
+            elevatorParameters.SetHolesQuantity(value);
+        }
+    }
+
+    //Holes MinDistance
+
+    public float HolesMinDistance
+    {
+        get { return elevatorParameters.GetHolesMinDistance(); }
+        set
+        {
+            elevatorParameters.SetHolesMinDistance(value);
+        }
+    }
+
+
 }

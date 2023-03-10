@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public enum GAME_DATA
@@ -11,6 +12,7 @@ public enum GAME_DATA
     LIFE,
     LEVEL,
     TIMER,
+    MAP,
     ALL,
     NONE
 };
@@ -33,6 +35,7 @@ public class HUDMenuManager : MonoBehaviour
     public TMP_Text infiniteLevelText;
     public TMP_Text infiniteFruitLifeText;
     public TMP_Text infiniteTimerText;
+    public Slider infiniteMapSlider;
 
     public void Awake()
     {
@@ -150,6 +153,9 @@ public class HUDMenuManager : MonoBehaviour
             case GAME_DATA.TIMER:
                 StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
                 break;
+            case GAME_DATA.MAP:
+                StartCoroutine(AnimateSlider(infiniteMapSlider, InfiniteGameController.instance.GetFruitHeightForMap()));
+                break;
             case GAME_DATA.ALL:
                 StartCoroutine(AnimateText(infiniteScoreText, InfiniteGameController.instance.score.ToString()));
                 StartCoroutine(AnimateText(infiniteBonusText, InfiniteGameController.instance.bonusScore.ToString()));
@@ -221,9 +227,29 @@ public class HUDMenuManager : MonoBehaviour
     }
 
 
+    // =========================================== //
+    // ========== MAP SLIDER ANIMATIONS ========== //
+    // =========================================== //
 
+    private IEnumerator AnimateSlider(Slider mapSlider, float fruitHeight)
+    {
+        float sliderValue = fruitHeight / 40f; // assuming max height is 40
+        sliderValue = Mathf.Clamp01(sliderValue); // clamp the value between 0 and 1
 
+        float elapsedTime = 0f;
+        float startValue = mapSlider.value;
+        float duration = 0.5f; // adjust as needed
 
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            mapSlider.value = Mathf.Lerp(startValue, sliderValue, t);
+            yield return null;
+        }
+
+        mapSlider.value = sliderValue; // ensure that the slider ends up with the exact target value
+    }
 
 
 
@@ -324,8 +350,6 @@ public class HUDMenuManager : MonoBehaviour
 
     public IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
     {
-        print($"CURRENT BONUS SCORE: {currentBonusScore}");
-        print($"NEW BONUS SCORE WITH TIMER: {newBonusScore}");
         // Get the duration of the animation
         float animationDuration = 1.75f;
 
@@ -361,10 +385,6 @@ public class HUDMenuManager : MonoBehaviour
 
     public IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
     {
-        print($"NEW BONUS SCORE WITH TIMER: {currentBonusScore}");
-        print($"BONUS SCORE RESET: {newBonusScore}");
-        print($"CURRENT SCORE: {currentScore}");
-        print($"NEW SCORE WITH BONUS SCORE: {newScore}");
         // Get the duration of the animation
         float animationDuration = 1.75f;
 

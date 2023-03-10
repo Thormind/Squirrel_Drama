@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class InfiniteFruit : MonoBehaviour
 {
-    public float fruitFallingGravityScale = 0.75f;
-    public float fruitGravityScale = 1f;
-
-    public float MinCollisionDistance = 0.12f;
+    private float fruitFallingGravityScale;
+    private float fruitGravityScale;
+    private float MinCollisionDistance;
 
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
@@ -27,7 +26,6 @@ public class InfiniteFruit : MonoBehaviour
     void Start()
     {
         startFruitScale = transform.localScale;
-        fruitRigidbody.gravityScale = fruitGravityScale;
 
         collisionEnabled = true;
     }
@@ -187,5 +185,21 @@ public class InfiniteFruit : MonoBehaviour
     public void QuickResetFruitPosition(Vector3 position)
     {
         transform.localPosition = position;
+    }
+
+    public void SetFruitGravityScale(float gravityScale)
+    {
+        fruitGravityScale = gravityScale;
+        fruitRigidbody.gravityScale = gravityScale;
+    }
+
+    public void SetFruitFallingGravityScale(float gravityScale)
+    {
+        fruitFallingGravityScale = gravityScale;
+    }
+
+    public void SetFruitMinCollisionDistance(float minCollDis)
+    {
+        MinCollisionDistance = minCollDis;
     }
 }

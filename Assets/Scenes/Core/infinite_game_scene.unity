@@ -6196,7 +6196,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 1
@@ -12530,7 +12530,7 @@ Rigidbody2D:
   m_AngularDrag: 0.02
   m_GravityScale: 45
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -12612,9 +12612,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596f877d721dd6046ad273ceb4cb580b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitFallingGravityScale: 30
-  fruitGravityScale: 45.7
-  MinCollisionDistance: 0.11
   collisionEnabled: 0
 --- !u!1001 &506426109
 PrefabInstance:
@@ -17535,7 +17532,7 @@ Rigidbody2D:
   m_AngularDrag: 0.02
   m_GravityScale: 60
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 1
@@ -17627,9 +17624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b893e262e0a77d646a99ccf8153d8223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMovementSpeed: 25
-  movementSpeed: 15
-  maxDifference: 7.5
   bottom: {fileID: 236103733}
   start: {fileID: 1450611958}
   end: {fileID: 149299623}
@@ -20633,6 +20627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0dc3df9516a98418362bfa19f01fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  elevatorParameters: {fileID: 11400000, guid: f75775a57c8be4d4889702076c5dafff, type: 2}
   elevatorControllerRef: {fileID: 706388252}
   fruitRef: {fileID: 506127052}
   score: 0
@@ -25752,7 +25747,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 1

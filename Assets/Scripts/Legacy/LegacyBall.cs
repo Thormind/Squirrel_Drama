@@ -5,9 +5,8 @@ using UnityEngine;
 public class LegacyBall : MonoBehaviour
 {
 
-    public float ballGravityScale = 2.285f;
-
-    public float MinCollisionDistance = 0.12f;
+    private float ballGravityScale;
+    private float MinCollisionDistance;
 
     public float enterTheHoleTime = 5f;
 
@@ -27,7 +26,6 @@ public class LegacyBall : MonoBehaviour
     {
         startBallPosition = transform.position;
         startBallScale = transform.localScale;
-        ballRigidbody.gravityScale = ballGravityScale;
 
         collisionEnabled = true;
     }
@@ -107,5 +105,16 @@ public class LegacyBall : MonoBehaviour
         transform.localScale = startBallScale;
 
         ballRigidbody.gravityScale = ballGravityScale;
+    }
+
+    public void SetBallGravityScale(float gravityScale)
+    {
+        ballGravityScale = gravityScale;
+        ballRigidbody.gravityScale = gravityScale;
+    }
+
+    public void SetBallMinCollisionDistance(float minCollDis)
+    {
+        MinCollisionDistance = minCollDis;
     }
 }

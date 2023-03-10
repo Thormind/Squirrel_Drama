@@ -6,11 +6,11 @@ using UnityEngine.InputSystem;
 public class InfiniteElevatorController : MonoBehaviour
 {
     private float resetMovementSpeed = 100f;
-    private float bottomMovementSpeed = 1f;
+    private float bottomMovementSpeed;
 
-    public float startMovementSpeed = 1f;
-    public float movementSpeed = 0.6f;
-    public float maxDifference = 0.3f;
+    private float startMovementSpeed;
+    private float movementSpeed;
+    private float maxDifference;
 
     public Transform bottom;
     public Transform start;
@@ -161,7 +161,20 @@ public class InfiniteElevatorController : MonoBehaviour
     }
 
 
+    public void SetElevatorMovementSpeed(float mSpeed)
+    {
+        movementSpeed = mSpeed;
+    }
 
+    public void SetElevatorStartMovementSpeed(float startSpeed)
+    {
+        startMovementSpeed = startSpeed;
+    }
+
+    public void SetElevatorMaxDifference(float maxDiff)
+    {
+        maxDifference = maxDiff;
+    }
 
 
 
