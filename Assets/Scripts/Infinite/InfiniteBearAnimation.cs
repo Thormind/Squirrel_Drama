@@ -93,6 +93,8 @@ public class InfiniteBearAnimation : MonoBehaviour
         float distance = Vector3.Distance(startPosition, endPosition);
         float duration = distance / translationSpeed;
 
+        InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
+
         float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
         float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f;
         Time.timeScale = slowMotion;
@@ -126,12 +128,14 @@ public class InfiniteBearAnimation : MonoBehaviour
         impactVFX.GetComponent<ParticleSystem>().Play();
 
         distance = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
+
         if (CameraManager.instance != null)
         {
             CameraManager.instance.ShakeCamera(distance);
 
         }
 
+        InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
         Time.timeScale = 1f;
 
         t = 0f;

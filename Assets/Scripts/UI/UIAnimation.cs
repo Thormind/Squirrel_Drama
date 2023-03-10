@@ -8,6 +8,7 @@ public enum MENU_ANIMATION_TYPE
     NO_TRANSITION,
     BOUNCING,
     QUADRATIC,
+    DOUBLE_QUADRATIC,
     ELASTIC,
 };
 
@@ -26,13 +27,23 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] public Vector3 targetScale;
     [SerializeField] public Vector3 targetPosition;
 
+    [SerializeField] public Vector3 targetScale2;
+    [SerializeField] public Vector3 targetPosition2;
+
     private RectTransform rectTransform;
     [SerializeField] private RectTransform panelRectTransform;
+    [SerializeField] private RectTransform panelRectTransform2;
 
     private void Awake()
     {
         targetScale = panelRectTransform.localScale;
         targetPosition = panelRectTransform.localPosition;
+
+        if (panelRectTransform2 != null)
+        {
+            targetScale2 = panelRectTransform2.localScale;
+            targetPosition2 = panelRectTransform2.localPosition;
+        }
 
         isGoingIn = true;
     }
@@ -92,6 +103,18 @@ public class UIAnimation : MonoBehaviour
             else
             {
                 StartCoroutine(AnimateQuadratic(targetPosition, new Vector2(Screen.width, targetPosition.y)));
+            }
+        }
+        if (animationType == MENU_ANIMATION_TYPE.DOUBLE_QUADRATIC)
+        {
+            if (isGoingIn)
+            {
+                gameObject.SetActive(true);
+                StartCoroutine(AnimateDoubleQuadratic(new Vector2(Screen.width, targetPosition.y), targetPosition, new Vector2(-Screen.width, targetPosition2.y), targetPosition2));
+            }
+            else
+            {
+                StartCoroutine(AnimateDoubleQuadratic(targetPosition, new Vector2(Screen.width, targetPosition.y), targetPosition2, new Vector2(-Screen.width, targetPosition2.y)));
             }
         }
         if (animationType == MENU_ANIMATION_TYPE.NO_TRANSITION)
@@ -215,6 +238,36 @@ public class UIAnimation : MonoBehaviour
         if (!isGoingIn) { gameObject.SetActive(isGoingIn); }
 
         panelRectTransform.localPosition = endPosition;
+    }
+
+    private IEnumerator AnimateDoubleQuadratic(Vector3 startPostion1, Vector3 endPosition1, Vector3 startPostion2, Vector3 endPosition2)
+    {
+        float startTime = Time.realtimeSinceStartup;
+        float endTime = startTime + animationDuration;
+        float easedTime;
+
+        while (Time.realtimeSinceStartup < endTime)
+        {
+            float t = Mathf.Clamp01((Time.realtimeSinceStartup - startTime) / animationDuration);
+
+            if (isGoingIn)
+            {
+                easedTime = easeOutBack(t);
+            }
+            else
+            {
+                easedTime = easeInBack(t);
+            }
+
+            panelRectTransform.localPosition = Vector3.LerpUnclamped(startPostion1, endPosition1, easedTime);
+            panelRectTransform2.localPosition = Vector3.LerpUnclamped(startPostion2, endPosition2, easedTime);
+            yield return null;
+        }
+
+        if (!isGoingIn) { gameObject.SetActive(isGoingIn); }
+
+        panelRectTransform.localPosition = endPosition1;
+        panelRectTransform2.localPosition = endPosition2;
     }
 
     private IEnumerator AnimateFloating()

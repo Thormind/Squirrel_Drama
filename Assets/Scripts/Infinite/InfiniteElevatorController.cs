@@ -18,6 +18,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
+    public Rigidbody2D elevatorRigidBody;
 
     private Vector2 movementOffset;
 
@@ -27,6 +28,11 @@ public class InfiniteElevatorController : MonoBehaviour
     private float rightDownInputValue;
 
     private bool inputEnabled = false;
+
+    private void Awake()
+    {
+        elevatorRigidBody = GetComponent<Rigidbody2D>();
+    }
 
     private void FixedUpdate()
     {

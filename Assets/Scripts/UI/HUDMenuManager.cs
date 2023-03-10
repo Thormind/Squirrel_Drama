@@ -78,6 +78,7 @@ public class HUDMenuManager : MonoBehaviour
     {
         legacyPanel.SetActive(false);
         infinitePanel.SetActive(true);
+        infiniteMapSlider.transform.parent.gameObject.SetActive(true);
         //InfiniteGameController.instance.UpdateHUD();
         UpdateInfiniteHUD(GAME_DATA.ALL);
     }
@@ -86,6 +87,7 @@ public class HUDMenuManager : MonoBehaviour
     {
         infinitePanel.SetActive(false);
         legacyPanel.SetActive(true);
+        infiniteMapSlider.transform.parent.gameObject.SetActive(false);
         //LegacyGameController.instance.UpdateHUD();
         UpdateLegacyHUD(GAME_DATA.ALL);
     }
@@ -162,7 +164,7 @@ public class HUDMenuManager : MonoBehaviour
                 StartCoroutine(AnimateText(infiniteBestScoreText, SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString()));
                 StartCoroutine(AnimateText(infiniteFruitLifeText, InfiniteGameController.instance.currentFruitNumber.ToString()));
                 StartCoroutine(AnimateText(infiniteLevelText, InfiniteGameController.instance.currentLevel.ToString()));
-                                StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
+                StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
                 break;
             case GAME_DATA.NONE:
                 infiniteScoreText.text = InfiniteGameController.instance.score.ToString();
@@ -250,8 +252,6 @@ public class HUDMenuManager : MonoBehaviour
 
         mapSlider.value = sliderValue; // ensure that the slider ends up with the exact target value
     }
-
-
 
 
     // ====================================== //

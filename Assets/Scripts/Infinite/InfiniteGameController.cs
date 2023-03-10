@@ -369,6 +369,8 @@ public class InfiniteGameController : MonoBehaviour
 
         EnableFruitCollision(true);
 
+        SetRigidBodyExtrapolate(false);
+
         StartTimer();
     }
 
@@ -572,6 +574,25 @@ public class InfiniteGameController : MonoBehaviour
         {
             elevatorParameters.SetFruitMinCollisionDistance(value);
         }
+    }
+
+    public void SetRigidBodyExtrapolate(bool extrapolate)
+    {
+        if (extrapolate)
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        }
+        else
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
+        }
+
     }
 
 

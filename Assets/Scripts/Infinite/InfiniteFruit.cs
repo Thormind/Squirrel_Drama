@@ -13,7 +13,7 @@ public class InfiniteFruit : MonoBehaviour
 
     public bool collisionEnabled;
 
-    Rigidbody2D fruitRigidbody;
+    public Rigidbody2D fruitRigidbody;
 
     private Vector3 startFruitScale;
 
