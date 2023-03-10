@@ -114,11 +114,6 @@ public class InfiniteGameController : MonoBehaviour
     {
         elapsedTime = 0f;
         timerRunning = false;
-
-        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
-        {
-            HUDMenuManager.instance.ResetInfiniteTimer();
-        }
     }
 
     // Call this method to reset the timer to 0
@@ -275,8 +270,6 @@ public class InfiniteGameController : MonoBehaviour
     {
         levelCompletedState = true;
 
-        GlobalUIManager.instance.EnableInputs(false);
-
         RemoveObstacles();
 
         PauseTimer();
@@ -300,8 +293,6 @@ public class InfiniteGameController : MonoBehaviour
         }
 
         // ==================== //
-
-        GlobalUIManager.instance.EnableInputs(true);
 
         PrepareForLevel();
 
@@ -332,6 +323,7 @@ public class InfiniteGameController : MonoBehaviour
         RemoveObstacles();
 
         ResetTimer();
+        UpdateHUD(GAME_DATA.TIMER);
 
         PrepareForLevel();
 

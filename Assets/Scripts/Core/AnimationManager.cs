@@ -55,6 +55,15 @@ public class AnimationManager : MonoBehaviour
         isPlayingMenuAnimation = false;
     }
 
+    public void ClearMenuQueue()
+    {
+        menuAnimationQueue.Clear();
+
+        // Set the playing flag to false
+        isPlayingMenuAnimation = false;
+
+    }
+
     // =========== IN GAME ANIMATION =========== //
 
     public void PlayInGameAnimation(IEnumerator animation, System.Action callback = null)
@@ -102,6 +111,16 @@ public class AnimationManager : MonoBehaviour
 
         // Set the playing flag to false
         isPlayingInGameAnimation = false;
+    }
+
+    public void ClearInGameQueue()
+    {
+        inGameAnimationQueue.Clear();
+
+        // Set the playing flag to false
+        isPlayingMenuAnimation = false;
+
+        isPausedInGameAnimation = false;
     }
 
 

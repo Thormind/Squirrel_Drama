@@ -12,14 +12,14 @@ public class LegacyGameController : MonoBehaviour
     public LegacyBall ballRef;
     public GameObject LegacyMachineLight;
 
-    public int score = 0;
-    public int bonusScore = 1000;
+    public int score;
+    public int bonusScore;
     public int bestScore;
 
     public int currentBallNumber = 3;
     public int numberOfBallsPerGame = 3;
 
-    int currentHoleIndex = 0;
+    int currentHoleIndex;
 
     public float timePerDecrement = 5.0f;
     public int bonusScoreIncrement = 1000;
@@ -43,6 +43,11 @@ public class LegacyGameController : MonoBehaviour
         {
             bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
         }
+
+
+        currentHoleIndex = 0;
+        score = 0;
+        bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
     }
 
     public void UpdateHUD(GAME_DATA gameData)
@@ -60,6 +65,14 @@ public class LegacyGameController : MonoBehaviour
 
     private void RecalculateScore()
     {
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        {
+            AnimationManager.instance.PlayInGameAnimation(
+                HUDMenuManager.instance.AnimateLegacyScore(bonusScore, 0, score, score + bonusScore),
+                () => {
+                    GameCompletedCheck();
+                });
+        }
         score += bonusScore;
         UpdateHUD(GAME_DATA.SCORE);
     }
@@ -156,13 +169,29 @@ public class LegacyGameController : MonoBehaviour
     {
         currentHoleIndex++;
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+
         UpdateHUD(GAME_DATA.BONUS_SCORE);
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void ResetBall()
     {
         ballRef.ResetBallPosition();
     }
+
+    public void GameCompletedCheck()
+    {
+        if (currentHoleIndex < LegacyHoleController.instance.holes.Count - 1)
+        {
+            NextHole();
+        }
+        else
+        {
+            gameCompletedState = true;
+        }
+    }
+
 
 
     // ========== OBSTACLES HANDLES ========== //
@@ -175,20 +204,12 @@ public class LegacyGameController : MonoBehaviour
         {
             LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
             RecalculateScore();
-
-            if (currentHoleIndex < LegacyHoleController.instance.holes.Count - 1)
-            {
-                NextHole();
-            }
-            else
-            {
-                gameCompletedState = true;
-            }
         }
         else
         {
             currentBallNumber--;
             UpdateHUD(GAME_DATA.LIFE);
+            elevatorControllerRef.MoveBarToBottomPositionFunction();
 
             if (currentBallNumber <= 0)
             {
@@ -206,7 +227,6 @@ public class LegacyGameController : MonoBehaviour
             }
         }
 
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
 

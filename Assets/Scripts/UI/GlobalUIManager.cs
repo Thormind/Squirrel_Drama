@@ -286,6 +286,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         SetMenu(MENU.MENU_PREGAME);
         Time.timeScale = 1f;
+        AnimationManager.instance.ClearInGameQueue();
         gameIsPaused = false;
         StartCoroutine(PauseResumeCallback());
     }
@@ -326,6 +327,8 @@ public class GlobalUIManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         AudioManager.instance.PlayUiMusic();
+
+        AnimationManager.instance.ClearInGameQueue();
 
         SetMenu(MENU.MENU_LOADING);
 
@@ -370,8 +373,7 @@ public class GlobalUIManager : MonoBehaviour
 
         foreach (var menu in runtimeMenuRefs)
         {
-            //  && lastMenu != menu.Key
-            if (currentMenu != menu.Key)
+            if (currentMenu != menu.Key && lastMenu != menu.Key)
             {
                 Destroy(menu.Value);
                 keysToRemove.Add(menu.Key);
@@ -386,7 +388,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator LoadGameCompletedCallback()
     {
         yield return null;
-        //ClearMenus();
+        ClearMenusException();
         CameraManager.instance.Transition(false);
         SetMenu(MENU.MENU_PREGAME);
     }
@@ -394,7 +396,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
-        //ClearMenus();
+        ClearMenusException();
         CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
     }
