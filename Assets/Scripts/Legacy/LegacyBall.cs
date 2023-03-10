@@ -34,7 +34,7 @@ public class LegacyBall : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        print($"{ Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition)}");
+        //print($"{ Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition)}");
         if (collision.transform.gameObject.tag == "Hole"
             && Vector2.Distance(collision.transform.localPosition, ballRigidbody.transform.localPosition) <= MinCollisionDistance
             && collisionEnabled)
@@ -42,12 +42,12 @@ public class LegacyBall : MonoBehaviour
             collisionEnabled = false;
             if (collision.transform.gameObject == LegacyGameController.instance.GetCurrentHole())
             {
-                Debug.Log("RIGHT HOLE");
+                //Debug.Log("RIGHT HOLE");
                 LegacyGameController.instance.HandleBallInHole(true);
             }
             else
             {
-                Debug.Log("WRONG HOLE");
+                //Debug.Log("WRONG HOLE");
                 LegacyGameController.instance.HandleBallInHole(false);
             }
             ballRigidbody.simulated = false;
@@ -82,13 +82,26 @@ public class LegacyBall : MonoBehaviour
 
     }
 
-    public void ResetBallPosition()
+    public void HideBall()
     {
-        transform.position = startBallPosition;
+        GetComponent<CircleCollider2D>().enabled = false;
+        ballRigidbody.simulated = true;
+
+        ballRigidbody.gravityScale = ballGravityScale * 0.5f;
+        ballRigidbody.velocity = Vector2.zero;
+        ballRigidbody.angularVelocity = 0;
+    }
+
+
+    public void ResetBallPosition(Vector3 elevatorPostion)
+    {
+
 
         collisionEnabled = true;
 
         GetComponent<CircleCollider2D>().enabled = true;
+
+        transform.localPosition = elevatorPostion;
         ballRigidbody.velocity = Vector2.zero;
         ballRigidbody.angularVelocity = 0;
         transform.localScale = startBallScale;

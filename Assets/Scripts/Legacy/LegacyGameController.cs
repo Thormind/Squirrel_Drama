@@ -122,6 +122,8 @@ public class LegacyGameController : MonoBehaviour
 
         LegacyMachineLight.SetActive(false);
 
+        ballRef.HideBall();
+
         LegacyHoleController.instance.RemoveHoles();
 
         PrepareForHole();
@@ -177,7 +179,8 @@ public class LegacyGameController : MonoBehaviour
 
     public void ResetBall()
     {
-        ballRef.ResetBallPosition();
+        Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.25f, 0);
+        ballRef.ResetBallPosition(positon);
     }
 
     public void GameCompletedCheck()
@@ -199,6 +202,8 @@ public class LegacyGameController : MonoBehaviour
     public void HandleBallInHole(bool rightHole)
     {
         CancelInvoke(nameof(DecreaseBonusScore));
+
+        elevatorControllerRef.EnableInput(false);
 
         if (rightHole)
         {

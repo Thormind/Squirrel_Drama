@@ -145,6 +145,11 @@ public class LegacyElevatorController : MonoBehaviour
         yield return null;
     }
 
+    public void EnableInput(bool enableInput)
+    {
+        inputEnabled = enableInput;
+    }
+
     [ContextMenu("Move To Start Position")]
     public void MoveBarToStartPositionFunction()
     {

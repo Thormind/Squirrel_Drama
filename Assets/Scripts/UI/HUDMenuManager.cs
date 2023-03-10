@@ -387,10 +387,13 @@ public class HUDMenuManager : MonoBehaviour
             timer += Time.deltaTime;
         }
 
-        infiniteBonusText.text = "0";
-        infiniteScoreText.text = newScore.ToString();
+        StartCoroutine(AnimateText(infiniteBonusText, "0"));
+        StartCoroutine(AnimateText(infiniteScoreText, newScore.ToString()));
 
         yield return new WaitForSeconds(2f);
+
+        infiniteBonusText.text = "0";
+        infiniteScoreText.text = newScore.ToString();
     }
 
 
@@ -417,10 +420,13 @@ public class HUDMenuManager : MonoBehaviour
             timer += Time.deltaTime;
         }
 
-        legacyBonusText.text = "0";
-        legacyScoreText.text = newScore.ToString();
+        StartCoroutine(AnimateText(legacyBonusText, "0"));
+        StartCoroutine(AnimateText(legacyScoreText, newScore.ToString()));
 
         yield return new WaitForSeconds(2f);
+
+        legacyBonusText.text = "0";
+        legacyScoreText.text = newScore.ToString();
     }
 
 
