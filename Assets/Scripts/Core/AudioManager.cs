@@ -21,6 +21,7 @@ public enum SOUND
     CLICK,                      // Implanted: false
     SWEEP,                      // Implanted: true
     // Infinite mode
+    OBSTACLE_SPAWN,             // Implanted: false
     FRUIT_FALL,                 // Implanted: false
     FRUIT_SQUASH,               // Implanted: false
     FRUIT_INHOLE,               // Implanted: true

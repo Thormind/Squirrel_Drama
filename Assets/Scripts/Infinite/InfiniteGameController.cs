@@ -463,6 +463,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public void SpawnObstacles()
     {
+        AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
         if (InfiniteHolesController.instance != null)
         {
             InfiniteHolesController.instance.SpawnHoles();
