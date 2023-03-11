@@ -150,6 +150,7 @@ public class LegacyElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
+        StopAllCoroutines();
         StartCoroutine(MoveBarToBottomPosition());
     }
 

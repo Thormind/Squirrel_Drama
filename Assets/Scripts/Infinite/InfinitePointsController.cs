@@ -11,7 +11,6 @@ public class InfinitePointsController : MonoBehaviour
     public GameObject pointsParent;
     public GameObject pointPrefab;
 
-    public List<GameObject> points;
     private List<Vector3> _spawnedPointsPositions = new List<Vector3>();
 
     //Difficulty Parameters
@@ -56,14 +55,13 @@ public class InfinitePointsController : MonoBehaviour
             if (spawnPosition == Vector3.zero)
             {
                 NotifySpawnDebug(false);
-                Debug.Log("Could not find a valid POINTS spawn position after " + maxTries + " tries.");
                 break;
             }
 
             NotifySpawnDebug(true);
 
+            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
             GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity, pointsParent.transform);
-            points.Add(pointInstantiated);
 
             _spawnedPointsPositions.Add(spawnPosition);
         }
@@ -126,12 +124,15 @@ public class InfinitePointsController : MonoBehaviour
     public void RemovePoints()
     {
 
-        foreach (GameObject g in points)
+        for (int i = 0; i < pointsParent.transform.childCount; i++)
         {
-            Destroy(g);
+            GameObject child = pointsParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
+            Destroy(child);
         }
-
-        points.Clear();
 
         _spawnedPointsPositions.Clear();
         _spawnedPointsPositions = new List<Vector3>();

@@ -11,7 +11,6 @@ public class InfiniteFruitsController : MonoBehaviour
     public GameObject fruitsParent;
     public GameObject fruitPrefab;
 
-    public List<GameObject> fruits;
     private List<Vector3> _spawnedFruitsPositions = new List<Vector3>();
 
     //Difficulty Parameters
@@ -55,14 +54,13 @@ public class InfiniteFruitsController : MonoBehaviour
             if (spawnPosition == Vector3.zero)
             {
                 NotifySpawnDebug(false);
-                Debug.Log("Could not find a valid FRUIT spawn position after " + maxTries + " tries.");
                 break;
             }
 
             NotifySpawnDebug(true);
 
+            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
             GameObject fruitInstantiated = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity, fruitsParent.transform);
-            fruits.Add(fruitInstantiated);
 
             _spawnedFruitsPositions.Add(spawnPosition);
         }
@@ -139,12 +137,15 @@ public class InfiniteFruitsController : MonoBehaviour
     public void RemoveFruits()
     {
 
-        foreach (GameObject g in fruits)
+        for (int i = 0; i < fruitsParent.transform.childCount; i++)
         {
-            Destroy(g);
+            GameObject child = fruitsParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
+            Destroy(child);
         }
-
-        fruits.Clear();
 
         _spawnedFruitsPositions.Clear();
         _spawnedFruitsPositions = new List<Vector3>();

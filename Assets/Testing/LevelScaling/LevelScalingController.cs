@@ -56,29 +56,41 @@ public class LevelScalingController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InfiniteGameController.instance.StartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            InfiniteGameController.instance.QuickRemoveObstacles();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            InfiniteGameController.instance.QuickSpawnObstacles();
+        }
+        if (Input.GetKeyDown(KeyCode.H))
         {
             InfiniteHolesController.instance.SpawnHoles();
         }
-        if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             InfiniteBeesController.instance.SpawnBees();
         }
-        if (Input.GetKeyDown(KeyCode.V) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             InfiniteWormsController.instance.RemoveWorms();
             InfiniteWormsController.instance.SpawnWorm();
         }
-        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.J))
         {
             InfiniteBearController.instance.RemoveBears();
             InfiniteBearController.instance.SpawnBear();
         }
-        if (Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             InfinitePointsController.instance.SpawnPoints();
         }
-        if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             InfiniteFruitsController.instance.SpawnFruits();
         }

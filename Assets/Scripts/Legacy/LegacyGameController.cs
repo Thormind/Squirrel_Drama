@@ -150,6 +150,7 @@ public class LegacyGameController : MonoBehaviour
     public void StartGame()
     {
         gameOverState = false;
+        gameCompletedState = false;
 
         LegacyHoleController.instance.SpawnHoles();
 
@@ -198,13 +199,60 @@ public class LegacyGameController : MonoBehaviour
 
     public void GameCompletedCheck()
     {
-        if (currentHoleIndex < LegacyHoleController.instance.holes.Count - 1)
+        if (currentHoleIndex < LegacyHoleController.instance.holeIndicatorList.Count - 1)
         {
             NextHole();
         }
         else
         {
             gameCompletedState = true;
+
+            if (CameraManager.instance != null)
+            {
+                CameraManager.instance.Transition(false);
+            }
+
+            elevatorControllerRef.MoveBarToBottomPositionFunction();
+
+            AnimationManager.instance.PlayInGameAnimation( GameCompletedAnimation(), () => { ResetGame(); });
+
+            //elevatorControllerRef.MoveBarToBottomPositionFunction();
+        }
+    }
+
+    private IEnumerator GameCompletedAnimation()
+    {
+        foreach(GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
+        {
+            holeIndicator.GetComponent<HoleIndicator>().StartFlashing();
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        foreach (GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
+        {
+            holeIndicator.GetComponent<HoleIndicator>().StopFlashing();
+        }
+
+        GlobalUIManager.instance.ReplayGame();
+
+    }
+
+    public void GameOverCheck()
+    {
+        if (currentBallNumber <= 0)
+        {
+
+            gameOverState = true;
+
+            RecalculateBestScore();
+
+            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+
+            if (GlobalUIManager.instance != null)
+            {
+                GlobalUIManager.instance.SetScoreBoardMenu();
+            }
         }
     }
 
@@ -229,25 +277,10 @@ public class LegacyGameController : MonoBehaviour
             UpdateHUD(GAME_DATA.LIFE);
             elevatorControllerRef.MoveBarToBottomPositionFunction();
 
-            if (currentBallNumber <= 0)
-            {
-
-                gameOverState = true;
-
-                RecalculateBestScore();
-
-                LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
-
-                if (GlobalUIManager.instance != null)
-                {
-                    GlobalUIManager.instance.SetScoreBoardMenu();
-                }
-            }
+            GameOverCheck();
         }
 
     }
-
-
 
 
 

@@ -42,6 +42,7 @@ public class InfiniteBearAnimation : MonoBehaviour
     {
         warnCooldown = warnTime;
         transform.localScale = new Vector3(impactRange, impactRange, impactRange);
+
         StartCoroutine(BearPawAttack());
     }
 

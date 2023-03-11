@@ -84,7 +84,7 @@ public class InfiniteElevatorController : MonoBehaviour
     IEnumerator MoveBarToBottomPosition()
     {
 
-        bottomMovementSpeed = CalculateMoveBarToBottomSpeed();
+        bottomMovementSpeed = CalculateBottomMovementSpeed();
 
         while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
         {
@@ -130,7 +130,7 @@ public class InfiniteElevatorController : MonoBehaviour
         StartCoroutine(MoveBarToBottomPosition());
     }
 
-    public float CalculateMoveBarToBottomSpeed()
+    public float CalculateBottomMovementSpeed()
     {
         // Ensure height is within the range of 0 to 40
         float height = Mathf.Clamp(leftLifter.transform.localPosition.y, 0f, 40f);

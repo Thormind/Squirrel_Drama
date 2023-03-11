@@ -10,8 +10,6 @@ public class InfiniteBearController : MonoBehaviour
     public GameObject bearPrefab;
     public GameObject bearInstantiated;
 
-    public List<GameObject> bears;
-
     //Difficulty Parameters
     [SerializeField] private BearParametersSO _bearParameters;
 
@@ -84,7 +82,6 @@ public class InfiniteBearController : MonoBehaviour
             bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
                 randomWarnAnimationTime, BearImpactRange);
 
-            bears.Add(bearInstantiated);
         }
     }
 
@@ -92,12 +89,15 @@ public class InfiniteBearController : MonoBehaviour
     {
         isSpawning = false;
 
-        foreach (GameObject g in bears)
+        for (int i = 0; i < bearParent.transform.childCount; i++)
         {
-            Destroy(g);
+            GameObject child = bearParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
+            Destroy(child);
         }
-
-        bears.Clear();
     }
 
     private Vector3 GetRandomPositionNearFruit()

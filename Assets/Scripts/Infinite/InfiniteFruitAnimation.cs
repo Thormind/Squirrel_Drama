@@ -7,7 +7,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
 
     private float rotationSpeed = 25f;
 
-    private float movementSpeed = 0.5f;
+    private float movementSpeed = 0.75f;
 
     private float maxY = 1.5f;
     private Vector3 endOfLifePosition;

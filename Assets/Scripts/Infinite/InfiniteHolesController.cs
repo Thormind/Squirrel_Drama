@@ -10,7 +10,6 @@ public class InfiniteHolesController : MonoBehaviour
     public GameObject holesParent;
     public GameObject holePrefab;
 
-    public List<GameObject> holes;
     private List<Vector3> _spawnedHolesPositions = new List<Vector3>();
 
 
@@ -54,14 +53,13 @@ public class InfiniteHolesController : MonoBehaviour
             if (spawnPosition == Vector3.zero)
             {
                 NotifySpawnDebug(false);
-                Debug.Log("Could not find a valid HOLE spawn position after " + maxTries + " tries.");
                 break;
             }
 
             NotifySpawnDebug(true);
 
+            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
             GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
-            holes.Add(holeInstantiated);
         }
     }
 
@@ -118,13 +116,15 @@ public class InfiniteHolesController : MonoBehaviour
 
     public void RemoveHoles()
     {
-
-        foreach (GameObject g in holes)
+        for (int i = 0; i < holesParent.transform.childCount; i++)
         {
-            Destroy(g);
+            GameObject child = holesParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
+            Destroy(child);
         }
-
-        holes.Clear();
 
         _spawnedHolesPositions.Clear();
         _spawnedHolesPositions = new List<Vector3>();
