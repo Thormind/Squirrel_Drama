@@ -83,6 +83,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToBottomPosition()
     {
+
         bottomMovementSpeed = CalculateMoveBarToBottomSpeed();
 
         while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
@@ -125,6 +126,7 @@ public class InfiniteElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
+        StopAllCoroutines();
         StartCoroutine(MoveBarToBottomPosition());
     }
 

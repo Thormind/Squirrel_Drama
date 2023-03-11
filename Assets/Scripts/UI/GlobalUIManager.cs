@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [System.Serializable]
 public enum MENU
@@ -53,6 +54,7 @@ public class GlobalUIManager : MonoBehaviour
     public static bool isPreGame = false;
 
     [SerializeField] private GameObject controllerIcon;
+
     public static bool isControllerConnected = false;
 
     public void Awake()
@@ -81,16 +83,18 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_TITLE_SCREEN);
 
         DetectController();
+
     }
+
 
     void Update()
     {
-
+     
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (gameIsActive && es.enabled)
             {
-                if(isPreGame)
+                if (isPreGame)
                 {
                     ReturnToMainMenu();
                 }
@@ -107,7 +111,33 @@ public class GlobalUIManager : MonoBehaviour
                 }
             }
         }
+        
     }
+
+    /*
+    private void OnPause()
+    {
+        print("SUP");
+        if (gameIsActive && es.enabled)
+        {
+            if (isPreGame)
+            {
+                ReturnToMainMenu();
+            }
+            else
+            {
+                if (gameIsPaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
+            }
+        }
+    }
+    */
 
     private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
     {
@@ -143,9 +173,7 @@ public class GlobalUIManager : MonoBehaviour
             AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
 
-        //print($"Current Menu : {desiredMenu}");
-        //print($"Current Menu : {currentMenu}");
-        //print($"Last Menu : {lastMenu}");
+
     }
 
     public void SetMenu(MENU desiredMenu)
@@ -460,4 +488,7 @@ public class GlobalUIManager : MonoBehaviour
             es.SetSelectedGameObject(firstSelected);
         }
     }
+
+
+
 }

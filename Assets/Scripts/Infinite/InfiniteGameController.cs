@@ -181,7 +181,7 @@ public class InfiniteGameController : MonoBehaviour
 
     private void PointsBonusScoreIncrement()
     {
-        bonusScore += pointsScoreIncrement;
+        bonusScore += pointsScoreIncrement * difficultyLevel;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
