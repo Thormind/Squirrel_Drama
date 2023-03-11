@@ -8,11 +8,9 @@ public class AnimationManager : MonoBehaviour
 
     private Queue<IEnumerator> menuAnimationQueue = new Queue<IEnumerator>();
     private Queue<IEnumerator> inGameAnimationQueue = new Queue<IEnumerator>();
-    private Queue<IEnumerator> obstaclesAnimationQueue = new Queue<IEnumerator>();
 
     private bool isPlayingMenuAnimation = false;
     private bool isPlayingInGameAnimation = false;
-    private bool isPlayingObstaclesAnimation = false;
 
     private bool isPausedInGameAnimation = false;
 
@@ -124,45 +122,6 @@ public class AnimationManager : MonoBehaviour
 
         isPausedInGameAnimation = false;
     }
-
-    // =========== OBSTACLES ANIMATION =========== //
-
-    public void PlayObstaclesAnimation(IEnumerator animation, System.Action callback = null)
-    {
-        // Add the animation coroutine to the queue
-        obstaclesAnimationQueue.Enqueue(Animate(animation, callback));
-
-        // Start playing the queue if it's not already playing
-        if (!isPlayingObstaclesAnimation)
-        {
-            StartCoroutine(PlayObstaclesQueue());
-        }
-    }
-
-    private IEnumerator PlayObstaclesQueue()
-    {
-        // Set the playing flag to true
-        isPlayingObstaclesAnimation = true;
-
-        while (obstaclesAnimationQueue.Count > 0)
-        {
-            // Dequeue the next animation coroutine and start it
-            yield return StartCoroutine(obstaclesAnimationQueue.Dequeue());
-        }
-
-        // Set the playing flag to false
-        isPlayingObstaclesAnimation = false;
-    }
-
-    public void ClearObstaclesQueue()
-    {
-        obstaclesAnimationQueue.Clear();
-
-        // Set the playing flag to false
-        isPlayingObstaclesAnimation = false;
-
-    }
-
 
     // ============================ //
 
