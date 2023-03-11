@@ -17,7 +17,9 @@ public class InfiniteWormsAnimation : MonoBehaviour
         inAnimationTime = inTime;
         derpAnimationTime = derpTime;
         derpSpeed = animationSpeed;
+
         StartCoroutine(HandleWormInAnimation());
+
     }
 
     IEnumerator HandleWormInAnimation()

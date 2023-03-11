@@ -9,7 +9,6 @@ public class InfiniteWormsController : MonoBehaviour
     public GameObject wormsParent;
     public GameObject wormPrefab;
 
-    public List<GameObject> worms;
     private List<Vector3> _spawnedWormsPositions = new List<Vector3>();
 
     //Difficulty Parameters
@@ -62,7 +61,6 @@ public class InfiniteWormsController : MonoBehaviour
 
         if (holePosition == Vector3.zero)
         {
-            Debug.Log("Could not find a valid WORM spawn position after " + maxTries + " tries.");
             NotifySpawnDebug(false);
         }
         else
@@ -72,7 +70,6 @@ public class InfiniteWormsController : MonoBehaviour
 
             Vector3 worldPosition = wormsParent.transform.TransformPoint(holePosition);
             GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
-            worms.Add(wormInstantiated);
 
             float randomInAnimationTime = Random.Range(WormsInAnimationTime - 1f, WormsInAnimationTime + 1f);
             float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 2f, WormsDerpAnimationTime + 2f);
@@ -82,6 +79,7 @@ public class InfiniteWormsController : MonoBehaviour
                 randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed);
 
             _spawnedWormsPositions.Add(holePosition);
+
         }
     }
 
@@ -89,12 +87,15 @@ public class InfiniteWormsController : MonoBehaviour
     {
         isSpawning = false;
 
-        foreach (GameObject w in worms)
+        for (int i = 0; i < wormsParent.transform.childCount; i++)
         {
-            Destroy(w);
+            GameObject child = wormsParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
+            Destroy(child);
         }
-
-        worms.Clear();
 
         _spawnedWormsPositions.Clear();
         _spawnedWormsPositions = new List<Vector3>();

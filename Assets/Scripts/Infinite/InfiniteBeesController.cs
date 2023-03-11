@@ -57,7 +57,6 @@ public class InfiniteBeesController : MonoBehaviour
             if (spawnPosition == Vector3.zero)
             {
                 NotifySpawnDebug(false);
-                Debug.Log("Could not find a valid BEE spawn position after " + maxTries + " tries.");
                 break;
             }
 
@@ -65,6 +64,7 @@ public class InfiniteBeesController : MonoBehaviour
 
             Vector3 realPosition = beesParent.transform.TransformPoint(spawnPosition);
 
+            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
             GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity, beesParent.transform);
 
             float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.1f, BeesMovementSpeed + 0.1f);
@@ -79,6 +79,10 @@ public class InfiniteBeesController : MonoBehaviour
         for (int i = 0; i < beesParent.transform.childCount; i++)
         {
             GameObject child = beesParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+            }
             Destroy(child);
         }
 

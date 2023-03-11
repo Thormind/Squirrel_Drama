@@ -7,11 +7,13 @@ using UnityEngine.UI;
 public class HoleIndicator : MonoBehaviour
 {
     public float pulsatingSpeed = 5.7f;
+    public float flashInterval = 0.5f;
 
     public Image im;
     Color colorRef;
 
     IEnumerator pulsatingCoroutineReference;
+    IEnumerator flashingCoroutineReference;
 
     public TMP_Text holeNumberText;
 
@@ -19,6 +21,7 @@ public class HoleIndicator : MonoBehaviour
     {
         colorRef = im.color;
         pulsatingCoroutineReference = Pulsate();
+        flashingCoroutineReference = Flash();
     }
 
     IEnumerator Pulsate()
@@ -46,5 +49,40 @@ public class HoleIndicator : MonoBehaviour
     public void SetHoleNumber(int holeNumber)
     {
         holeNumberText.text = holeNumber.ToString();
+    }
+
+    IEnumerator Flash()
+    {
+        while (true)
+        {
+            im.gameObject.SetActive(!im.gameObject.activeSelf);
+
+            float t = 0;
+
+            while (t < 1f)
+            {
+
+                t += Time.deltaTime / flashInterval;
+                yield return null;
+            }
+
+            yield return new WaitForEndOfFrame();
+
+
+        }
+    }
+
+    public void StartFlashing()
+    {
+        colorRef.a = 255;
+        im.color = colorRef;
+        StartCoroutine(flashingCoroutineReference);
+    }
+
+    public void StopFlashing()
+    {
+        StopCoroutine(flashingCoroutineReference);
+        colorRef.a = 0;
+        im.color = colorRef;
     }
 }

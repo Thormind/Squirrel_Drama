@@ -13,6 +13,9 @@ public class InfiniteGameController : MonoBehaviour
     public InfiniteElevatorController elevatorControllerRef;
     public InfiniteFruit fruitRef;
 
+    public GameObject obstaclesParent;
+    public GameObject obstacleInstanciateVFX;
+
     public int score;
     public int bonusScore;
     public int bestScore;
@@ -88,7 +91,7 @@ public class InfiniteGameController : MonoBehaviour
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         UpdateTimer();
         UpdateHUD(GAME_DATA.MAP);
@@ -386,8 +389,6 @@ public class InfiniteGameController : MonoBehaviour
         {
             CameraManager.instance.Transition(false);
         }
-
-        //UpdateHUD();
     }
 
     public void GameOverCheck()
@@ -516,6 +517,11 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+    public void ObstacleInstantiateAnimation(Vector3 position)
+    {
+        Instantiate(obstacleInstanciateVFX, position, Quaternion.identity, obstaclesParent.transform);
+    }
+
     //ElevatorMovementSpeed
     public float ElevatorMovementSpeed
     {
@@ -596,7 +602,78 @@ public class InfiniteGameController : MonoBehaviour
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
     // ========== DEV FUNCTIONS ========== //
+
+    public void QuickRemoveObstacles()
+    {
+
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.RemoveHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.RemoveBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.RemoveWorms();
+        }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.RemoveBears();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.RemovePoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.RemoveFruits();
+        }
+    }
+
+
+    public void QuickSpawnObstacles()
+    {
+        if (InfiniteHolesController.instance != null)
+        {
+            InfiniteHolesController.instance.SpawnHoles();
+        }
+        if (InfiniteBeesController.instance != null)
+        {
+            InfiniteBeesController.instance.SpawnBees();
+        }
+        if (InfiniteWormsController.instance != null)
+        {
+            InfiniteWormsController.instance.SpawnWorms();
+        }
+        if (InfiniteBearController.instance != null)
+        {
+            InfiniteBearController.instance.SpawnBears();
+        }
+        if (InfinitePointsController.instance != null)
+        {
+            InfinitePointsController.instance.SpawnPoints();
+        }
+        if (InfiniteFruitsController.instance != null)
+        {
+            InfiniteFruitsController.instance.SpawnFruits();
+        }
+    }
+
+
 
     public void QuickResetFruit()
     {
