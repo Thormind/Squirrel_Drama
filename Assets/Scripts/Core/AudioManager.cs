@@ -19,21 +19,20 @@ public enum SOUND
     // Menus
     MOUSEOVER,                  // Implanted: false
     CLICK,                      // Implanted: false
-    SWEEP,                      // Implanted: false
+    SWEEP,                      // Implanted: true
     // Infinite mode
     FRUIT_FALL,                 // Implanted: false
     FRUIT_SQUASH,               // Implanted: false
-    FRUIT_INHOLE,               // Implanted: false
-    FRUIT_TOUCHBEE,             // Implanted: false
+    FRUIT_INHOLE,               // Implanted: true
+    FRUIT_TOUCHBEE,             // Implanted: true
     POINT_GRAB,                 // Implanted: true
     LIFE_SPIN,                  // Implanted: true
     LIFE_POP,                   // Implanted: true
     SQUIRREL_PANIC,             // Implanted: false
     SQUIRREL_CAUTION,           // Implanted: false
-    BEAR_ROAR,                  // Implanted: false
-    BEAR_HIT,                   // Implanted: false
+    BEAR_ROAR,                  // Implanted: true
+    BEAR_HIT,                   // Implanted: true
     WORM_BLINK,                 // Implanted: false
-    WORM_MOVEMENT,              // Implanted: false
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
     BUNNY_SFX                   // Implanted: false
     // Legacy mode
