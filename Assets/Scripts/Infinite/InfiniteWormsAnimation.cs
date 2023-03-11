@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InfiniteWormsAnimation : MonoBehaviour
 {
+    public AudioSource wormSound;
     private float inAnimationTime;
     private float derpAnimationTime;
 
@@ -44,6 +45,8 @@ public class InfiniteWormsAnimation : MonoBehaviour
         Quaternion outStartRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, outAnimationRotationOffset));
 
         float t = 0;
+
+        wormSound.Play();
 
         while (t <= 1)
         {
