@@ -67,7 +67,6 @@ public class InfiniteBearController : MonoBehaviour
 
         if (position == Vector3.zero)
         {
-            Debug.Log("Could not find a valid BEAR spawn position after " + maxTries + " tries.");
             NotifySpawnDebug(false);
         }
         else

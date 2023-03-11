@@ -15,6 +15,6 @@ MonoBehaviour:
   infiniteElevatorMovementSpeed: 15
   infiniteElevatorStartMovementSpeed: 25
   infiniteElevatorMaxDifference: 7.5
-  infiniteFruitGravityScale: 41.5
+  infiniteFruitGravityScale: 30
   infiniteFruitFallingGravityScale: 30
   infiniteFruitMinCollisionDistance: 0.11
