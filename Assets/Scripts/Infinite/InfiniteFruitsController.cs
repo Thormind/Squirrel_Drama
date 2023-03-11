@@ -15,8 +15,7 @@ public class InfiniteFruitsController : MonoBehaviour
     private List<Vector3> _spawnedFruitsPositions = new List<Vector3>();
 
     //Difficulty Parameters
-    private int[] _fruitsQuantity = new int[9]; //{ 1, 1, 1, 2, 2, 2, 3, 3, 3 };
-    private float[] _fruitsMinDistance = new float[9]; // { 1f, 1f, 1f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f } ;
+    [SerializeField] private FruitsParametersSO _fruitsParameters;
 
     //Spawning Limits Parameters
     private float xMin = -2.5f;
@@ -40,9 +39,6 @@ public class InfiniteFruitsController : MonoBehaviour
             Destroy(this);
         }
 
-        LoadFruitsQuantity();
-        LoadFruitsMinDistance();
-
         isAllSpawned = false;
     }
 
@@ -50,9 +46,9 @@ public class InfiniteFruitsController : MonoBehaviour
     {
         RemoveFruits();
 
-        int randomFruitsQuantity = Random.Range(1, FruitsQuantity + 1);
+        //int randomFruitsQuantity = Random.Range(1, FruitsQuantity + 1);
 
-        for (int i = 0; i < randomFruitsQuantity; i++)
+        for (int i = 0; i < FruitsQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
 
@@ -107,7 +103,7 @@ public class InfiniteFruitsController : MonoBehaviour
     {
         foreach (Vector2 spawnedPosition in _spawnedFruitsPositions)
         {
-            if (Vector2.Distance(position, spawnedPosition) < FruitsMinDistance)
+            if (Vector2.Distance(position, spawnedPosition) < FruitsMinDistance + 5f)
             {
                 return false;
             }
@@ -167,56 +163,22 @@ public class InfiniteFruitsController : MonoBehaviour
     //FRUITS QUANTITY
     public int FruitsQuantity
     {
-        get { return _fruitsQuantity[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _fruitsParameters.GetQuantityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _fruitsQuantity[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveFruitsQuantity();
+            _fruitsParameters.SetQuantityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnFruits();
-        }
-    }
-
-    private void SaveFruitsQuantity()
-    {
-        for (int i = 0; i < _fruitsQuantity.Length; i++)
-        {
-            PlayerPrefs.SetInt("FruitsQuantity_Level_" + (i + 1), _fruitsQuantity[i]);
-        }
-    }
-
-    private void LoadFruitsQuantity()
-    {
-        for (int i = 0; i < _fruitsQuantity.Length; i++)
-        {
-            _fruitsQuantity[i] = PlayerPrefs.GetInt("FruitsQuantity_Level_" + (i + 1), 50);
         }
     }
 
     //MIN DISTANCE
     public float FruitsMinDistance
     {
-        get { return _fruitsMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _fruitsParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _fruitsMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveFruitsMinDistance();
+            _fruitsParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnFruits();
-        }
-    }
-
-    private void SaveFruitsMinDistance()
-    {
-        for (int i = 0; i < _fruitsMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("FruitsMinDistance_Level_" + (i + 1), _fruitsMinDistance[i]);
-        }
-    }
-
-    private void LoadFruitsMinDistance()
-    {
-        for (int i = 0; i < _fruitsMinDistance.Length; i++)
-        {
-            _fruitsMinDistance[i] = PlayerPrefs.GetFloat("FruitsMinDistance_Level_" + (i + 1), 50);
         }
     }
 

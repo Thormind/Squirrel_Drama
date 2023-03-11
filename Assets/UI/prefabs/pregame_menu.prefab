@@ -119,9 +119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationDuration: 0
   animationType: 0
+  floatingHeight: 0
   easedProgress: 0
-  startVisible: 0
-  isVisible: 0
   isGoingIn: 1
   targetScale: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
@@ -140,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infiniteText: {fileID: 7463534729061021302}
   legacyText: {fileID: 7393385281307101570}
+  flashInterval: 0.5
   anyKeyButton: {fileID: 8604458769593903832}
 --- !u!1 &3686573376406148202
 GameObject:
@@ -273,7 +273,6 @@ GameObject:
   - component: {fileID: 7958947338807609958}
   - component: {fileID: 118887796132459325}
   - component: {fileID: 7564504643270171558}
-  - component: {fileID: 8928498438708761934}
   m_Layer: 5
   m_Name: legacy_press_any_txt
   m_TagString: Untagged
@@ -398,20 +397,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8928498438708761934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7393385281307101570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d679ffcc405be43aa9c4d566267ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToFlash: {fileID: 7393385281307101570}
-  flashInterval: 0.5
 --- !u!1 &7463534729061021302
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,7 +408,6 @@ GameObject:
   - component: {fileID: 5604687424246735448}
   - component: {fileID: 1032177972195775839}
   - component: {fileID: 5930874660976810663}
-  - component: {fileID: 2812541325524498566}
   m_Layer: 5
   m_Name: infinite_press_any_txt
   m_TagString: Untagged
@@ -548,17 +532,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2812541325524498566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7463534729061021302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d679ffcc405be43aa9c4d566267ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToFlash: {fileID: 7463534729061021302}
-  flashInterval: 0.5

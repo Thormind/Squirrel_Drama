@@ -8,6 +8,8 @@ public class InfiniteGameController : MonoBehaviour
 {
     public static InfiniteGameController instance = null;
 
+    [SerializeField] private InfiniteElevatorParametersSO elevatorParameters;
+
     public InfiniteElevatorController elevatorControllerRef;
     public InfiniteFruit fruitRef;
 
@@ -47,7 +49,10 @@ public class InfiniteGameController : MonoBehaviour
         {
             Destroy(this);
         }
+    }
 
+    private void Start()
+    {
         gameOverState = false;
         levelCompletedState = false;
 
@@ -72,16 +77,26 @@ public class InfiniteGameController : MonoBehaviour
             bestScore = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE);
         }
 
+
+        elevatorControllerRef.SetElevatorMovementSpeed(ElevatorMovementSpeed);
+        elevatorControllerRef.SetElevatorStartMovementSpeed(ElevatorStartMovementSpeed);
+        elevatorControllerRef.SetElevatorMaxDifference(ElevatorMaxDifference);
+
+        fruitRef.SetFruitGravityScale(FruitGravityScale);
+        fruitRef.SetFruitFallingGravityScale(FruitFallingGravityScale);
+        fruitRef.SetFruitMinCollisionDistance(FruitMinCollisionDistance);
+
     }
 
     private void Update()
     {
         UpdateTimer();
+        UpdateHUD(GAME_DATA.MAP);
     }
 
     public void UpdateHUD(GAME_DATA gameData)
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
             HUDMenuManager.instance.UpdateInfiniteHUD(gameData);
         }
@@ -114,11 +129,6 @@ public class InfiniteGameController : MonoBehaviour
     {
         elapsedTime = 0f;
         timerRunning = false;
-
-        if (HUDMenuManager.instance != null)
-        {
-            HUDMenuManager.instance.ResetInfiniteTimer();
-        }
     }
 
     // Call this method to reset the timer to 0
@@ -128,14 +138,12 @@ public class InfiniteGameController : MonoBehaviour
         {
             gameTime = Time.timeSinceLevelLoad - startTime;
 
-            if (HUDMenuManager.instance != null)
+            if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
             {
                 HUDMenuManager.instance.UpdateInfiniteTimer(gameTime);
             }
-
         }
     }
-
 
     // ========== SCORE FUNCTIONS ========== //
 
@@ -143,9 +151,13 @@ public class InfiniteGameController : MonoBehaviour
     {
         int timerBonus = CalculateTimerBonusScore();
 
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
         {
-            HUDMenuManager.instance.RecalculateInfiniteBonusScore(bonusScore, bonusScore + timerBonus);
+            AnimationManager.instance.PlayInGameAnimation(
+                HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus), 
+                () => { RecalculateScore(); 
+            });
+
         }
 
         bonusScore += timerBonus;
@@ -153,9 +165,12 @@ public class InfiniteGameController : MonoBehaviour
 
     public void RecalculateScore()
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
-            HUDMenuManager.instance.RecalculateInfiniteScore(bonusScore, 0, score, score + bonusScore);
+            AnimationManager.instance.PlayInGameAnimation(
+                HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore),
+                () => { NextLevel();
+            });
         }
         score += bonusScore;
         UpdateHUD(GAME_DATA.SCORE);
@@ -166,7 +181,7 @@ public class InfiniteGameController : MonoBehaviour
 
     private void PointsBonusScoreIncrement()
     {
-        bonusScore += pointsScoreIncrement;
+        bonusScore += pointsScoreIncrement * difficultyLevel;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
@@ -237,6 +252,11 @@ public class InfiniteGameController : MonoBehaviour
         return fruitRef.gameObject.transform.localPosition;
     }
 
+    public float GetFruitHeightForMap()
+    {
+        return Mathf.Max(0f, fruitRef.gameObject.transform.localPosition.y);
+    }
+
     public Vector3 GetElevatorPosition()
     {
         return elevatorControllerRef.gameObject.transform.position;
@@ -269,13 +289,13 @@ public class InfiniteGameController : MonoBehaviour
     {
         levelCompletedState = true;
 
+        RemoveObstacles();
+
         PauseTimer();
 
         ResetTimer();
 
         RecalculateBonusScore();
-
-        //NextLevel();
     }
 
     // ========== LEVEL TRANSITIONS ========== //
@@ -292,8 +312,6 @@ public class InfiniteGameController : MonoBehaviour
         }
 
         // ==================== //
-
-        RemoveObstacles();
 
         PrepareForLevel();
 
@@ -324,6 +342,7 @@ public class InfiniteGameController : MonoBehaviour
         RemoveObstacles();
 
         ResetTimer();
+        UpdateHUD(GAME_DATA.TIMER);
 
         PrepareForLevel();
 
@@ -338,8 +357,6 @@ public class InfiniteGameController : MonoBehaviour
 
         SpawnObstacles();
 
-        //UpdateHUD();
-
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
@@ -352,9 +369,9 @@ public class InfiniteGameController : MonoBehaviour
 
         EnableFruitCollision(true);
 
-        StartTimer();
+        SetRigidBodyExtrapolate(false);
 
-        //UpdateHUD();
+        StartTimer();
     }
 
     public void PrepareForLevel()
@@ -497,6 +514,85 @@ public class InfiniteGameController : MonoBehaviour
         {
             InfiniteFruitsController.instance.RemoveFruits();
         }
+    }
+
+    //ElevatorMovementSpeed
+    public float ElevatorMovementSpeed
+    {
+        get { return elevatorParameters.GetMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetMovementSpeed(value);
+        }
+    }
+
+    //ElevatorStartMovementSpeed
+    public float ElevatorStartMovementSpeed
+    {
+        get { return elevatorParameters.GetStartMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetStartMovementSpeed(value);
+        }
+    }
+
+    //ElevatorMaxDifference
+    public float ElevatorMaxDifference
+    {
+        get { return elevatorParameters.GetMaxDifference(); }
+        set
+        {
+            elevatorParameters.SetMaxDifference(value);
+        }
+    }
+
+    //FruitGravityScale
+    public float FruitGravityScale
+    {
+        get { return elevatorParameters.GetFruitGravityScale(); }
+        set
+        {
+            elevatorParameters.SetFruitGravityScale(value);
+        }
+    }
+
+    //FruitFallingGravityScale
+    public float FruitFallingGravityScale
+    {
+        get { return elevatorParameters.GetFruitFallingGravityScale(); }
+        set
+        {
+            elevatorParameters.SetFruitFallingGravityScale(value);
+        }
+    }
+
+    //FruitMinCollisionDistance
+    public float FruitMinCollisionDistance
+    {
+        get { return elevatorParameters.GetFruitMinCollisionDistance(); }
+        set
+        {
+            elevatorParameters.SetFruitMinCollisionDistance(value);
+        }
+    }
+
+    public void SetRigidBodyExtrapolate(bool extrapolate)
+    {
+        if (extrapolate)
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        }
+        else
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
+        }
+
     }
 
 

@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfa521c33554ef245b5641ab810e3bfe, type: 3}
+  m_Name: WormsParameters
+  m_EditorClassIdentifier: 
+  _wormsMinDistance:
+  - 2
+  - 2
+  - 2
+  - 1.75
+  - 1.75
+  - 1.75
+  - 1.5
+  - 1.5
+  - 1.5
+  _wormsMaxDistance:
+  - 6
+  - 6
+  - 6
+  - 5
+  - 5
+  - 5
+  - 4
+  - 4
+  - 4
+  _wormsMinSpawningInterval:
+  - 6
+  - 6
+  - 6
+  - 5
+  - 5
+  - 5
+  - 4
+  - 4
+  - 4
+  _wormsMaxSpawningInterval:
+  - 9
+  - 9
+  - 9
+  - 8
+  - 8
+  - 8
+  - 6
+  - 6
+  - 6
+  _wormsSpawnProbability:
+  - 0.15
+  - 0.25
+  - 0.35
+  - 0.45
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  _wormsInAnimationTime:
+  - 1.5
+  - 1.5
+  - 1.5
+  - 1.25
+  - 1.25
+  - 1.25
+  - 1
+  - 1
+  - 1
+  _wormsDerpAnimationTime:
+  - 2
+  - 2
+  - 2
+  - 3
+  - 3
+  - 3
+  - 4
+  - 4
+  - 4
+  _wormsAnimationSpeed:
+  - 300
+  - 350
+  - 400
+  - 450
+  - 500
+  - 550
+  - 600
+  - 650
+  - 700

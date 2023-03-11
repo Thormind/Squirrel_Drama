@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [System.Serializable]
 public enum MENU
@@ -53,6 +54,7 @@ public class GlobalUIManager : MonoBehaviour
     public static bool isPreGame = false;
 
     [SerializeField] private GameObject controllerIcon;
+
     public static bool isControllerConnected = false;
 
     public void Awake()
@@ -81,16 +83,18 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_TITLE_SCREEN);
 
         DetectController();
+
     }
+
 
     void Update()
     {
-
+     
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             if (gameIsActive && es.enabled)
             {
-                if(isPreGame)
+                if (isPreGame)
                 {
                     ReturnToMainMenu();
                 }
@@ -107,7 +111,33 @@ public class GlobalUIManager : MonoBehaviour
                 }
             }
         }
+        
     }
+
+    /*
+    private void OnPause()
+    {
+        print("SUP");
+        if (gameIsActive && es.enabled)
+        {
+            if (isPreGame)
+            {
+                ReturnToMainMenu();
+            }
+            else
+            {
+                if (gameIsPaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
+            }
+        }
+    }
+    */
 
     private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
     {
@@ -135,21 +165,20 @@ public class GlobalUIManager : MonoBehaviour
 
         if (lastMenu != MENU.NONE)
         {
-            StartCoroutine(SetLastMenuAnimation(runtimeMenuRefs[lastMenu], runtimeMenuRefs[desiredMenu]));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[lastMenu], false));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
         else
         {
-            StartCoroutine(SetMenuAnimation(runtimeMenuRefs[desiredMenu]));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
         }
 
-        //print($"Current Menu : {desiredMenu}");
-        //print($"Current Menu : {currentMenu}");
-        //print($"Last Menu : {lastMenu}");
+
     }
 
     public void SetMenu(MENU desiredMenu)
     {
-        es.enabled = false;
+        EnableInputs(false);
 
         if (menuStack.Count > 0)
         {
@@ -171,7 +200,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetLastMenu()
     {
-        es.enabled = false;
+        EnableInputs(false);
 
         if (menuStackSize <= 1)
         {
@@ -194,29 +223,20 @@ public class GlobalUIManager : MonoBehaviour
         SetMenuInternal(menuStack.Peek());
     }
 
-    public IEnumerator SetLastMenuAnimation(GameObject lastMenuObject, GameObject currentMenuObject)
+    public IEnumerator SetMenuAnimation(GameObject currentMenuObject, bool isGoingIn)
     {
-
-        UIAnimation animation = lastMenuObject.GetComponent<UIAnimation>();
-
-        animation.play();
-
-        yield return new WaitForSecondsRealtime(animation.animationDuration);
-
-        StartCoroutine(SetMenuAnimation(currentMenuObject));
-    }
-
-    public IEnumerator SetMenuAnimation(GameObject currentMenuObject)
-    {
-
         UIAnimation animation = currentMenuObject.GetComponent<UIAnimation>();
+        animation.isGoingIn = isGoingIn;
         animation.play();
 
-        yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
-
-        ClearMenusException();
-
-        es.enabled = true;
+        if (isGoingIn)
+        {
+            yield return new WaitForSecondsRealtime(animation.animationDuration);
+        }
+        else
+        {
+            yield return new WaitForSecondsRealtime(animation.animationDuration + 0.2f);
+        }
     }
 
     public void SetTitleScreenMenu()
@@ -270,6 +290,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        AnimationManager.instance.ResumeInGameAnimations();
         SetMenu(MENU.MENU_HUD);
 
         Time.timeScale = 1f;
@@ -280,6 +301,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void PauseGame()
     {
+        AnimationManager.instance.PauseInGameAnimations();
         SetMenu(MENU.MENU_PAUSE);
 
         Time.timeScale = 0f;
@@ -292,6 +314,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         SetMenu(MENU.MENU_PREGAME);
         Time.timeScale = 1f;
+        AnimationManager.instance.ClearInGameQueue();
         gameIsPaused = false;
         StartCoroutine(PauseResumeCallback());
     }
@@ -332,6 +355,8 @@ public class GlobalUIManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         AudioManager.instance.PlayUiMusic();
+
+        AnimationManager.instance.ClearInGameQueue();
 
         SetMenu(MENU.MENU_LOADING);
 
@@ -376,8 +401,7 @@ public class GlobalUIManager : MonoBehaviour
 
         foreach (var menu in runtimeMenuRefs)
         {
-            //  && lastMenu != menu.Key
-            if (currentMenu != menu.Key)
+            if (currentMenu != menu.Key && lastMenu != menu.Key)
             {
                 Destroy(menu.Value);
                 keysToRemove.Add(menu.Key);
@@ -392,7 +416,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator LoadGameCompletedCallback()
     {
         yield return null;
-        ClearMenus();
+        ClearMenusException();
         CameraManager.instance.Transition(false);
         SetMenu(MENU.MENU_PREGAME);
     }
@@ -400,7 +424,7 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
-        ClearMenus();
+        ClearMenusException();
         CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
     }
@@ -452,6 +476,11 @@ public class GlobalUIManager : MonoBehaviour
         controllerIcon.SetActive(isControllerConnected);
     }
 
+    public void EnableInputs(bool isEnabled)
+    {
+        es.enabled = isEnabled;
+    }
+
     public void SetControllerFirstSelected (GameObject firstSelected)
     {
         if (isControllerConnected)
@@ -459,4 +488,7 @@ public class GlobalUIManager : MonoBehaviour
             es.SetSelectedGameObject(firstSelected);
         }
     }
+
+
+
 }

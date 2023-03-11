@@ -13,14 +13,7 @@ public class InfiniteWormsController : MonoBehaviour
     private List<Vector3> _spawnedWormsPositions = new List<Vector3>();
 
     //Difficulty Parameters
-    private float[] _wormsMinDistance = new float[9];
-    private float[] _wormsMaxDistance = new float[9];
-    private float[] _wormsMinSpawningInterval = new float[9];
-    private float[] _wormsMaxSpawningInterval = new float[9];
-    private float[] _wormsSpawnProbability = new float[9];
-    private float[] _wormsInAnimationTime = new float[9];
-    private float[] _wormsDerpAnimationTime = new float[9];
-    private float[] _wormsAnimationSpeed = new float[9];
+    [SerializeField] private WormsParametersSO _wormsParameters;
 
 
     private Vector3 spawnPosition;
@@ -39,15 +32,6 @@ public class InfiniteWormsController : MonoBehaviour
         {
             Destroy(this);
         }
-
-        LoadWormsMinDistance();
-        LoadWormsMaxDistance();
-        LoadWormsMinSpawningInterval();
-        LoadWormsMaxSpawningInterval();
-        LoadWormsSpawnProbability();
-        LoadWormsInAnimationTime();
-        LoadWormsDerpAnimationTime();
-        LoadWormsAnimationSpeed();
 
         isAllSpawned = false;
     }
@@ -132,7 +116,7 @@ public class InfiniteWormsController : MonoBehaviour
                     Vector2 tmpSpawnedPos = spawnedPosition;
                     float distance = Vector2.Distance(tmpFruitPos, tmpSpawnedPos);
 
-                    if (distance <= WormsMaxDistance && tmpSpawnedPos.y > fruitPosition.y && distance >= WormsMinDistance)
+                    if (distance <= WormsMaxDistance && tmpSpawnedPos.y > fruitPosition.y + WormsMinDistance && distance >= WormsMinDistance)
                     {
                         spawnPosition = tmpSpawnedPos;
                     }
@@ -171,227 +155,98 @@ public class InfiniteWormsController : MonoBehaviour
         }
     }
 
+
     //MIN DISTANCE
     public float WormsMinDistance
     {
-        get { return _wormsMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsMinDistance();
+            _wormsParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsMinDistance()
-    {
-        for (int i = 0; i < _wormsMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsMinDistance_Level_" + (i + 1), _wormsMinDistance[i]);
-        }
-    }
-
-    private void LoadWormsMinDistance()
-    {
-        for (int i = 0; i < _wormsMinDistance.Length; i++)
-        {
-            _wormsMinDistance[i] = PlayerPrefs.GetFloat("WormsMinDistance_Level_" + (i + 1), 50);
-        }
-    }
 
     //MAX DISTANCE
     public float WormsMaxDistance
     {
-        get { return _wormsMaxDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetMaxDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsMaxDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsMaxDistance();
+            _wormsParameters.SetMaxDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsMaxDistance()
-    {
-        for (int i = 0; i < _wormsMaxDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsMaxDistance_Level_" + (i + 1), _wormsMaxDistance[i]);
-        }
-    }
-
-    private void LoadWormsMaxDistance()
-    {
-        for (int i = 0; i < _wormsMaxDistance.Length; i++)
-        {
-            _wormsMaxDistance[i] = PlayerPrefs.GetFloat("WormsMaxDistance_Level_" + (i + 1), 50);
-        }
-    }
 
     //MIN SPAWNING INTERVAL
     public float WormsMinSpawningInterval
     {
-        get { return _wormsMinSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetMinSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsMinSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsMinSpawningInterval();
+            _wormsParameters.SetMinSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsMinSpawningInterval()
-    {
-        for (int i = 0; i < _wormsMinSpawningInterval.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsMinSpawningInterval_Level_" + (i + 1), _wormsMinSpawningInterval[i]);
-        }
-    }
-
-    private void LoadWormsMinSpawningInterval()
-    {
-        for (int i = 0; i < _wormsMinSpawningInterval.Length; i++)
-        {
-            _wormsMinSpawningInterval[i] = PlayerPrefs.GetFloat("WormsMinSpawningInterval_Level_" + (i + 1), 50);
-        }
-    }
 
     //MAX SPAWNING INTERVAL
     public float WormsMaxSpawningInterval
     {
-        get { return _wormsMaxSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetMaxSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsMaxSpawningInterval[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsMaxSpawningInterval();
+            _wormsParameters.SetMaxSpawningIntervalForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsMaxSpawningInterval()
-    {
-        for (int i = 0; i < _wormsMaxSpawningInterval.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsMaxSpawningInterval_Level_" + (i + 1), _wormsMaxSpawningInterval[i]);
-        }
-    }
-
-    private void LoadWormsMaxSpawningInterval()
-    {
-        for (int i = 0; i < _wormsMaxSpawningInterval.Length; i++)
-        {
-            _wormsMaxSpawningInterval[i] = PlayerPrefs.GetFloat("WormsMaxSpawningInterval_Level_" + (i + 1), 50);
-        }
-    }
 
     //SPAWNING PROBABILITY
     public float WormsSpawnProbability
     {
-        get { return _wormsSpawnProbability[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetSpawnProbabilityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsSpawnProbability[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsSpawnProbability();
+            _wormsParameters.SetSpawnProbabilityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsSpawnProbability()
-    {
-        for (int i = 0; i < _wormsSpawnProbability.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsSpawnProbability_Level_" + (i + 1), _wormsSpawnProbability[i]);
-        }
-    }
-
-    private void LoadWormsSpawnProbability()
-    {
-        for (int i = 0; i < _wormsSpawnProbability.Length; i++)
-        {
-            _wormsSpawnProbability[i] = PlayerPrefs.GetFloat("WormsSpawnProbability_Level_" + (i + 1), 50);
-        }
-    }
 
     //IN ANIMATION TIME
     public float WormsInAnimationTime
     {
-        get { return _wormsInAnimationTime[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetInAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsInAnimationTime[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsInAnimationTime();
+            _wormsParameters.SetInAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
-        }
-    }
-
-    private void SaveWormsInAnimationTime()
-    {
-        for (int i = 0; i < _wormsInAnimationTime.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsInAnimationTime_Level_" + (i + 1), _wormsInAnimationTime[i]);
-        }
-    }
-
-    private void LoadWormsInAnimationTime()
-    {
-        for (int i = 0; i < _wormsInAnimationTime.Length; i++)
-        {
-            _wormsInAnimationTime[i] = PlayerPrefs.GetFloat("WormsInAnimationTime_Level_" + (i + 1), 50);
         }
     }
 
     //DERP ANIMATION TIME
     public float WormsDerpAnimationTime
     {
-        get { return _wormsDerpAnimationTime[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetDerpAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsDerpAnimationTime[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsDerpAnimationTime();
+            _wormsParameters.SetDerpAnimationTimeForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
-        }
-    }
-
-    private void SaveWormsDerpAnimationTime()
-    {
-        for (int i = 0; i < _wormsDerpAnimationTime.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsDerpAnimationTime_Level_" + (i + 1), _wormsDerpAnimationTime[i]);
-        }
-    }
-
-    private void LoadWormsDerpAnimationTime()
-    {
-        for (int i = 0; i < _wormsDerpAnimationTime.Length; i++)
-        {
-            _wormsDerpAnimationTime[i] = PlayerPrefs.GetFloat("WormsDerpAnimationTime_Level_" + (i + 1), 50);
         }
     }
 
     //ANIMATION SPEED
     public float WormsAnimationSpeed
     {
-        get { return _wormsAnimationSpeed[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _wormsParameters.GetAnimationSpeedForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _wormsAnimationSpeed[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveWormsAnimationSpeed();
+            _wormsParameters.SetAnimationSpeedForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnWorms();
         }
     }
 
-    private void SaveWormsAnimationSpeed()
-    {
-        for (int i = 0; i < _wormsAnimationSpeed.Length; i++)
-        {
-            PlayerPrefs.SetFloat("WormsAnimationSpeed_Level_" + (i + 1), _wormsAnimationSpeed[i]);
-        }
-    }
-
-    private void LoadWormsAnimationSpeed()
-    {
-        for (int i = 0; i < _wormsAnimationSpeed.Length; i++)
-        {
-            _wormsAnimationSpeed[i] = PlayerPrefs.GetFloat("WormsAnimationSpeed_Level_" + (i + 1), 50);
-        }
-    }
 }

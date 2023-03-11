@@ -17,9 +17,8 @@ public class LegacyHoleController : MonoBehaviour
 
     public List<GameObject> holeIndicatorList;
 
-    public int holesQuantity = 50;
-    public int maxTries = 100;
-    public float minDistance = 0.45f;
+    private int holesQuantity;
+    private float minDistance;
 
     public float holesIndicatorXMin = -1.75f;
     public float holesIndicatorXMax = 1.75f;
@@ -35,6 +34,8 @@ public class LegacyHoleController : MonoBehaviour
 
     public float yMin = -3.75f;
     public float yMax = 3.75f;
+
+    public int maxTries = 100;
 
 
     private List<Vector3> _spawnedHolesPositions = new List<Vector3>();
@@ -159,5 +160,15 @@ public class LegacyHoleController : MonoBehaviour
         holes.Clear();
 
         _spawnedHolesPositions.Clear();
+    }
+
+    public void SetHolesQuantity(int quantity)
+    {
+        holesQuantity = quantity;
+    }
+
+    public void SetHolesMinDistance(float minDis)
+    {
+        minDistance = minDis;
     }
 }

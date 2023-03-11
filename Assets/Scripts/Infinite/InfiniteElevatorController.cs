@@ -6,11 +6,11 @@ using UnityEngine.InputSystem;
 public class InfiniteElevatorController : MonoBehaviour
 {
     private float resetMovementSpeed = 100f;
-    private float bottomMovementSpeed = 1f;
+    private float bottomMovementSpeed;
 
-    public float startMovementSpeed = 1f;
-    public float movementSpeed = 0.6f;
-    public float maxDifference = 0.3f;
+    private float startMovementSpeed;
+    private float movementSpeed;
+    private float maxDifference;
 
     public Transform bottom;
     public Transform start;
@@ -18,6 +18,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
+    public Rigidbody2D elevatorRigidBody;
 
     private Vector2 movementOffset;
 
@@ -28,12 +29,17 @@ public class InfiniteElevatorController : MonoBehaviour
 
     private bool inputEnabled = false;
 
+    private void Awake()
+    {
+        elevatorRigidBody = GetComponent<Rigidbody2D>();
+    }
+
     private void FixedUpdate()
     {
         if (inputEnabled)
         {
             if (leftLifter.position.y >= end.position.y
-                || rightLifter.position.y >= end.position.y)
+                && rightLifter.position.y >= end.position.y)
             {
                 inputEnabled = false;
                 InfiniteGameController.instance.LevelCompleted();
@@ -77,6 +83,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToBottomPosition()
     {
+
         bottomMovementSpeed = CalculateMoveBarToBottomSpeed();
 
         while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
@@ -101,7 +108,7 @@ public class InfiniteElevatorController : MonoBehaviour
         {
             InfiniteGameController.instance.StartGame();
         }
-        if (!InfiniteGameController.instance.gameOverState)
+        if (!InfiniteGameController.instance.gameOverState && !GlobalUIManager.isPreGame)
         {
             StartCoroutine(MoveBarToStartPosition());
         }
@@ -119,6 +126,7 @@ public class InfiniteElevatorController : MonoBehaviour
     public void MoveBarToBottomPositionFunction()
     {
         inputEnabled = false;
+        StopAllCoroutines();
         StartCoroutine(MoveBarToBottomPosition());
     }
 
@@ -161,7 +169,20 @@ public class InfiniteElevatorController : MonoBehaviour
     }
 
 
+    public void SetElevatorMovementSpeed(float mSpeed)
+    {
+        movementSpeed = mSpeed;
+    }
 
+    public void SetElevatorStartMovementSpeed(float startSpeed)
+    {
+        startMovementSpeed = startSpeed;
+    }
+
+    public void SetElevatorMaxDifference(float maxDiff)
+    {
+        maxDifference = maxDiff;
+    }
 
 
 

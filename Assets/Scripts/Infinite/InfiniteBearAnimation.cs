@@ -68,9 +68,7 @@ public class InfiniteBearAnimation : MonoBehaviour
             shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
 
             float shadowAlpha = Mathf.Lerp(shadowMinAlpha, shadowMaxAlpha, (warnCooldown - remainingCooldown) / warnCooldown);
-            Color shadowColor = shadowImage.GetComponent<Image>().color;
-            shadowColor.a = shadowAlpha / 255f;
-            shadowImage.GetComponent<Image>().color = shadowColor;
+            SetShadowAlpha(shadowAlpha);
 
             yield return new WaitForSeconds(0.1f);
             remainingCooldown -= 0.1f;
@@ -80,9 +78,10 @@ public class InfiniteBearAnimation : MonoBehaviour
 
 
         // ============== SLOW MOTION BEFORE IMPACT ANIMATION ============== //
-        Time.timeScale = 0.3f;
-
+        InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
         bearPaw.SetActive(true);
+
+        SetSlowMotion(true);
 
         Vector3 startPosition = bearPaw.transform.localPosition;
         Vector3 endPosition = new Vector3(0f, 0f, 0f);
@@ -92,10 +91,6 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         float distance = Vector3.Distance(startPosition, endPosition);
         float duration = distance / translationSpeed;
-
-        float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-        float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f;
-        Time.timeScale = slowMotion;
 
         float t = 0f;
 
@@ -107,46 +102,43 @@ public class InfiniteBearAnimation : MonoBehaviour
             bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, easedProgress);
 
             float bearAlpha = Mathf.Lerp(bearMinAlpha, bearMaxAlpha, easedProgress);
-            Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
-            bearColor.a = bearAlpha / 255f;
-            bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
+            SetBearAlpha(bearAlpha);
+
 
             t += Time.deltaTime / duration;
             yield return null;
         }
 
-
+        bearPaw.transform.localPosition = endPosition;
+        bearPaw.transform.localRotation = endRotation;
+        SetBearAlpha(bearMaxAlpha);
 
         // ============== IMPACT ANIMATION ============== //
+        SetSlowMotion(false);
+
         bearCollider.enabled = true;
+        InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
 
-        impactVFX.SetActive(true);
-        var mod = impactVFX.GetComponent<ParticleSystem>().main;
-        mod.simulationSpeed = 2f;
-        impactVFX.GetComponent<ParticleSystem>().Play();
+        PlayImpactVFX();
+        PlayImpactCameraShake();
 
-        distance = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-        if (CameraManager.instance != null)
-        {
-            CameraManager.instance.ShakeCamera(distance);
+        yield return new WaitForSeconds(0.25f);
 
-        }
-
-        Time.timeScale = 1f;
+        bearCollider.enabled = false;
+        bearPaw.GetComponent<BoxCollider2D>().enabled = true;
 
         t = 0f;
 
         while (t < 1f)
         {
-            t += Time.deltaTime / 0.05f;
+            t += Time.deltaTime / 1f;
             yield return null;
         }
 
-
+        bearPaw.GetComponent<BoxCollider2D>().enabled = false;
 
 
         // ============== POST IMPACT ANIMATION ============== //
-        bearCollider.enabled = false;
 
         startPosition = bearPaw.transform.localPosition;
         endPosition = new Vector3(0f, 0f, -0.5f);
@@ -157,21 +149,17 @@ public class InfiniteBearAnimation : MonoBehaviour
         {
             float easedProgress = EaseOutCirc(t);
 
-            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
-
             float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, easedProgress);
-            Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
-            bearColor.a = bearAlpha / 255f;
-            bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
+            SetBearAlpha(bearAlpha);
 
             float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, easedProgress);
-            Color shadowColor = shadowImage.GetComponent<Image>().color;
-            shadowColor.a = shadowAlpha / 255f;
-            shadowImage.GetComponent<Image>().color = shadowColor;
+            SetShadowAlpha(shadowAlpha);
 
             float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, easedProgress);
             float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, easedProgress);
             shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
+
+            bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
 
             t += Time.deltaTime / delayBeforeDestroy;
             yield return null;
@@ -184,8 +172,56 @@ public class InfiniteBearAnimation : MonoBehaviour
         isCoroutineRunning = false;
     }
 
+    // ====================================== //
+    // ====================================== //
 
+    private void SetShadowAlpha(float shadowAlpha)
+    {
+        Color shadowColor = shadowImage.GetComponent<Image>().color;
+        shadowColor.a = shadowAlpha / 255f;
+        shadowImage.GetComponent<Image>().color = shadowColor;
+    }
 
+    private void SetBearAlpha(float bearAlpha)
+    {
+        Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
+        bearColor.a = bearAlpha / 255f;
+        bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
+    }
+
+    private void SetSlowMotion(bool isSlowMotion)
+    {
+        if (isSlowMotion)
+        {
+            float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
+            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f;
+            Time.timeScale = slowMotion;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+
+    }
+
+    private void PlayImpactVFX()
+    {
+        impactVFX.SetActive(true);
+        var mod = impactVFX.GetComponent<ParticleSystem>().main;
+        mod.simulationSpeed = 2f;
+        impactVFX.GetComponent<ParticleSystem>().Play();
+    }
+
+    private void PlayImpactCameraShake()
+    {
+        float distance = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.ShakeCamera(distance);
+
+        }
+    }
 
 
     // ====================================== //

@@ -12,14 +12,14 @@ public class LegacyGameController : MonoBehaviour
     public LegacyBall ballRef;
     public GameObject LegacyMachineLight;
 
-    public int score = 0;
-    public int bonusScore = 1000;
+    public int score;
+    public int bonusScore;
     public int bestScore;
 
     public int currentBallNumber = 3;
     public int numberOfBallsPerGame = 3;
 
-    int currentHoleIndex = 0;
+    int currentHoleIndex;
 
     public float timePerDecrement = 5.0f;
     public int bonusScoreIncrement = 1000;
@@ -27,6 +27,8 @@ public class LegacyGameController : MonoBehaviour
 
     public bool gameCompletedState = false;
     public bool gameOverState = false;
+
+    [SerializeField] private LegacyElevatorParametersSO elevatorParameters;
 
     private void Awake()
     {
@@ -38,16 +40,32 @@ public class LegacyGameController : MonoBehaviour
         {
             Destroy(this);
         }
+    }
 
+    private void Start()
+    {
         if (SaveManager.instance != null)
         {
             bestScore = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE);
         }
+
+        currentHoleIndex = 0;
+        score = 0;
+        bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+
+        elevatorControllerRef.SetElevatorMovementSpeed(ElevatorMovementSpeed);
+        elevatorControllerRef.SetElevatorMaxDifference(ElevatorMaxDifference);
+
+        ballRef.SetBallGravityScale(BallGravityScale);
+        ballRef.SetBallMinCollisionDistance(BallMinCollisionDistance);
+
+        LegacyHoleController.instance.SetHolesQuantity(HolesQuantity);
+        LegacyHoleController.instance.SetHolesMinDistance(HolesMinDistance);
     }
 
     public void UpdateHUD(GAME_DATA gameData)
     {
-        if (HUDMenuManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
             HUDMenuManager.instance.UpdateLegacyHUD(gameData);
         }
@@ -60,6 +78,14 @@ public class LegacyGameController : MonoBehaviour
 
     private void RecalculateScore()
     {
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        {
+            AnimationManager.instance.PlayInGameAnimation(
+                HUDMenuManager.instance.AnimateLegacyScore(bonusScore, 0, score, score + bonusScore),
+                () => {
+                    GameCompletedCheck();
+                });
+        }
         score += bonusScore;
         UpdateHUD(GAME_DATA.SCORE);
     }
@@ -109,6 +135,8 @@ public class LegacyGameController : MonoBehaviour
 
         LegacyMachineLight.SetActive(false);
 
+        ballRef.HideBall();
+
         LegacyHoleController.instance.RemoveHoles();
 
         PrepareForHole();
@@ -156,13 +184,30 @@ public class LegacyGameController : MonoBehaviour
     {
         currentHoleIndex++;
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
+
         UpdateHUD(GAME_DATA.BONUS_SCORE);
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void ResetBall()
     {
-        ballRef.ResetBallPosition();
+        Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.25f, 0);
+        ballRef.ResetBallPosition(positon);
     }
+
+    public void GameCompletedCheck()
+    {
+        if (currentHoleIndex < LegacyHoleController.instance.holes.Count - 1)
+        {
+            NextHole();
+        }
+        else
+        {
+            gameCompletedState = true;
+        }
+    }
+
 
 
     // ========== OBSTACLES HANDLES ========== //
@@ -171,24 +216,18 @@ public class LegacyGameController : MonoBehaviour
     {
         CancelInvoke(nameof(DecreaseBonusScore));
 
+        elevatorControllerRef.EnableInput(false);
+
         if (rightHole)
         {
             LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
             RecalculateScore();
-
-            if (currentHoleIndex < LegacyHoleController.instance.holes.Count - 1)
-            {
-                NextHole();
-            }
-            else
-            {
-                gameCompletedState = true;
-            }
         }
         else
         {
             currentBallNumber--;
             UpdateHUD(GAME_DATA.LIFE);
+            elevatorControllerRef.MoveBarToBottomPositionFunction();
 
             if (currentBallNumber <= 0)
             {
@@ -206,7 +245,6 @@ public class LegacyGameController : MonoBehaviour
             }
         }
 
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
 
@@ -248,4 +286,69 @@ public class LegacyGameController : MonoBehaviour
     {
         return LegacyHoleController.instance.holes[currentHoleIndex];
     }
+
+
+
+    //ElevatorMovementSpeed
+    public float ElevatorMovementSpeed
+    {
+        get { return elevatorParameters.GetMovementSpeed(); }
+        set
+        {
+            elevatorParameters.SetMovementSpeed(value); 
+        }
+    }
+
+    //ElevatorMaxDifference
+    public float ElevatorMaxDifference
+    {
+        get { return elevatorParameters.GetMaxDifference(); }
+        set
+        {
+            elevatorParameters.SetMaxDifference(value);
+        }
+    }
+
+    //BallGravityScale
+    public float BallGravityScale
+    {
+        get { return elevatorParameters.GetBallGravityScale(); }
+        set
+        {
+            elevatorParameters.SetBallGravityScale(value);
+        }
+    }
+
+    //BallMinCollisionDistance
+    public float BallMinCollisionDistance
+    {
+        get { return elevatorParameters.GetBallMinCollisionDistance(); }
+        set
+        {
+            elevatorParameters.SetBallMinCollisionDistance(value);
+        }
+    }
+
+    //Holes Quantity
+    public int HolesQuantity
+    {
+        get { return elevatorParameters.GetHolesQuantity(); }
+        set
+        {
+            elevatorParameters.SetHolesQuantity(value);
+        }
+    }
+
+    //Holes MinDistance
+
+    public float HolesMinDistance
+    {
+        get { return elevatorParameters.GetHolesMinDistance(); }
+        set
+        {
+            elevatorParameters.SetHolesMinDistance(value);
+        }
+    }
+
+
 }

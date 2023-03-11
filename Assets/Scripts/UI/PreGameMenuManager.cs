@@ -9,6 +9,8 @@ public class PreGameMenuManager : MonoBehaviour
     public GameObject infiniteText;
     public GameObject legacyText;
 
+    public float flashInterval = 0.5f;
+
     [SerializeField] private Button anyKeyButton;
 
     // Start is called before the first frame update
@@ -21,27 +23,15 @@ public class PreGameMenuManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             AudioManager.instance.StopCurrentMusic();
-            SetInfinitePregame();
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             AudioManager.instance.StopCurrentMusic();
-            SetLegacyPregame();
         }
 
+        StartFlash();
+
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
-    }
-
-    public void SetInfinitePregame()
-    {
-        legacyText.SetActive(false);
-        infiniteText.SetActive(true);
-    }
-
-    public void SetLegacyPregame()
-    {
-        infiniteText.SetActive(false);
-        legacyText.SetActive(true);
     }
 
     public void HandleStartGame()
@@ -61,6 +51,51 @@ public class PreGameMenuManager : MonoBehaviour
             LegacyGameController.instance.StartGame();
             
         }
+    }
+
+    private void OnEnable()
+    {
+
+        GlobalUIManager.isPreGame = true;
+
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            AudioManager.instance.StopCurrentMusic();
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            AudioManager.instance.StopCurrentMusic();
+        }
+
+        StartFlash();
+
+        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+    }
+
+    private void Flash()
+    {
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            infiniteText.SetActive(!infiniteText.activeSelf);
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            legacyText.SetActive(!legacyText.activeSelf);
+        }
+
+    }
+
+    public void StartFlash()
+    {
+        StopFlash();
+        infiniteText.SetActive(false);
+        legacyText.SetActive(false);
+        InvokeRepeating($"Flash", 0, flashInterval);
+    }
+
+    public void StopFlash()
+    {
+        CancelInvoke("Flash");
     }
 
 }

@@ -5,8 +5,9 @@ using UnityEngine.InputSystem;
 
 public class LegacyElevatorController : MonoBehaviour
 {
-    public float movementSpeed = 1f;
-    public float maxDifference = 0.5f;
+    private float movementSpeed;
+    private float maxDifference;
+
 
     public Transform bottom;
     public Transform start;
@@ -19,19 +20,12 @@ public class LegacyElevatorController : MonoBehaviour
     public LegacyBall ballRef;
     public Transform ballTransformRef;
 
-    private Vector3 startPosition;
-
     private float leftUpInputValue;
     private float leftDownInputValue;
     private float rightUpInputValue;
     private float rightDownInputValue;
 
-    public float maxHeight;
-    public float minHeight;
-
     private bool inputEnabled = false;
-
-    public float startPositionVerticalOffset = 1f;
 
     public Vector3 leftShaftInitialRotation;
     public Vector3 rightShaftInitialRotation;
@@ -45,10 +39,6 @@ public class LegacyElevatorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.position;
-        minHeight = startPosition.y + startPositionVerticalOffset;
-        maxHeight = minHeight + 10f;
-
         leftShaftInitialRotation = leftShaftTransform.rotation.eulerAngles;
         rightShaftInitialRotation = rightShaftTransform.rotation.eulerAngles;
     }
@@ -145,6 +135,11 @@ public class LegacyElevatorController : MonoBehaviour
         yield return null;
     }
 
+    public void EnableInput(bool enableInput)
+    {
+        inputEnabled = enableInput;
+    }
+
     [ContextMenu("Move To Start Position")]
     public void MoveBarToStartPositionFunction()
     {
@@ -180,6 +175,17 @@ public class LegacyElevatorController : MonoBehaviour
     {
         //print("DOWN");
         rightDownInputValue = rightDownValue.Get<float>();
+    }
+
+
+    public void SetElevatorMovementSpeed(float mSpeed)
+    {
+        movementSpeed = mSpeed;
+    }
+
+    public void SetElevatorMaxDifference(float maxDiff)
+    {
+        maxDifference = maxDiff;
     }
 
 }

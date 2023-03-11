@@ -841,8 +841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af0d373757b10c44b18e4ac61359efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0.875
-  maxDifference: 0.5
   bottom: {fileID: 1283180562}
   start: {fileID: 1517023327}
   max: {fileID: 363927802}
@@ -850,9 +848,6 @@ MonoBehaviour:
   rightLifter: {fileID: 659981790}
   ballRef: {fileID: 1910256105}
   ballTransformRef: {fileID: 1910256099}
-  maxHeight: 0
-  minHeight: 0
-  startPositionVerticalOffset: 1
   leftShaftInitialRotation: {x: 0, y: 0, z: 0}
   rightShaftInitialRotation: {x: 0, y: 0, z: 0}
   leftShaftTransform: {fileID: 9073663020783997818}
@@ -1112,6 +1107,7 @@ MonoBehaviour:
   bonusScoreDecrement: 100
   gameCompletedState: 0
   gameOverState: 0
+  elevatorParameters: {fileID: 11400000, guid: 9842737a9b87fa849a7229a0d71e4d8d, type: 2}
 --- !u!1 &790725206
 GameObject:
   m_ObjectHideFlags: 0
@@ -2169,8 +2165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3362c52c66092c4b894e4af38ccc599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballGravityScale: 2.285
-  MinCollisionDistance: 0.07
   enterTheHoleTime: 0.2
   collisionEnabled: 0
 --- !u!58 &1910256106
@@ -2394,9 +2388,6 @@ MonoBehaviour:
   holePrefab: {fileID: 2889715039030902513, guid: d4fa6a0c5ac07db4289866de7caf2781, type: 3}
   holeIndicatorPrefab: {fileID: 3855093136185463005, guid: db66c803ff63c23418048cda825a2bf6, type: 3}
   holeIndicatorList: []
-  holesQuantity: 120
-  maxTries: 100
-  minDistance: 0.4
   holesIndicatorXMin: -2.75
   holesIndicatorXMax: 2.75
   holesIndicatorYMin: -3.25
@@ -2407,6 +2398,7 @@ MonoBehaviour:
   xMax: 3.85
   yMin: -4
   yMax: 4
+  maxTries: 100
 --- !u!1 &2128778660
 GameObject:
   m_ObjectHideFlags: 0

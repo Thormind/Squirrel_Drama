@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class InfiniteFruit : MonoBehaviour
 {
-    public float fruitFallingGravityScale = 0.75f;
-    public float fruitGravityScale = 1f;
-
-    public float MinCollisionDistance = 0.12f;
+    private float fruitFallingGravityScale;
+    private float fruitGravityScale;
+    private float MinCollisionDistance;
 
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
 
     public bool collisionEnabled;
 
-    Rigidbody2D fruitRigidbody;
+    public Rigidbody2D fruitRigidbody;
 
     private Vector3 startFruitScale;
 
@@ -27,7 +26,6 @@ public class InfiniteFruit : MonoBehaviour
     void Start()
     {
         startFruitScale = transform.localScale;
-        fruitRigidbody.gravityScale = fruitGravityScale;
 
         collisionEnabled = true;
     }
@@ -51,12 +49,15 @@ public class InfiniteFruit : MonoBehaviour
         {
             if (collision.transform.gameObject.tag == "Bee")
             {
+
                 InfiniteGameController.instance.HandleFruitInBee();
+
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
             }
 
             if (collision.transform.gameObject.tag == "Worm")
             {
+
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -64,20 +65,22 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Bear")
             {
-                InfiniteGameController.instance.HandleFruitInBear();
 
+                InfiniteGameController.instance.HandleFruitInBear();
 
                 StartCoroutine(CrushedCoroutine(collision.transform));
             }
 
             if (collision.transform.gameObject.tag == "Points")
             {
+                collision.enabled = false;
                 collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
                 InfiniteGameController.instance.HandleFruitInPoints();
             }
 
             if (collision.transform.gameObject.tag == "Fruit")
             {
+                collision.enabled = false;
                 collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
                 InfiniteGameController.instance.HandleFruitInFruit();
             }
@@ -182,5 +185,21 @@ public class InfiniteFruit : MonoBehaviour
     public void QuickResetFruitPosition(Vector3 position)
     {
         transform.localPosition = position;
+    }
+
+    public void SetFruitGravityScale(float gravityScale)
+    {
+        fruitGravityScale = gravityScale;
+        fruitRigidbody.gravityScale = gravityScale;
+    }
+
+    public void SetFruitFallingGravityScale(float gravityScale)
+    {
+        fruitFallingGravityScale = gravityScale;
+    }
+
+    public void SetFruitMinCollisionDistance(float minCollDis)
+    {
+        MinCollisionDistance = minCollDis;
     }
 }

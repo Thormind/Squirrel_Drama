@@ -1524,14 +1524,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationDuration: 0.5
-  animationType: 3
+  animationType: 4
+  floatingHeight: 0
   easedProgress: 0
-  startVisible: 0
-  isVisible: 0
   isGoingIn: 1
   targetScale: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  targetScale2: {x: 0, y: 0, z: 0}
+  targetPosition2: {x: 0, y: 0, z: 0}
   panelRectTransform: {fileID: 8309960015511481116}
+  panelRectTransform2: {fileID: 0}
 --- !u!1 &5877478224415953228
 GameObject:
   m_ObjectHideFlags: 0

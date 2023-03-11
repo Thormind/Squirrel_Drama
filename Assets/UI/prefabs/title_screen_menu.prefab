@@ -389,15 +389,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationDuration: 0.5
-  animationType: 3
+  animationType: 4
   floatingHeight: 0
   easedProgress: 0
-  startVisible: 0
-  isVisible: 0
   isGoingIn: 1
   targetScale: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  targetScale2: {x: 0, y: 0, z: 0}
+  targetPosition2: {x: 0, y: 0, z: 0}
   panelRectTransform: {fileID: 2220224106907810690}
+  panelRectTransform2: {fileID: 0}
 --- !u!114 &1016905408136831405
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -119,4 +119,11 @@ public class SettingsMenuManager : MonoBehaviour
 
         CameraManager.instance.SetTimeOfDay(SaveManager.instance.TimeOfDay);
     }
+
+    private void OnEnable()
+    {
+        resetPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetControllerFirstSelected(exitButton.gameObject);
+    }
 }

@@ -6,6 +6,7 @@ public class flashingText : MonoBehaviour
 {
     public GameObject objectToFlash;
     public float flashInterval = 0.5f;
+    private bool flash;
 
     private void Start()
     {
@@ -14,12 +15,13 @@ public class flashingText : MonoBehaviour
 
     private void Flash()
     {
-        objectToFlash.SetActive(!objectToFlash.activeSelf);
+        flash = !flash;
+        objectToFlash.SetActive(flash);
     }
 
     public void StartFlash()
     {
-        InvokeRepeating("Flash", 0, flashInterval);
+        InvokeRepeating($"Flash", 0, flashInterval);
     }
 
     public void StopFlash()

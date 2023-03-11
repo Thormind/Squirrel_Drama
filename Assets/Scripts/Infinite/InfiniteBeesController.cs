@@ -13,9 +13,7 @@ public class InfiniteBeesController : MonoBehaviour
 
     //Difficulty Parameters
     private float maxBeesYDistance;
-    private int[] _beesQuantity = new int[9]; //{ 5, 5, 10, 10, 20, 20, 30, 30, 40 } ;
-    private float[] _beesMinDistance = new float[9]; //{ 5f, 4f, 4f, 3f, 3f, 2f, 2f, 1f, 1f };
-    private float[] _beesMovementSpeed = new float[9]; //{ 0.3f, 0.35f, 0.40f, 0.45f, 0.55f, 0.65f, 0.75f, 0.85f, 1f } ;
+    [SerializeField] private BeesParametersSO _beesParameters;
 
     //Spawning Limits Parameters
     public float beesXMin = -3.15f;
@@ -39,10 +37,6 @@ public class InfiniteBeesController : MonoBehaviour
             Destroy(this);
         }
 
-        LoadBeesQuantity();
-        LoadBeesMinDistance();
-        LoadBeesMovementSpeed();
-
         isAllSpawned = false;
     }
 
@@ -54,9 +48,9 @@ public class InfiniteBeesController : MonoBehaviour
 
         currentY = beesYMin;
 
-        int randomBeesQuantity = Random.Range(BeesQuantity, BeesQuantity + 2);
+        //int randomBeesQuantity = Random.Range(BeesQuantity, BeesQuantity + 2);
 
-        for (int i = 1; i <= randomBeesQuantity; i++)
+        for (int i = 1; i <= BeesQuantity; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
 
@@ -143,84 +137,33 @@ public class InfiniteBeesController : MonoBehaviour
     //BEES QUANTITY
     public int BeesQuantity
     {
-        get { return _beesQuantity[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _beesParameters.GetQuantityForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _beesQuantity[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBeesQuantity();
+            _beesParameters.SetQuantityForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBees();
-        }
-    }
-
-    private void SaveBeesQuantity()
-    {
-        for (int i = 0; i < _beesQuantity.Length; i++)
-        {
-            PlayerPrefs.SetInt("BeesQuantity_Level_" + (i + 1), _beesQuantity[i]);
-        }
-    }
-
-    private void LoadBeesQuantity()
-    {
-        for (int i = 0; i < _beesQuantity.Length; i++)
-        {
-            _beesQuantity[i] = PlayerPrefs.GetInt("BeesQuantity_Level_" + (i + 1), 50);
         }
     }
 
     //MIN DISTANCE
     public float BeesMinDistance
     {
-        get { return _beesMinDistance[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _beesParameters.GetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _beesMinDistance[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBeesMinDistance();
+            _beesParameters.SetMinDistanceForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBees();
-        }
-    }
-
-    private void SaveBeesMinDistance()
-    {
-        for (int i = 0; i < _beesMinDistance.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BeesMinDistance_Level_" + (i + 1), _beesMinDistance[i]);
-        }
-    }
-
-    private void LoadBeesMinDistance()
-    {
-        for (int i = 0; i < _beesMinDistance.Length; i++)
-        {
-            _beesMinDistance[i] = PlayerPrefs.GetFloat("BeesMinDistance_Level_" + (i + 1), 50);
         }
     }
 
     //MOVEMENT SPEED
     public float BeesMovementSpeed
     {
-        get { return _beesMovementSpeed[InfiniteGameController.instance.difficultyLevel - 1]; }
+        get { return _beesParameters.GetMovementSpeedForLevel(InfiniteGameController.instance.difficultyLevel); }
         set
         {
-            _beesMovementSpeed[InfiniteGameController.instance.difficultyLevel - 1] = value;
-            SaveBeesMovementSpeed();
+            _beesParameters.SetMovementSpeedForLevel(InfiniteGameController.instance.difficultyLevel, value);
             SpawnBees();
-        }
-    }
-
-    private void SaveBeesMovementSpeed()
-    {
-        for (int i = 0; i < _beesMovementSpeed.Length; i++)
-        {
-            PlayerPrefs.SetFloat("BeesMovementSpeed_Level_" + (i + 1), _beesMovementSpeed[i]);
-        }
-    }
-
-    private void LoadBeesMovementSpeed()
-    {
-        for (int i = 0; i < _beesMovementSpeed.Length; i++)
-        {
-            _beesMovementSpeed[i] = PlayerPrefs.GetFloat("BeesMovementSpeed_Level_" + (i + 1), 50);
         }
     }
 

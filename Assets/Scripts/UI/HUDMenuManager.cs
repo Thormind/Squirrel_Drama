@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public enum GAME_DATA
@@ -11,6 +12,7 @@ public enum GAME_DATA
     LIFE,
     LEVEL,
     TIMER,
+    MAP,
     ALL,
     NONE
 };
@@ -33,6 +35,7 @@ public class HUDMenuManager : MonoBehaviour
     public TMP_Text infiniteLevelText;
     public TMP_Text infiniteFruitLifeText;
     public TMP_Text infiniteTimerText;
+    public Slider infiniteMapSlider;
 
     public void Awake()
     {
@@ -59,20 +62,34 @@ public class HUDMenuManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            SetInfiniteHUD();
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            SetLegacyHUD();
+        }
+    }
+
     public void SetInfiniteHUD()
     {
         legacyPanel.SetActive(false);
         infinitePanel.SetActive(true);
+        infiniteMapSlider.transform.parent.gameObject.SetActive(true);
         //InfiniteGameController.instance.UpdateHUD();
-        UpdateInfiniteHUD(GAME_DATA.NONE);
+        UpdateInfiniteHUD(GAME_DATA.ALL);
     }
 
     public void SetLegacyHUD()
     {
         infinitePanel.SetActive(false);
         legacyPanel.SetActive(true);
+        infiniteMapSlider.transform.parent.gameObject.SetActive(false);
         //LegacyGameController.instance.UpdateHUD();
-        UpdateLegacyHUD(GAME_DATA.NONE);
+        UpdateLegacyHUD(GAME_DATA.ALL);
     }
 
 
@@ -96,6 +113,12 @@ public class HUDMenuManager : MonoBehaviour
                 StartCoroutine(AnimateText(legacyBestScoreText, SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString()));
                 break;
             case GAME_DATA.LIFE:
+                StartCoroutine(AnimateText(legacyBallLifeText, LegacyGameController.instance.currentBallNumber.ToString()));
+                break;
+            case GAME_DATA.ALL:
+                StartCoroutine(AnimateText(legacyScoreText, LegacyGameController.instance.score.ToString()));
+                StartCoroutine(AnimateText(legacyBonusText, LegacyGameController.instance.bonusScore.ToString()));
+                StartCoroutine(AnimateText(legacyBestScoreText, SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString()));
                 StartCoroutine(AnimateText(legacyBallLifeText, LegacyGameController.instance.currentBallNumber.ToString()));
                 break;
             case GAME_DATA.NONE:
@@ -130,6 +153,17 @@ public class HUDMenuManager : MonoBehaviour
                 StartCoroutine(AnimateText(infiniteLevelText, InfiniteGameController.instance.currentLevel.ToString()));
                 break;
             case GAME_DATA.TIMER:
+                StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
+                break;
+            case GAME_DATA.MAP:
+                StartCoroutine(AnimateSlider(infiniteMapSlider, InfiniteGameController.instance.GetFruitHeightForMap()));
+                break;
+            case GAME_DATA.ALL:
+                StartCoroutine(AnimateText(infiniteScoreText, InfiniteGameController.instance.score.ToString()));
+                StartCoroutine(AnimateText(infiniteBonusText, InfiniteGameController.instance.bonusScore.ToString()));
+                StartCoroutine(AnimateText(infiniteBestScoreText, SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString()));
+                StartCoroutine(AnimateText(infiniteFruitLifeText, InfiniteGameController.instance.currentFruitNumber.ToString()));
+                StartCoroutine(AnimateText(infiniteLevelText, InfiniteGameController.instance.currentLevel.ToString()));
                 StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
                 break;
             case GAME_DATA.NONE:
@@ -195,11 +229,29 @@ public class HUDMenuManager : MonoBehaviour
     }
 
 
+    // =========================================== //
+    // ========== MAP SLIDER ANIMATIONS ========== //
+    // =========================================== //
 
+    private IEnumerator AnimateSlider(Slider mapSlider, float fruitHeight)
+    {
+        float sliderValue = fruitHeight / 40f; // assuming max height is 40
+        sliderValue = Mathf.Clamp01(sliderValue); // clamp the value between 0 and 1
 
+        float elapsedTime = 0f;
+        float startValue = mapSlider.value;
+        float duration = 0.5f; // adjust as needed
 
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            mapSlider.value = Mathf.Lerp(startValue, sliderValue, t);
+            yield return null;
+        }
 
-
+        mapSlider.value = sliderValue; // ensure that the slider ends up with the exact target value
+    }
 
 
     // ====================================== //
@@ -296,26 +348,23 @@ public class HUDMenuManager : MonoBehaviour
     // ========== SCORE & BONUS SCORE ANIMATIONS ========== //
     // ==================================================== //
 
-    public void RecalculateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
-    {
-        StartCoroutine(AnimateInfiniteBonusScore(currentBonusScore, newBonusScore));
-    }
-
-    public void RecalculateInfiniteScore(int currentBonusScore, int newBonusScore,int currentScore, int newScore)
-    {
-        StartCoroutine(AnimateInfiniteScore(currentBonusScore, newBonusScore, currentScore, newScore));
-    }
-
-    private IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
+    public IEnumerator AnimateInfiniteBonusScore(int currentBonusScore, int newBonusScore)
     {
         // Get the duration of the animation
         float animationDuration = 1.75f;
 
         float timer = 0f;
 
+        string startTimerString = infiniteTimerText.text;
+        string resetTimerString = "00:00:00";
+
         // Loop until the timer reaches the animation duration
         while (timer < animationDuration)
         {
+            // Calculate the current timer string based on the animation progress
+            string currentTimerString = GetAnimatedTimerString(startTimerString, resetTimerString, timer / animationDuration);
+            StartCoroutine(AnimateText(infiniteTimerText, currentTimerString));
+
             string currentBonusScoreString = Mathf.FloorToInt(Mathf.Lerp(currentBonusScore, newBonusScore, timer / animationDuration)).ToString();
             StartCoroutine(AnimateText(infiniteBonusText, currentBonusScoreString));
 
@@ -326,14 +375,18 @@ public class HUDMenuManager : MonoBehaviour
             timer += Time.deltaTime;
         }
 
-        infiniteBonusText.text = newBonusScore.ToString();
+        StartCoroutine(AnimateText(infiniteBonusText, newBonusScore.ToString()));
+        StartCoroutine(AnimateText(infiniteTimerText, resetTimerString));
 
         yield return new WaitForSeconds(2f);
 
-        InfiniteGameController.instance.RecalculateScore();
+        infiniteBonusText.text = newBonusScore.ToString();
+
+        // Set the final timer string to "00:00:00"
+        infiniteTimerText.text = resetTimerString;
     }
 
-    private IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
+    public IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
     {
         // Get the duration of the animation
         float animationDuration = 1.75f;
@@ -357,16 +410,47 @@ public class HUDMenuManager : MonoBehaviour
             timer += Time.deltaTime;
         }
 
-        infiniteBonusText.text = "0";
-        infiniteScoreText.text = newScore.ToString();
+        StartCoroutine(AnimateText(infiniteBonusText, "0"));
+        StartCoroutine(AnimateText(infiniteScoreText, newScore.ToString()));
 
         yield return new WaitForSeconds(2f);
 
-        InfiniteGameController.instance.NextLevel();
+        infiniteBonusText.text = "0";
+        infiniteScoreText.text = newScore.ToString();
     }
 
 
+    public IEnumerator AnimateLegacyScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
+    {
+        float animationDuration = 1.75f;
 
+        float timer = 0f;
+
+        // Loop until the timer reaches the animation duration
+        while (timer < animationDuration)
+        {
+            // Calculate the current timer string based on the animation progress
+            string currentBonusScoreString = Mathf.FloorToInt(Mathf.Lerp(currentBonusScore, newBonusScore, timer / animationDuration)).ToString();
+            StartCoroutine(AnimateText(legacyBonusText, currentBonusScoreString));
+
+            string currentScoreString = Mathf.FloorToInt(Mathf.Lerp(currentScore, newScore, timer / animationDuration)).ToString();
+            StartCoroutine(AnimateText(legacyScoreText, currentScoreString));
+
+            // Wait for the next frame
+            yield return null;
+
+            // Update the timer
+            timer += Time.deltaTime;
+        }
+
+        StartCoroutine(AnimateText(legacyBonusText, "0"));
+        StartCoroutine(AnimateText(legacyScoreText, newScore.ToString()));
+
+        yield return new WaitForSeconds(2f);
+
+        legacyBonusText.text = "0";
+        legacyScoreText.text = newScore.ToString();
+    }
 
 
 
