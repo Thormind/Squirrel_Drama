@@ -51,7 +51,7 @@ public class InfiniteWormsController : MonoBehaviour
 
     public void SpawnWorms()
     {
-        RemoveWorms();
+        QuickRemoveWorms();
         isSpawning = true;
     }
 
@@ -69,18 +69,27 @@ public class InfiniteWormsController : MonoBehaviour
             holePosition = new Vector3(holePosition.x, holePosition.y, 1f);
 
             Vector3 worldPosition = wormsParent.transform.TransformPoint(holePosition);
-            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
 
-            float randomInAnimationTime = Random.Range(WormsInAnimationTime - 1f, WormsInAnimationTime + 1f);
-            float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 2f, WormsDerpAnimationTime + 2f);
-            float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
+            InstantiateAnimation(worldPosition, true);
 
-            wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleWormAnimationFunction(
-                randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed);
 
             _spawnedWormsPositions.Add(holePosition);
 
         }
+    }
+
+    public void QuickRemoveWorms()
+    {
+        isSpawning = false;
+
+        for (int i = 0; i < wormsParent.transform.childCount; i++)
+        {
+            GameObject child = wormsParent.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        _spawnedWormsPositions.Clear();
+        _spawnedWormsPositions = new List<Vector3>();
     }
 
     public void RemoveWorms()
@@ -92,14 +101,47 @@ public class InfiniteWormsController : MonoBehaviour
             GameObject child = wormsParent.transform.GetChild(i).gameObject;
             if (child != null)
             {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+                InstantiateAnimation(child.transform.position, false, child);
             }
-            Destroy(child);
         }
 
         _spawnedWormsPositions.Clear();
         _spawnedWormsPositions = new List<Vector3>();
     }
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        if (spawn)
+        {
+            GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
+
+            float randomInAnimationTime = Random.Range(WormsInAnimationTime - 1f, WormsInAnimationTime + 1f);
+            float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 2f, WormsDerpAnimationTime + 2f);
+            float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
+
+            wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleWormAnimationFunction(
+                randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed);
+        }
+        if (!spawn && obj != null)
+        {
+            Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, wormsParent.transform);
+            Destroy(obj);
+        }
+
+        yield return new WaitForSeconds(0.025f);
+    }
+
 
     private Vector3 GetRandomHoleNearFruit()
     {

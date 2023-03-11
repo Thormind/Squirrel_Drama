@@ -44,9 +44,7 @@ public class InfinitePointsController : MonoBehaviour
 
     public void SpawnPoints()
     {
-        RemovePoints();
-
-        //int randomPointsQuantity = Random.Range(PointsQuantity - 5, PointsQuantity + 5);
+        QuickRemovePoints();
 
         for (int i = 0; i < PointsQuantity; i++)
         {
@@ -60,11 +58,67 @@ public class InfinitePointsController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
-            GameObject pointInstantiated = Instantiate(pointPrefab, spawnPosition, Quaternion.identity, pointsParent.transform);
+            InstantiateAnimation(spawnPosition, true);
 
             _spawnedPointsPositions.Add(spawnPosition);
         }
+    }
+
+    public void RemovePoints()
+    {
+
+        for (int i = 0; i < pointsParent.transform.childCount; i++)
+        {
+            GameObject child = pointsParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InstantiateAnimation(child.transform.position, false, child);
+            }
+        }
+
+        _spawnedPointsPositions.Clear();
+        _spawnedPointsPositions = new List<Vector3>();
+    }
+
+    public void QuickRemovePoints()
+    {
+
+        for (int i = 0; i < pointsParent.transform.childCount; i++)
+        {
+            GameObject child = pointsParent.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        _spawnedPointsPositions.Clear();
+        _spawnedPointsPositions = new List<Vector3>();
+    }
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, pointsParent.transform);
+
+        if (spawn)
+        {
+            GameObject pointInstantiated = Instantiate(pointPrefab, position, Quaternion.identity, pointsParent.transform);
+        }
+        if (!spawn && obj != null)
+        {
+            Destroy(obj);
+        }
+
+
+        yield return new WaitForSeconds(0.025f);
     }
 
     private Vector3 GetRandomSpawnPosition()
@@ -119,23 +173,6 @@ public class InfinitePointsController : MonoBehaviour
         }
 
         return true;
-    }
-
-    public void RemovePoints()
-    {
-
-        for (int i = 0; i < pointsParent.transform.childCount; i++)
-        {
-            GameObject child = pointsParent.transform.GetChild(i).gameObject;
-            if (child != null)
-            {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
-            }
-            Destroy(child);
-        }
-
-        _spawnedPointsPositions.Clear();
-        _spawnedPointsPositions = new List<Vector3>();
     }
 
     private void NotifySpawnDebug(bool spawned)

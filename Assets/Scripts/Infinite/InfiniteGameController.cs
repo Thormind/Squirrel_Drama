@@ -156,11 +156,13 @@ public class InfiniteGameController : MonoBehaviour
 
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
         {
+            /*
             AnimationManager.instance.PlayInGameAnimation(
                 HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus), 
                 () => { RecalculateScore(); 
             });
-
+            */
+            AnimationManager.instance.PlayInGameAnimation( HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus));
         }
 
         bonusScore += timerBonus;
@@ -170,15 +172,18 @@ public class InfiniteGameController : MonoBehaviour
     {
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
         {
+            /*
             AnimationManager.instance.PlayInGameAnimation(
                 HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore),
                 () => { NextLevel();
             });
+            */
+            AnimationManager.instance.PlayInGameAnimation(HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore));
         }
         score += bonusScore;
-        UpdateHUD(GAME_DATA.SCORE);
+        //UpdateHUD(GAME_DATA.SCORE);
         bonusScore = 0;
-        UpdateHUD(GAME_DATA.BONUS_SCORE);
+        //UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
 
@@ -206,8 +211,6 @@ public class InfiniteGameController : MonoBehaviour
     public int CalculateTimerBonusScore()
     {
         float totalTime = Time.time - startTime;
-
-        print($"Time: {totalTime}");
 
         if (totalTime <= 20f)
         {
@@ -299,12 +302,21 @@ public class InfiniteGameController : MonoBehaviour
         ResetTimer();
 
         RecalculateBonusScore();
+
+        RecalculateScore();
+
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayInGameAnimation(NextLevel());
+        }
     }
 
     // ========== LEVEL TRANSITIONS ========== //
 
-    public void NextLevel()
+    public IEnumerator NextLevel()
     {
+        yield return null;
+
         currentLevel++;
         UpdateHUD(GAME_DATA.LEVEL);
 
@@ -319,6 +331,7 @@ public class InfiniteGameController : MonoBehaviour
         PrepareForLevel();
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
+
     }
 
     public void ResetGame()
@@ -461,8 +474,21 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+    public void HandleFruitFalling()
+    {
+        PrepareForLevel();
+
+        FruitNumberDecrement();
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
     public void SpawnObstacles()
     {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.ClearObstaclesQueue();
+        }
         if (InfiniteHolesController.instance != null)
         {
             InfiniteHolesController.instance.SpawnHoles();
@@ -492,6 +518,10 @@ public class InfiniteGameController : MonoBehaviour
 
     public void RemoveObstacles()
     {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.ClearObstaclesQueue();
+        }
         if (InfiniteHolesController.instance != null)
         {
             InfiniteHolesController.instance.RemoveHoles();
@@ -518,6 +548,7 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+ 
     public void ObstacleInstantiateAnimation(Vector3 position)
     {
         Instantiate(obstacleInstanciateVFX, position, Quaternion.identity, obstaclesParent.transform);

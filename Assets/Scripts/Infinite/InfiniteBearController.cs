@@ -57,7 +57,7 @@ public class InfiniteBearController : MonoBehaviour
 
     public void SpawnBears()
     {
-        RemoveBears();
+        QuickRemoveBears();
         isSpawning = true;
     }
 
@@ -73,13 +73,7 @@ public class InfiniteBearController : MonoBehaviour
         {
             NotifySpawnDebug(true);
 
-            Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
-            bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
-
-            float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 0.5f, BearWarnAnimationTime + 0.5f);
-
-            bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
-                randomWarnAnimationTime, BearImpactRange);
+            InstantiateAnimation(position, true);
 
         }
     }
@@ -93,10 +87,52 @@ public class InfiniteBearController : MonoBehaviour
             GameObject child = bearParent.transform.GetChild(i).gameObject;
             if (child != null)
             {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+                InstantiateAnimation(child.transform.position, false, child);
             }
+        }
+    }
+
+    public void QuickRemoveBears()
+    {
+        isSpawning = false;
+
+        for (int i = 0; i < bearParent.transform.childCount; i++)
+        {
+            GameObject child = bearParent.transform.GetChild(i).gameObject;
             Destroy(child);
         }
+    }
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        if (spawn)
+        {
+            Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
+            bearInstantiated = Instantiate(bearPrefab, position, randomRotation, bearParent.transform);
+
+            float randomWarnAnimationTime = Random.Range(BearWarnAnimationTime - 0.5f, BearWarnAnimationTime + 0.5f);
+
+            bearInstantiated.GetComponent<InfiniteBearAnimation>().HandleBearAnimationFunction(
+                randomWarnAnimationTime, BearImpactRange);
+        }
+        if (!spawn && obj != null)
+        {
+            Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, bearParent.transform);
+            Destroy(obj);
+        }
+
+        yield return new WaitForSeconds(0.025f);
     }
 
     private Vector3 GetRandomPositionNearFruit()

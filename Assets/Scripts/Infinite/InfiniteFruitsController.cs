@@ -43,9 +43,7 @@ public class InfiniteFruitsController : MonoBehaviour
 
     public void SpawnFruits()
     {
-        RemoveFruits();
-
-        //int randomFruitsQuantity = Random.Range(1, FruitsQuantity + 1);
+        QuickRemoveFruits();
 
         for (int i = 0; i < FruitsQuantity; i++)
         {
@@ -59,11 +57,68 @@ public class InfiniteFruitsController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
-            GameObject fruitInstantiated = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity, fruitsParent.transform);
+            InstantiateAnimation(spawnPosition, true);
 
             _spawnedFruitsPositions.Add(spawnPosition);
         }
+    }
+
+    public void QuickRemoveFruits()
+    {
+
+        for (int i = 0; i < fruitsParent.transform.childCount; i++)
+        {
+            GameObject child = fruitsParent.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        _spawnedFruitsPositions.Clear();
+        _spawnedFruitsPositions = new List<Vector3>();
+    }
+
+    public void RemoveFruits()
+    {
+
+        for (int i = 0; i < fruitsParent.transform.childCount; i++)
+        {
+            GameObject child = fruitsParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InstantiateAnimation(child.transform.position, false, child);
+            }
+        }
+
+        _spawnedFruitsPositions.Clear();
+        _spawnedFruitsPositions = new List<Vector3>();
+    }
+
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, fruitsParent.transform);
+
+        if (spawn)
+        {
+            GameObject fruitInstantiated = Instantiate(fruitPrefab, position, Quaternion.identity, fruitsParent.transform);
+        }
+        if (!spawn && obj != null)
+        {
+            Destroy(obj);
+        }
+
+
+        yield return new WaitForSeconds(0.025f);
     }
 
     private Vector3 GetRandomSpawnPosition()
@@ -134,22 +189,6 @@ public class InfiniteFruitsController : MonoBehaviour
         return true;
     }
 
-    public void RemoveFruits()
-    {
-
-        for (int i = 0; i < fruitsParent.transform.childCount; i++)
-        {
-            GameObject child = fruitsParent.transform.GetChild(i).gameObject;
-            if (child != null)
-            {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
-            }
-            Destroy(child);
-        }
-
-        _spawnedFruitsPositions.Clear();
-        _spawnedFruitsPositions = new List<Vector3>();
-    }
 
     private void NotifySpawnDebug(bool spawned)
     {

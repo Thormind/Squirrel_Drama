@@ -124,7 +124,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         PlayImpactVFX();
         PlayImpactCameraShake();
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         bearCollider.enabled = false;
         bearPaw.GetComponent<BoxCollider2D>().enabled = true;

@@ -17,6 +17,7 @@ TagManager:
   - Bear
   - FxTemporaire
   - Points
+  - FallingZone
   layers:
   - Default
   - TransparentFX
