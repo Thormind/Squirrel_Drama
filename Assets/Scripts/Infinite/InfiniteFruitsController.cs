@@ -133,7 +133,7 @@ public class InfiniteFruitsController : MonoBehaviour
             float x = Random.Range(xMin, xMax);
             float y = Random.Range(yMin, yMax);
 
-            localPosition = new Vector3(x, y, -0.25f);
+            localPosition = new Vector3(x, y, -0.1f);
             spawnPosition = fruitsParent.transform.TransformPoint(localPosition);
 
             tries++;
