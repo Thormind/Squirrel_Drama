@@ -24,13 +24,14 @@ public enum SOUND
     FRUIT_FALL,                 // Implanted: false
     FRUIT_SQUASH,               // Implanted: false
     FRUIT_INHOLE,               // Implanted: false
-    FRUIT_MOVEMENT,             // Implanted: false
     FRUIT_TOUCHBEE,             // Implanted: false
-    POINT_GRAB,                 // Implanted: false
-    LIFE_GRAB,                  // Implanted: false
+    POINT_GRAB,                 // Implanted: true
+    LIFE_SPIN,                  // Implanted: true
+    LIFE_POP,                   // Implanted: true
     SQUIRREL_PANIC,             // Implanted: false
     SQUIRREL_CAUTION,           // Implanted: false
-    BEAR_ACTION,                // Implanted: false
+    BEAR_ROAR,                  // Implanted: false
+    BEAR_HIT,                   // Implanted: false
     WORM_BLINK,                 // Implanted: false
     WORM_MOVEMENT,              // Implanted: false
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
@@ -150,7 +151,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
-    public void PlaySound(SOUND sound)
+    public void PlaySoundAllowed(SOUND sound)
     {
         AudioSource audioSource = soundplayer.GetComponent<AudioSource>();
         if (!audioSource.isPlaying)
@@ -179,6 +180,14 @@ public class AudioManager : MonoBehaviour
             newSource.volume = audioSource.volume;
             newSource.Play();
         }    
+    }
+    
+    public void PlaySound(SOUND sound)
+    {
+        if(AudioManager.instance != null)
+        {
+            PlaySoundAllowed(sound);
+        }
     }
 
     public void StopCurrentMusic()

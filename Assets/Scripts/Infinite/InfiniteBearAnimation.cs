@@ -56,7 +56,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         // ============== WARN ANIMATION ============== //
         float remainingCooldown = warnCooldown;
-
+        AudioManager.instance.PlaySound(SOUND.BEAR_ROAR);
         while (remainingCooldown > 0f)
         {
             // Update countdown text
@@ -108,6 +108,7 @@ public class InfiniteBearAnimation : MonoBehaviour
             t += Time.deltaTime / duration;
             yield return null;
         }
+        AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
 
         bearPaw.transform.localPosition = endPosition;
         bearPaw.transform.localRotation = endRotation;

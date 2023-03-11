@@ -65,7 +65,7 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Bear")
             {
-
+                AudioManager.instance.PlaySound(SOUND.FRUIT_SQUASH);
                 InfiniteGameController.instance.HandleFruitInBear();
 
                 StartCoroutine(CrushedCoroutine(collision.transform));

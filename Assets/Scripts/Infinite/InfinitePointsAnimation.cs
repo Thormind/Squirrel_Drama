@@ -26,9 +26,16 @@ public class InfinitePointsAnimation : MonoBehaviour
         float t = 0;
 
         Vector3 fruitPosition;
+        bool soundPlayed = false;
 
         while (t <= 1)
         {
+            if(!soundPlayed)
+            {
+                AudioManager.instance.PlaySound(SOUND.POINT_GRAB);
+                soundPlayed = true;
+            }
+
             fruitPosition = InfiniteGameController.instance.GetFruitLocalPosition();
 
             transform.localPosition = Vector3.Lerp(transform.localPosition, fruitPosition, t);
@@ -37,7 +44,6 @@ public class InfinitePointsAnimation : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
-
         Destroy(gameObject);
     }
 }

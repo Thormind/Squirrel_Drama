@@ -29,7 +29,7 @@ public class InfiniteFruitAudio : MonoBehaviour
         }
         else
         {
-            movement.pitch = velocity/6;
+            movement.pitch = Math.Abs(velocity/6);
             if(!movement.isPlaying)
             {
                 //Debug.Log("AudioSource is not playing");

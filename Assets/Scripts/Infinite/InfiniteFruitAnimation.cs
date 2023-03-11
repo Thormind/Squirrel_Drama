@@ -39,12 +39,21 @@ public class InfiniteFruitAnimation : MonoBehaviour
 
         ShinyVFX.SetActive(false);
 
+        bool soundPlayed = false;
+
         while (transform.localPosition.y < endOfLifePosition.y - 0.2f)
         {
+            if (!soundPlayed)
+            {
+                AudioManager.instance.PlaySound(SOUND.LIFE_SPIN);
+                soundPlayed = true;
+            }
             transform.localPosition = Vector3.Lerp(transform.localPosition, endOfLifePosition, Time.fixedDeltaTime * movementSpeed);
 
             yield return new WaitForEndOfFrame();
         }
+
+        AudioManager.instance.PlaySound(SOUND.LIFE_POP);
 
         yield return new WaitForSecondsRealtime(0.2f);
 
