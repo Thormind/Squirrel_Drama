@@ -487,6 +487,7 @@ public class InfiniteGameController : MonoBehaviour
         {
             InfiniteFruitsController.instance.SpawnFruits();
         }
+
     }
 
     public void RemoveObstacles()
