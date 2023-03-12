@@ -15,6 +15,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public GameObject obstaclesParent;
     public GameObject obstacleInstanciateVFX;
+    public GameObject fruitInstanciateVFX;
 
     public int score;
     public int bonusScore;
@@ -239,47 +240,7 @@ public class InfiniteGameController : MonoBehaviour
         GameOverCheck();
     }
 
-    private void EnableFruitCollision(bool enableCollision)
-    {
-        fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
-    }
 
-    // ========== GETTERS ========== //
-
-    public Vector3 GetFruitPosition()
-    {
-        return fruitRef.gameObject.transform.position;
-    }
-
-    public Vector3 GetFruitLocalPosition()
-    {
-        return fruitRef.gameObject.transform.localPosition;
-    }
-
-    public float GetFruitHeightForMap()
-    {
-        return Mathf.Max(0f, fruitRef.gameObject.transform.localPosition.y);
-    }
-
-    public Vector3 GetElevatorPosition()
-    {
-        return elevatorControllerRef.gameObject.transform.position;
-    }
-
-    public Vector3 GetElevatorLocalPosition()
-    {
-        return elevatorControllerRef.gameObject.transform.localPosition;
-    }
-
-    public float GetElevatorHeight()
-    {
-        return elevatorControllerRef.gameObject.transform.position.y;
-    }
-
-    public float GetElevatorLocalHeight()
-    {
-        return elevatorControllerRef.gameObject.transform.localPosition.y;
-    }
 
     // ========== ANIMATIONS ========== //
 
@@ -289,9 +250,23 @@ public class InfiniteGameController : MonoBehaviour
         fruitRef.ResetFruitPosition(positon);
     }
 
+
+
+
+
+
+
+
+
+    // ======================================= //
+    // ========== LEVEL TRANSITIONS ========== //
+    // ======================================= //
+
     public void LevelCompleted()
     {
         levelCompletedState = true;
+
+        EnableFruitCollision(false);
 
         RemoveObstacles();
 
@@ -308,8 +283,6 @@ public class InfiniteGameController : MonoBehaviour
             AnimationManager.instance.PlayInGameAnimation(NextLevel());
         }
     }
-
-    // ========== LEVEL TRANSITIONS ========== //
 
     public IEnumerator NextLevel()
     {
@@ -382,7 +355,6 @@ public class InfiniteGameController : MonoBehaviour
         }
 
         EnableFruitCollision(true);
-
         SetRigidBodyExtrapolate(false);
 
         StartTimer();
@@ -393,8 +365,8 @@ public class InfiniteGameController : MonoBehaviour
         PauseTimer();
 
         Time.timeScale = 1f;
-
         EnableFruitCollision(false);
+        SetRigidBodyExtrapolate(false);
 
         if (CameraManager.instance != null)
         {
@@ -417,7 +389,16 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+
+
+
+
+
+
+
+    // ======================================= //
     // ========== OBSTACLES HANDLES ========== //
+    // ======================================= //
 
     public void HandleFruitInHole()
     {
@@ -552,6 +533,61 @@ public class InfiniteGameController : MonoBehaviour
         Instantiate(obstacleInstanciateVFX, position, Quaternion.identity, obstaclesParent.transform);
     }
 
+
+
+
+
+
+
+    // ============================= //
+    // ========== GETTERS ========== //
+    // ============================= //
+
+    public Vector3 GetFruitPosition()
+    {
+        return fruitRef.gameObject.transform.position;
+    }
+
+    public Vector3 GetFruitLocalPosition()
+    {
+        return fruitRef.gameObject.transform.localPosition;
+    }
+
+    public float GetFruitHeightForMap()
+    {
+        return Mathf.Max(0f, fruitRef.gameObject.transform.localPosition.y);
+    }
+
+    public Vector3 GetElevatorPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.position;
+    }
+
+    public Vector3 GetElevatorLocalPosition()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition;
+    }
+
+    public float GetElevatorHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.position.y;
+    }
+
+    public float GetElevatorLocalHeight()
+    {
+        return elevatorControllerRef.gameObject.transform.localPosition.y;
+    }
+
+
+
+
+
+
+    // ========================================== //
+    // ========== PARAMETERS FUNCTIONS ========== //
+    // ========================================== //
+
+
     //ElevatorMovementSpeed
     public float ElevatorMovementSpeed
     {
@@ -612,6 +648,18 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+
+
+
+
+
+
+
+
+    // ========================================== //
+    // ========== COLLISIONS FUNCTIONS ========== //
+    // ========================================== //
+
     public void SetRigidBodyExtrapolate(bool extrapolate)
     {
         if (extrapolate)
@@ -632,6 +680,10 @@ public class InfiniteGameController : MonoBehaviour
     }
 
 
+    private void EnableFruitCollision(bool enableCollision)
+    {
+        fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
+    }
 
 
 
@@ -640,10 +692,9 @@ public class InfiniteGameController : MonoBehaviour
 
 
 
-
-
-
+    // =================================== //
     // ========== DEV FUNCTIONS ========== //
+    // =================================== //
 
     public void QuickRemoveObstacles()
     {
