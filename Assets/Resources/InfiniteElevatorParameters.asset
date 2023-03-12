@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b02bccc7bfd47404c8f842a5331d943c, type: 3}
   m_Name: InfiniteElevatorParameters
   m_EditorClassIdentifier: 
-  infiniteElevatorMovementSpeed: 15
+  infiniteElevatorMovementSpeed: 12.5
   infiniteElevatorStartMovementSpeed: 25
-  infiniteElevatorMaxDifference: 7.5
-  infiniteFruitGravityScale: 30
-  infiniteFruitFallingGravityScale: 30
+  infiniteElevatorMaxDifference: 6
+  infiniteFruitGravityScale: 22.85
+  infiniteFruitFallingGravityScale: 22.85
   infiniteFruitMinCollisionDistance: 0.11

@@ -63,13 +63,13 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
-            InfiniteGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
+            InfiniteGameController.instance.ResetGame();
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
-            LegacyGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
+            LegacyGameController.instance.ResetGame();
         }
     }
 

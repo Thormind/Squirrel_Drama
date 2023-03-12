@@ -18,6 +18,9 @@ public class InfiniteElevatorController : MonoBehaviour
 
     public Rigidbody2D leftLifter;
     public Rigidbody2D rightLifter;
+    public ParticleSystem leftLifterVFX;
+    public ParticleSystem rightLifterVFX;
+
     public Rigidbody2D elevatorRigidBody;
 
     private Vector2 movementOffset;
@@ -47,6 +50,11 @@ public class InfiniteElevatorController : MonoBehaviour
 
             Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
             movementOffset = input * Time.fixedDeltaTime * movementSpeed;
+
+            ParticleSystem.MainModule leftVFX = leftLifterVFX.main;
+            leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
+            ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
+            rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
 
             Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
             Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
@@ -110,7 +118,11 @@ public class InfiniteElevatorController : MonoBehaviour
         }
         if (!InfiniteGameController.instance.gameOverState && !GlobalUIManager.isPreGame)
         {
-            StartCoroutine(MoveBarToStartPosition());
+            if (AnimationManager.instance != null)
+            {
+                AnimationManager.instance.PlayObstaclesAnimation(MoveBarToStartPosition());
+            }
+            //StartCoroutine(MoveBarToStartPosition());
         }
 
         yield return null;
@@ -127,12 +139,7 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         inputEnabled = false;
         StopAllCoroutines();
-        /*
-        if (AnimationManager.instance != null)
-        {
-            AnimationManager.instance.PlayObstaclesAnimation(MoveBarToBottomPosition());
-        }
-        */
+       
         StartCoroutine(MoveBarToBottomPosition());
     }
 

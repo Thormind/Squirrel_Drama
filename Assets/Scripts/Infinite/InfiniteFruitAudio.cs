@@ -18,7 +18,7 @@ public class InfiniteFruitAudio : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     { 
         
         velocity = GetComponent<Rigidbody2D>().velocity.x;
@@ -30,7 +30,7 @@ public class InfiniteFruitAudio : MonoBehaviour
         }
         else
         {
-            movement.pitch = Math.Abs(velocity/6);
+            movement.pitch = Mathf.Abs(velocity/6);
             if(!movement.isPlaying)
             {
                 movement.Play();
@@ -44,7 +44,7 @@ public class InfiniteFruitAudio : MonoBehaviour
     {
         if(collision.gameObject.tag == "Border")
         {
-            collide.volume = Math.Abs(velocity / 90);
+            collide.volume = Mathf.Abs(velocity / 90);
             collide.Play(); 
         }
     }

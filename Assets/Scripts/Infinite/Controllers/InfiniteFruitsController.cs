@@ -106,7 +106,7 @@ public class InfiniteFruitsController : MonoBehaviour
     {
         //play sound 
 
-        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, fruitsParent.transform);
+        Instantiate(InfiniteGameController.instance.fruitInstanciateVFX, position, Quaternion.identity, fruitsParent.transform);
 
         if (spawn)
         {
