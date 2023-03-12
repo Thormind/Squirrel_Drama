@@ -104,10 +104,6 @@ public class InfinitePointsController : MonoBehaviour
 
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
-        //play sound 
-
-        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, pointsParent.transform);
-
         if (spawn)
         {
             GameObject pointInstantiated = Instantiate(pointPrefab, position, Quaternion.identity, pointsParent.transform);
@@ -118,7 +114,7 @@ public class InfinitePointsController : MonoBehaviour
         }
 
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.05f);
     }
 
     private Vector3 GetRandomSpawnPosition()

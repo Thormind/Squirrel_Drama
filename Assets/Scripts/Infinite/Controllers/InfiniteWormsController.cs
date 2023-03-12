@@ -120,8 +120,6 @@ public class InfiniteWormsController : MonoBehaviour
 
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
-        //play sound 
-
         if (spawn)
         {
             GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
@@ -137,9 +135,11 @@ public class InfiniteWormsController : MonoBehaviour
         {
             Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, wormsParent.transform);
             Destroy(obj);
+            //play sound 
+            AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
         }
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.05f);
     }
 
 

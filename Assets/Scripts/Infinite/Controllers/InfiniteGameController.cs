@@ -181,9 +181,7 @@ public class InfiniteGameController : MonoBehaviour
             AnimationManager.instance.PlayInGameAnimation(HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore));
         }
         score += bonusScore;
-        //UpdateHUD(GAME_DATA.SCORE);
         bonusScore = 0;
-        //UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
 

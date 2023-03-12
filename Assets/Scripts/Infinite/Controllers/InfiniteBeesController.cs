@@ -106,6 +106,7 @@ public class InfiniteBeesController : MonoBehaviour
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
         //play sound 
+        AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
 
         Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, beesParent.transform);
 
@@ -121,7 +122,7 @@ public class InfiniteBeesController : MonoBehaviour
             Destroy(obj);
         }
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.05f);
     }
 
     private Vector3 GetRandomSpawnPosition()

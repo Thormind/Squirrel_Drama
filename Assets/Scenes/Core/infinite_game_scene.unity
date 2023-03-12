@@ -1486,7 +1486,7 @@ MonoBehaviour:
   elevatorControllerRef: {fileID: 706388252}
   fruitRef: {fileID: 506127052}
   obstaclesParent: {fileID: 1249040316}
-  obstacleInstanciateVFX: {fileID: 100000, guid: dfb282ab2faef944380be5bdd35992c7, type: 3}
+  obstacleInstanciateVFX: {fileID: 141433446842962269, guid: 72b461dca7c3e3941bf47a5ac79d9d68, type: 3}
   score: 0
   bonusScore: 1000
   bestScore: 0
