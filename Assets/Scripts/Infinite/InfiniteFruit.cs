@@ -49,7 +49,7 @@ public class InfiniteFruit : MonoBehaviour
         {
             if (collision.transform.gameObject.tag == "Bee")
             {
-                AudioManager.instance.PlaySound(SOUND.FRUIT_TOUCHBEE);
+                AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
                 InfiniteGameController.instance.HandleFruitInBee();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -57,7 +57,7 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Worm")
             {
-
+                AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -97,7 +97,7 @@ public class InfiniteFruit : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Collider2D holeTransform)
     {
         fruitRigidbody.simulated = false;
-        AudioManager.instance.PlaySound(SOUND.FRUIT_INHOLE);
+        AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
         float t = 0;
         Vector3 fruitPosition = transform.localPosition;
         Vector3 holePosition = new Vector3(holeTransform.transform.localPosition.x, holeTransform.transform.localPosition.y, holeTransform.transform.localPosition.z + 2f);

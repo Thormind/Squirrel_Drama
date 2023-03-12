@@ -134,10 +134,6 @@ public class CameraManager : MonoBehaviour
 
         if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
-            if(GetComponent<AudioListener>() == null)
-            {
-                gameObject.AddComponent<AudioListener>();
-            }
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
             arcadeLightIntensity = 0;
@@ -160,10 +156,6 @@ public class CameraManager : MonoBehaviour
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
-            if (GetComponent<AudioListener>() != null)
-            {
-                Destroy(GetComponent<AudioListener>());
-            }
              
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
