@@ -114,8 +114,6 @@ public class InfiniteBearController : MonoBehaviour
 
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
-        //play sound 
-
         if (spawn)
         {
             Quaternion randomRotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45));
@@ -130,9 +128,11 @@ public class InfiniteBearController : MonoBehaviour
         {
             Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, bearParent.transform);
             Destroy(obj);
+            //play sound 
+            AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
         }
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.05f);
     }
 
     private Vector3 GetRandomPositionNearFruit()

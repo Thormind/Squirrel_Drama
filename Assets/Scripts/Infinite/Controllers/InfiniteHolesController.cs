@@ -112,7 +112,7 @@ public class InfiniteHolesController : MonoBehaviour
             Destroy(obj);
         }
 
-        yield return new WaitForSeconds(0.025f);
+        yield return new WaitForSeconds(0.05f);
     }
 
     private Vector3 GetRandomSpawnPosition()
