@@ -57,8 +57,9 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Worm")
             {
-                AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
+
                 InfiniteGameController.instance.HandleFruitInWorm();
+
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
             }
 
