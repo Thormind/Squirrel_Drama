@@ -418,6 +418,7 @@ public class GlobalUIManager : MonoBehaviour
         yield return null;
         ClearMenusException();
         CameraManager.instance.Transition(false);
+        AudioManager.instance.SwitchAudioListener(ScenesManager.instance.gameMode);
         SetMenu(MENU.MENU_PREGAME);
     }
 
@@ -426,6 +427,7 @@ public class GlobalUIManager : MonoBehaviour
         yield return null;
         ClearMenusException();
         CameraManager.instance.Transition(true);
+        AudioManager.instance.SwitchAudioListener(ScenesManager.instance.gameMode);
         SetMenu(MENU.MENU_MAIN);
     }
 

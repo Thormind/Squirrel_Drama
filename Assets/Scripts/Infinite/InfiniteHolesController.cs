@@ -99,6 +99,7 @@ public class InfiniteHolesController : MonoBehaviour
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
         //play sound 
+        AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
 
         Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, holesParent.transform);
 

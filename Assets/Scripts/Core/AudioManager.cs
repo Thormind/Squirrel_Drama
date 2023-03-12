@@ -21,10 +21,8 @@ public enum SOUND
     CLICK,                      // Implanted: false
     SWEEP,                      // Implanted: true
     // Infinite mode
-    FRUIT_FALL,                 // Implanted: false
-    FRUIT_SQUASH,               // Implanted: false
-    FRUIT_INHOLE,               // Implanted: true
-    FRUIT_TOUCHBEE,             // Implanted: true
+    FRUIT_FALL,                 // Implanted: True
+    FRUIT_SQUASH,               // Implanted: True
     POINT_GRAB,                 // Implanted: true
     LIFE_SPIN,                  // Implanted: true
     LIFE_POP,                   // Implanted: true
@@ -34,7 +32,8 @@ public enum SOUND
     BEAR_HIT,                   // Implanted: true
     WORM_BLINK,                 // Implanted: false
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
-    BUNNY_SFX                   // Implanted: false
+    BUNNY_SFX,                  // Implanted: false
+    OBSTACLE_SPAWN,             // Implanted: false
     // Legacy mode
 };
 
@@ -49,6 +48,9 @@ public class AudioManager : MonoBehaviour
     public AudioSource uiMusic;
     public AudioSource infiniteMusic;
     public AudioSource legacyMusic;
+
+    [SerializeField] public AudioListener cameraListener;
+    public AudioListener gameListener;
 
     public GameObject soundplayer;
     public SoundAudioClip[] soundAudioClipArray;
@@ -100,7 +102,43 @@ public class AudioManager : MonoBehaviour
 
 
     // ===== METHODS ===== //
+    public void SwitchAudioListener(GAME_MODE gameMode)
+    {
+        switch (gameMode)
+        {
+            case GAME_MODE.NONE:
+                if (cameraListener != null)
+                {
+                    cameraListener.enabled = true;
+                }
+                if (gameListener != null)
+                {
+                    cameraListener.enabled = false;
+                }
+                break;
+            case GAME_MODE.INFINITE_MODE:
+                if (cameraListener != null)
+                {
+                    cameraListener.enabled = false;
+                }
+                if (gameListener != null)
+                {
+                    cameraListener.enabled = true;
+                }
+                break;
+            case GAME_MODE.LEGACY_MODE:
+                if (cameraListener != null)
+                {
+                    cameraListener.enabled = false;
+                }
+                if (gameListener != null)
+                {
+                    cameraListener.enabled = true;
+                }
+                break;
+        }
 
+    }
     private void FillSoundDictionary()
     {
         foreach (SoundAudioClip soundAudioClip in soundAudioClipArray)

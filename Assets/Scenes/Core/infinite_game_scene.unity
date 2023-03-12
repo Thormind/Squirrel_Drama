@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -827,9 +827,9 @@ GameObject:
   - component: {fileID: 506127048}
   - component: {fileID: 506127052}
   - component: {fileID: 506127054}
-  - component: {fileID: 506127053}
   - component: {fileID: 506127056}
   - component: {fileID: 506127055}
+  - component: {fileID: 506127057}
   m_Layer: 7
   m_Name: Fruit
   m_TagString: Untagged
@@ -954,14 +954,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionEnabled: 0
   fruitRigidbody: {fileID: 0}
---- !u!81 &506127053
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 506127045}
-  m_Enabled: 1
 --- !u!114 &506127054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,6 +1160,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &506127057
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506127045}
+  m_Enabled: 0
 --- !u!1 &597877958
 GameObject:
   m_ObjectHideFlags: 0

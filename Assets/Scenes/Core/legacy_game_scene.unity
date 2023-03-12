@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1867,6 +1867,7 @@ GameObject:
   - component: {fileID: 1910256106}
   - component: {fileID: 1910256101}
   - component: {fileID: 1910256105}
+  - component: {fileID: 1910256107}
   m_Layer: 7
   m_Name: Ball
   m_TagString: Untagged
@@ -1990,6 +1991,14 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.44
+--- !u!81 &1910256107
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910256098}
+  m_Enabled: 0
 --- !u!1 &1944553281
 GameObject:
   m_ObjectHideFlags: 0

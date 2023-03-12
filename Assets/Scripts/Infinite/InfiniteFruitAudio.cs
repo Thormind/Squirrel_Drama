@@ -10,10 +10,11 @@ public class InfiniteFruitAudio : MonoBehaviour
     public AudioSource collide;
     private float velocity;
 
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        AudioManager.instance.gameListener = gameObject.GetComponent<AudioListener>();
     }
 
     // Update is called once per frame
@@ -32,7 +33,6 @@ public class InfiniteFruitAudio : MonoBehaviour
             movement.pitch = Math.Abs(velocity/6);
             if(!movement.isPlaying)
             {
-                //Debug.Log("AudioSource is not playing");
                 movement.Play();
             }
         }
