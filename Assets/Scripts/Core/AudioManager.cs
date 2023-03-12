@@ -23,17 +23,17 @@ public enum SOUND
     // Infinite mode
     FRUIT_FALL,                 // Implanted: True
     FRUIT_SQUASH,               // Implanted: True
-    POINT_GRAB,                 // Implanted: true
+    POINT_GRAB,                 // Implanted: true Note: correct volume
     LIFE_SPIN,                  // Implanted: true
     LIFE_POP,                   // Implanted: true
     SQUIRREL_PANIC,             // Implanted: false
     SQUIRREL_CAUTION,           // Implanted: false
     BEAR_ROAR,                  // Implanted: true
-    BEAR_HIT,                   // Implanted: true
+    BEAR_HIT,                   // Implanted: true Note: correct pitch
     WORM_BLINK,                 // Implanted: false
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
     BUNNY_SFX,                  // Implanted: false
-    OBSTACLE_SPAWN,             // Implanted: false
+    OBSTACLE_SPAWN,             // Implanted: false Note: correct pitch
     // Legacy mode
 };
 
