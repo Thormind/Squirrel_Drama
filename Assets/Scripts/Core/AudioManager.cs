@@ -123,7 +123,7 @@ public class AudioManager : MonoBehaviour
                 }
                 if (gameListener != null)
                 {
-                    cameraListener.enabled = true;
+                    gameListener.enabled = true;
                 }
                 break;
             case GAME_MODE.LEGACY_MODE:
@@ -133,7 +133,7 @@ public class AudioManager : MonoBehaviour
                 }
                 if (gameListener != null)
                 {
-                    cameraListener.enabled = true;
+                    gameListener.enabled = true;
                 }
                 break;
         }
