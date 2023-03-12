@@ -106,7 +106,7 @@ public class InfinitePointsController : MonoBehaviour
     {
         //play sound 
 
-        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, pointsParent.transform);
+        //Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, pointsParent.transform);
 
         if (spawn)
         {
