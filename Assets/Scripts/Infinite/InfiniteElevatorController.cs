@@ -127,6 +127,12 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         inputEnabled = false;
         StopAllCoroutines();
+        /*
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(MoveBarToBottomPosition());
+        }
+        */
         StartCoroutine(MoveBarToBottomPosition());
     }
 

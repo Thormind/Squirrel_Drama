@@ -42,13 +42,11 @@ public class InfiniteBeesController : MonoBehaviour
 
     public void SpawnBees()
     {
-        RemoveBees();
+        QuickRemoveBees();
 
         maxBeesYDistance = ((Mathf.Abs(beesYMin - beesYMax)) / BeesQuantity) + 0.2f;
 
         currentY = beesYMin;
-
-        //int randomBeesQuantity = Random.Range(BeesQuantity, BeesQuantity + 2);
 
         for (int i = 1; i <= BeesQuantity; i++)
         {
@@ -63,12 +61,7 @@ public class InfiniteBeesController : MonoBehaviour
             NotifySpawnDebug(true);
 
             Vector3 realPosition = beesParent.transform.TransformPoint(spawnPosition);
-
-            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
-            GameObject beeInstantiated = Instantiate(beePrefab, realPosition, Quaternion.identity, beesParent.transform);
-
-            float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.1f, BeesMovementSpeed + 0.1f);
-            beeInstantiated.GetComponent<InfiniteBeeAnimation>().SetMovementSpeed(randomMovementSpeed);
+            InstantiateAnimation(realPosition, true);
 
             _spawnedBeesPositions.Add(spawnPosition);
         }
@@ -81,13 +74,54 @@ public class InfiniteBeesController : MonoBehaviour
             GameObject child = beesParent.transform.GetChild(i).gameObject;
             if (child != null)
             {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
+                InstantiateAnimation(child.transform.position, false, child);
             }
+        }
+
+        _spawnedBeesPositions.Clear();
+        _spawnedBeesPositions = new List<Vector3>();
+    }
+
+    public void QuickRemoveBees()
+    {
+        for (int i = 0; i < beesParent.transform.childCount; i++)
+        {
+            GameObject child = beesParent.transform.GetChild(i).gameObject;
             Destroy(child);
         }
 
         _spawnedBeesPositions.Clear();
         _spawnedBeesPositions = new List<Vector3>();
+    }
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, beesParent.transform);
+
+        if (spawn)
+        {
+            GameObject beeInstantiated = Instantiate(beePrefab, position, Quaternion.identity, beesParent.transform);
+
+            float randomMovementSpeed = Random.Range(BeesMovementSpeed - 0.1f, BeesMovementSpeed + 0.1f);
+            beeInstantiated.GetComponent<InfiniteBeeAnimation>().SetMovementSpeed(randomMovementSpeed);
+        }
+        if (!spawn && obj != null)
+        {
+            Destroy(obj);
+        }
+
+        yield return new WaitForSeconds(0.025f);
     }
 
     private Vector3 GetRandomSpawnPosition()

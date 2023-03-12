@@ -42,9 +42,7 @@ public class InfiniteHolesController : MonoBehaviour
 
     public void SpawnHoles()
     {
-        RemoveHoles();
-
-        //int randomHolesQuantity = Random.Range(HolesQuantity-5, HolesQuantity+5);
+        QuickRemoveHoles();
 
         for (int i = 0; i < HolesQuantity; i++)
         {
@@ -58,9 +56,62 @@ public class InfiniteHolesController : MonoBehaviour
 
             NotifySpawnDebug(true);
 
-            InfiniteGameController.instance.ObstacleInstantiateAnimation(spawnPosition);
-            GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
+            InstantiateAnimation(spawnPosition, true);
         }
+    }
+
+    
+    public void RemoveHoles()
+    {
+        for (int i = 0; i < holesParent.transform.childCount; i++)
+        {
+            GameObject child = holesParent.transform.GetChild(i).gameObject;
+            if (child != null)
+            {
+                InstantiateAnimation(child.transform.position, false, child);
+            }
+        }
+
+        _spawnedHolesPositions.Clear();
+        _spawnedHolesPositions = new List<Vector3>();
+    }
+
+    public void QuickRemoveHoles()
+    {
+        for (int i = 0; i < holesParent.transform.childCount; i++)
+        {
+            GameObject child = holesParent.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        _spawnedHolesPositions.Clear();
+        _spawnedHolesPositions = new List<Vector3>();
+    }
+
+    public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayObstaclesAnimation(AnimateInstantiate(position, spawn, obj));
+        }
+    }
+
+    private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
+    {
+        //play sound 
+
+        Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, holesParent.transform);
+
+        if (spawn)
+        {
+            GameObject holeInstantiated = Instantiate(holePrefab, position, Quaternion.identity, holesParent.transform);
+        }
+        if (!spawn && obj != null)
+        {
+            Destroy(obj);
+        }
+
+        yield return new WaitForSeconds(0.025f);
     }
 
     private Vector3 GetRandomSpawnPosition()
@@ -112,22 +163,6 @@ public class InfiniteHolesController : MonoBehaviour
         {
             LevelScalingController.instance.UpdateObstacleMessages();
         }
-    }
-
-    public void RemoveHoles()
-    {
-        for (int i = 0; i < holesParent.transform.childCount; i++)
-        {
-            GameObject child = holesParent.transform.GetChild(i).gameObject;
-            if (child != null)
-            {
-                InfiniteGameController.instance.ObstacleInstantiateAnimation(child.transform.position);
-            }
-            Destroy(child);
-        }
-
-        _spawnedHolesPositions.Clear();
-        _spawnedHolesPositions = new List<Vector3>();
     }
 
     public List<Vector3> GetSpawnedPositions()

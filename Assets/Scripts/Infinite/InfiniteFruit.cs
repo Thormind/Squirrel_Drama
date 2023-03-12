@@ -83,6 +83,13 @@ public class InfiniteFruit : MonoBehaviour
                 collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
                 InfiniteGameController.instance.HandleFruitInFruit();
             }
+
+            if (collision.transform.gameObject.tag == "FallingZone")
+            {
+                InfiniteGameController.instance.HandleFruitFalling();
+
+                StartCoroutine(FallFromTreeCoroutine(collision.transform));
+            }
         }
     }
 
