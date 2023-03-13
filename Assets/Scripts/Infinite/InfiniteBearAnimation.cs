@@ -94,7 +94,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         float duration = distance / translationSpeed;
 
         float t = 0f;
-
+        AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
         while (t < 1f && bearPaw.transform.localRotation.x <= endRotation.x)
         {
             float easedProgress = EaseInCirc(t);
@@ -109,7 +109,6 @@ public class InfiniteBearAnimation : MonoBehaviour
             t += Time.deltaTime / duration;
             yield return null;
         }
-        AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
 
         bearPaw.transform.localPosition = endPosition;
         bearPaw.transform.localRotation = endRotation;

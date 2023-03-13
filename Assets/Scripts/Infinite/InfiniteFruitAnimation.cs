@@ -54,6 +54,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
         }
 
         AudioManager.instance.PlaySound(SOUND.LIFE_POP);
+        
 
         yield return new WaitForSecondsRealtime(0.2f);
 
