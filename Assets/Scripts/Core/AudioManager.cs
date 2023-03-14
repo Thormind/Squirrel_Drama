@@ -48,6 +48,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource uiMusic;
     public AudioSource infiniteMusic;
     public AudioSource legacyMusic;
+    public AudioSource wind;
 
     [SerializeField] public AudioListener cameraListener;
     public AudioListener gameListener;
@@ -248,6 +249,34 @@ public class AudioManager : MonoBehaviour
     {
         StopCurrentMusic();
         infiniteMusic.Play();
+    }
+
+    public void Playwind()
+    {
+        if(!wind.isPlaying)
+        {
+            wind.Play();
+        }
+    }
+
+    public void Stopwind()
+    {
+        if(wind.isPlaying && ScenesManager.instance.gameMode == GAME_MODE.NONE)
+        {
+            wind.Stop();
+        }
+    }
+
+    public void PlayElevatorSound(AudioSource source, Vector2 input)
+    {
+        if ((input.x == 0 && input.y == 0) && source.isPlaying)
+        {
+            source.Stop();
+        }
+        if ((input.x != 0 || input.y != 0) && !source.isPlaying)
+        {
+            source.Play();
+        }
     }
 
 

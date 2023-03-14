@@ -30,8 +30,7 @@ public class InfiniteElevatorController : MonoBehaviour
     private float rightUpInputValue;
     private float rightDownInputValue;
 
-    public AudioSource Up_sound;
-    public AudioSource Down_sound;
+    public AudioSource moveSound;
 
     private bool inputEnabled = false;
 
@@ -53,6 +52,8 @@ public class InfiniteElevatorController : MonoBehaviour
 
             Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
             movementOffset = input * Time.fixedDeltaTime * movementSpeed;
+
+            //AudioManager.instance.PlayElevatorSound(moveSound, input);
 
             ParticleSystem.MainModule leftVFX = leftLifterVFX.main;
             leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
@@ -166,37 +167,21 @@ public class InfiniteElevatorController : MonoBehaviour
 
     private void OnLeftEndUp(InputValue leftUpValue)
     {
-        //if (!Up_sound.isPlaying)
-        //{
-        //    Up_sound.Play();
-        //}
         leftUpInputValue = leftUpValue.Get<float>();
     }
 
     private void OnLeftEndDown(InputValue leftDownValue)
     {
-        //if (!Down_sound.isPlaying)
-        //{
-        //    Down_sound.Play();
-        //}
         leftDownInputValue = leftDownValue.Get<float>();
     }
 
     private void OnRightEndUp(InputValue rightUpValue)
     {
-        //if (!Up_sound.isPlaying)
-        //{
-        //    Up_sound.Play();
-        //}
         rightUpInputValue = rightUpValue.Get<float>();
     }
 
     private void OnRightEndDown(InputValue rightDownValue)
     {
-        //if (!Down_sound.isPlaying)
-        //{
-        //    Down_sound.Play();
-        //}
         rightDownInputValue = rightDownValue.Get<float>();
     }
 

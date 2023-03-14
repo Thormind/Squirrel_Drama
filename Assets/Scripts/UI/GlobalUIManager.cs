@@ -354,6 +354,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        AudioManager.instance.Stopwind();
         AudioManager.instance.PlayUiMusic();
 
         AnimationManager.instance.ClearInGameQueue();

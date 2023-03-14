@@ -23,6 +23,7 @@ public class PreGameMenuManager : MonoBehaviour
         if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             AudioManager.instance.StopCurrentMusic();
+            AudioManager.instance.Playwind();
         }
         if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
