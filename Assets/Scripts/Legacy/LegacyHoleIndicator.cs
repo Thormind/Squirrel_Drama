@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class HoleIndicator : MonoBehaviour
+public class LegacyHoleIndicator : MonoBehaviour
 {
     public float pulsatingSpeed = 5.7f;
     public float flashInterval = 0.5f;

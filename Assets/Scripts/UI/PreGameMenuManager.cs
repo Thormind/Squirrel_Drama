@@ -9,6 +9,8 @@ public class PreGameMenuManager : MonoBehaviour
     public GameObject infiniteText;
     public GameObject legacyText;
 
+    public GameObject flashingInfo;
+
     public float flashInterval = 0.5f;
 
     [SerializeField] private Button anyKeyButton;
@@ -16,35 +18,31 @@ public class PreGameMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.isPreGame = true;
-
         anyKeyButton.onClick.AddListener(() => HandleStartGame());
+    }
 
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
-        {
-            AudioManager.instance.StopCurrentMusic();
-        }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
-        {
-            AudioManager.instance.StopCurrentMusic();
-        }
+    private void OnEnable()
+    {
+        AudioManager.instance.StopCurrentMusic();
 
-        StartFlash();
+        Flash(true);
 
+        GlobalUIManager.instance.specificMenu = MENU.NONE;
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
+
     public void HandleStartGame()
     {
-        GlobalUIManager.isPreGame = false;
+        Flash(false);
 
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
         {
             AudioManager.instance.PlayInfinite();
             GlobalUIManager.instance.SetHUDMenu();
             InfiniteGameController.instance.StartGame();
         }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
         {
             AudioManager.instance.PlayLegacy();
             GlobalUIManager.instance.SetHUDMenu();
@@ -53,49 +51,30 @@ public class PreGameMenuManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Flash(bool isActive)
     {
-
-        GlobalUIManager.isPreGame = true;
-
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        if (isActive)
         {
-            AudioManager.instance.StopCurrentMusic();
+            if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+            {
+                flashingInfo.GetComponent<flashingText>().StartFlashing(infiniteText);
+            }
+            if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+            {
+                flashingInfo.GetComponent<flashingText>().StartFlashing(legacyText);
+            }
         }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        else
         {
-            AudioManager.instance.StopCurrentMusic();
+            if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+            {
+                flashingInfo.GetComponent<flashingText>().StopFlashing(infiniteText);
+            }
+            if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+            {
+                flashingInfo.GetComponent<flashingText>().StopFlashing(legacyText);
+            }
         }
-
-        StartFlash();
-
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
-    }
-
-    private void Flash()
-    {
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
-        {
-            infiniteText.SetActive(!infiniteText.activeSelf);
-        }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
-        {
-            legacyText.SetActive(!legacyText.activeSelf);
-        }
-
-    }
-
-    public void StartFlash()
-    {
-        StopFlash();
-        infiniteText.SetActive(false);
-        legacyText.SetActive(false);
-        InvokeRepeating($"Flash", 0, flashInterval);
-    }
-
-    public void StopFlash()
-    {
-        CancelInvoke("Flash");
     }
 
 }

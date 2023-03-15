@@ -62,7 +62,7 @@ public class LegacyBall : MonoBehaviour
         while (t <= 1)
         {
             transform.localPosition = Vector3.Lerp(ballPosition, holePosition, t);
-            transform.localScale = startBallScale * Mathf.Lerp(1, 0.75f, t);
+            //transform.localScale = startBallScale * Mathf.Lerp(1, 0.75f, t);
 
             t += Time.deltaTime / enterTheHoleTime;
 

@@ -13,23 +13,20 @@ public class TitleScreenMenuManager : MonoBehaviour
     void Start()
     {
         anyKeyButton.onClick.AddListener(() => HandleAnyKey());
+    }
 
-        anyKeyText.GetComponent<flashingText>().StartFlash();
+    private void OnEnable()
+    {
+        anyKeyText.GetComponent<flashingText>().StartFlashing();
 
+        GlobalUIManager.instance.specificMenu = MENU.MENU_MAIN;
         GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
     public void HandleAnyKey()
     {
-        anyKeyText.GetComponent<flashingText>().StopFlash();
-        anyKeyText.SetActive(false);
-        GlobalUIManager.instance.SetMainMenu();
-    }
+        anyKeyText.GetComponent<flashingText>().StopFlashing();
 
-    private void OnEnable()
-    {
-        anyKeyText.SetActive(true);
-        anyKeyText.GetComponent<flashingText>().StartFlash();
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+        GlobalUIManager.instance.SetMainMenu();
     }
 }

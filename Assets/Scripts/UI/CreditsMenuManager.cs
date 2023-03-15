@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 
 public class CreditsMenuManager : MonoBehaviour
 {
-    [SerializeField] private Button anyKeyButton;
-    [SerializeField] private GameObject anyKeyText;
+    [SerializeField] private Button exitButton;
 
     [SerializeField] private Toggle controlsToggle;
     [SerializeField] private Toggle artsToggle;
@@ -18,31 +17,42 @@ public class CreditsMenuManager : MonoBehaviour
     [SerializeField] private GameObject artsPanel;
     [SerializeField] private GameObject creditsPanel;
 
-    [SerializeField] private GameObject flashText;
-
     private IEnumerator currentCoroutine = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        anyKeyButton.onClick.AddListener(() => HandleAnyKey());
+        UIAnimation.OnAnimationUICalled += HandleAnimationUICalled;
+
+        exitButton.onClick.AddListener(() => HandleAnyKey());
 
         controlsToggle.onValueChanged.AddListener(delegate { OnControlsToggleValueChanged(controlsToggle.isOn); });
         creditsToggle.onValueChanged.AddListener(delegate { OnCreditsToggleValueChanged(creditsToggle.isOn); });
         artsToggle.onValueChanged.AddListener(delegate { OnArtsToggleValueChanged(artsToggle.isOn); });
-
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
-
-        anyKeyText.GetComponent<flashingText>().StartFlash();
     }
 
-    public void HandleAnyKey()
+    private void OnDestroy()
+    {
+        UIAnimation.OnAnimationUICalled -= HandleAnimationUICalled;
+    }
+
+    private void OnEnable()
+    {
+        GlobalUIManager.instance.specificMenu = MENU.MENU_MAIN;
+        GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject);
+    }
+
+    private void HandleAnimationUICalled()
     {
         controlsToggle.isOn = false;
         creditsToggle.isOn = false;
         artsToggle.isOn = false;
-        anyKeyText.GetComponent<flashingText>().StopFlash();
-        anyKeyText.SetActive(false);
+    }
+
+    public void HandleAnyKey()
+    {
+        HandleAnimationUICalled();
+
         GlobalUIManager.instance.SetMainMenu();
     }
 
@@ -50,19 +60,16 @@ public class CreditsMenuManager : MonoBehaviour
     {
         keyboardControlsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
         gamepadControlsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
     public void OnCreditsToggleValueChanged(bool value)
     {
         creditsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
     public void OnArtsToggleValueChanged(bool value)
     {
         artsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 
     public void PlayAnimationCoroutine(IEnumerator coroutine)
@@ -84,13 +91,5 @@ public class CreditsMenuManager : MonoBehaviour
         currentCoroutine = nextCoroutine;
         yield return StartCoroutine(nextCoroutine);
         currentCoroutine = null;
-    }
-
-    private void OnEnable()
-    {
-        anyKeyText.SetActive(true);
-        anyKeyText.GetComponent<flashingText>().StartFlash();
-
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
     }
 }

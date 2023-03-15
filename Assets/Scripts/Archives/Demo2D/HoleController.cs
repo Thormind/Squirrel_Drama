@@ -100,7 +100,7 @@ public class HoleController : MonoBehaviour
 
             _spawnedHolesPositions.Add(spawnPosition);
 
-            holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i);
+            holeIndicatorInstantiated.GetComponent<LegacyHoleIndicator>().SetHoleNumber(i);
 
             float randomY = Random.Range(minHolesIndicatorYDistance, maxHolesIndicatorYDistance);
             currentY += randomY;
@@ -172,7 +172,7 @@ public class HoleController : MonoBehaviour
             GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, holes[i].transform.position, Quaternion.identity);
             holeIndicatorList.Add(holeIndicatorInstantiated);
 
-            holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i + 1);
+            holeIndicatorInstantiated.GetComponent<LegacyHoleIndicator>().SetHoleNumber(i + 1);
         }
 
     }
