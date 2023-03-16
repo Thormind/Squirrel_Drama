@@ -116,11 +116,11 @@ public class InfiniteElevatorController : MonoBehaviour
         InfiniteGameController.instance.ResetFruit();
 
 
-        if (InfiniteGameController.instance.levelCompletedState)
+        if (ScenesManager.gameState == GAME_STATE.LEVEL_COMPLETED)
         {
             InfiniteGameController.instance.StartGame();
         }
-        if (!InfiniteGameController.instance.gameOverState && !GlobalUIManager.isPreGame)
+        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
         {
             if (AnimationManager.instance != null)
             {

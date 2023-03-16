@@ -28,8 +28,6 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.instance.SetControllerFirstSelected(playInfiniteButton.gameObject);
-
         playInfiniteButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.INFINITE_MODE));
         playLegacyButton.onClick.AddListener(() => GlobalUIManager.instance.LoadGame(GAME_MODE.LEGACY_MODE));
 
@@ -42,24 +40,6 @@ public class MainMenuManager : MonoBehaviour
         quitButton.onClick.AddListener(() => HandleQuitButton());
         quitConfirmButton.onClick.AddListener(() => GlobalUIManager.instance.QuitApplication());
         quitCancelButton.onClick.AddListener(() => HandleCancelButton());
-
-        infiniteBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
-        legacyBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
-
-    }
-
-    private void HandleQuitButton()
-    {
-        mainPanel.SetActive(false);
-        quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(quitCancelButton.gameObject);
-    }
-
-    private void HandleCancelButton()
-    {
-        quitPanel.SetActive(false);
-        mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(quitButton.gameObject);
     }
 
     private void OnEnable()
@@ -70,7 +50,21 @@ public class MainMenuManager : MonoBehaviour
         infiniteBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
         legacyBestScore.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
 
-        GlobalUIManager.instance.SetControllerFirstSelected(playInfiniteButton.gameObject);
+        GlobalUIManager.instance.specificMenu = MENU.MENU_TITLE_SCREEN;
+        GlobalUIManager.instance.SetFirstSelected(playInfiniteButton.gameObject);
     }
 
+    private void HandleQuitButton()
+    {
+        mainPanel.SetActive(false);
+        quitPanel.SetActive(true);
+        GlobalUIManager.instance.SetFirstSelected(quitCancelButton.gameObject);
+    }
+
+    private void HandleCancelButton()
+    {
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetFirstSelected(quitButton.gameObject);
+    }
 }

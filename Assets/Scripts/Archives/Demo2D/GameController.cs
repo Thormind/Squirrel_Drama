@@ -153,7 +153,7 @@ public class GameController : MonoBehaviour
 
     public void ReadyForNextHole()
     {
-        HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
+        HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
 
@@ -165,7 +165,7 @@ public class GameController : MonoBehaviour
         CancelInvoke(nameof(DecreaseBonusScore));
         if(rightHole)
         {
-            HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+            HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
             RecalculateScore();
 
             if(currentHoleIndex < HoleController.instance.holes.Count - 1)
@@ -202,7 +202,7 @@ public class GameController : MonoBehaviour
 
                 RecalculateBestScore();
 
-                HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+                HoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
             }
             UpdateUI();
         }

@@ -102,13 +102,13 @@ public class CameraManager : MonoBehaviour
     {    
         if (isFocused)
         {
-            if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE && InfiniteGameController.instance != null)
+            if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE && InfiniteGameController.instance != null)
             {
                 Vector3 targetPosition = InfiniteGameController.instance.GetElevatorPosition() + Vector3.up * infiniteVerticalOffset;
                 Vector3 targetDirection = targetPosition - transform.position;
                 targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
             }
-            if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE && LegacyGameController.instance != null)
+            if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE && LegacyGameController.instance != null)
             {
                 Vector3 targetPosition = LegacyGameController.instance.GetElevatorPosition() + Vector3.up * legacyVerticalOffset;
                 Vector3 targetDirection = targetPosition - transform.position;
@@ -132,7 +132,7 @@ public class CameraManager : MonoBehaviour
 
         isFocused = focused;
 
-        if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+        if (ScenesManager.gameMode == GAME_MODE.NONE)
         {
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
@@ -154,7 +154,7 @@ public class CameraManager : MonoBehaviour
             }
 
         }
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
         {
              
             CheckTimeOfDay();
@@ -181,7 +181,7 @@ public class CameraManager : MonoBehaviour
                 targetSize = infiniteUnfocusedSize;
             }
         }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
         {
             CheckTimeOfDay();
             loungeLightIntensity = 0;
@@ -211,7 +211,7 @@ public class CameraManager : MonoBehaviour
 
     public void TransitionToCredits()
     {
-        if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+        if (ScenesManager.gameMode == GAME_MODE.NONE)
         {
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
@@ -242,7 +242,7 @@ public class CameraManager : MonoBehaviour
     {
         if (tod == TIME_OF_DAY.NOON)
         {
-            if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+            if (ScenesManager.gameMode == GAME_MODE.NONE)
             {
                 targetPosition = isFocused ? menuFocusedPosition : menuUnfocusedPosition;
                 targetRotation = isFocused ? menuFocusedRotation : menuUnfocusedRotation;
@@ -259,7 +259,7 @@ public class CameraManager : MonoBehaviour
         }
         if (tod == TIME_OF_DAY.NIGHT)
         {
-            if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
+            if (ScenesManager.gameMode == GAME_MODE.NONE)
             {
                 targetPosition = isFocused ? menuFocusedPosition2 : menuUnfocusedPosition2;
                 targetRotation = isFocused ? menuFocusedRotation2 : menuUnfocusedRotation2;

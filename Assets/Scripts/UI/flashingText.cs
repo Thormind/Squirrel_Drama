@@ -1,31 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class flashingText : MonoBehaviour
 {
     public GameObject objectToFlash;
+    public bool flashing;
     public float flashInterval = 0.5f;
-    private bool flash;
 
-    private void Start()
+    private IEnumerator Flash()
     {
-        StartFlash();
+        objectToFlash.SetActive(true);
+
+        while (flashing)
+        {
+            objectToFlash.SetActive(!objectToFlash.activeSelf);
+
+            float t = 0;
+
+            while (t < 1f)
+            {
+
+                t += Time.deltaTime / flashInterval;
+                yield return null;
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        objectToFlash.SetActive(false);
     }
 
-    private void Flash()
+    public void StartFlashing(GameObject objToFlash = null)
     {
-        flash = !flash;
-        objectToFlash.SetActive(flash);
+        if (objToFlash != null)
+        {
+            objectToFlash = objToFlash;
+        }
+
+        flashing = true;
+        StartCoroutine(Flash());
     }
 
-    public void StartFlash()
+    public void StopFlashing(GameObject objToFlash = null)
     {
-        InvokeRepeating($"Flash", 0, flashInterval);
-    }
+        if (objToFlash != null)
+        {
+            objectToFlash = objToFlash;
+        }
 
-    public void StopFlash()
-    {
-        CancelInvoke("Flash");
+        flashing = false;
+        StopCoroutine(Flash());
     }
 }

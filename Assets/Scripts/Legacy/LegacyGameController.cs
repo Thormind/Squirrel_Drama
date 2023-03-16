@@ -25,8 +25,8 @@ public class LegacyGameController : MonoBehaviour
     public int bonusScoreIncrement = 1000;
     public int bonusScoreDecrement = 100;
 
-    public bool gameCompletedState = false;
-    public bool gameOverState = false;
+    //public bool gameCompletedState = false;
+    //public bool gameOverState = false;
 
     [SerializeField] private LegacyElevatorParametersSO elevatorParameters;
 
@@ -130,8 +130,10 @@ public class LegacyGameController : MonoBehaviour
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
 
-        gameCompletedState = false;
-        gameOverState = true;
+        //gameCompletedState = false;
+        //gameOverState = true;
+
+        ScenesManager.gameState = GAME_STATE.GAME_OVER;
 
         LegacyMachineLight.SetActive(false);
 
@@ -149,8 +151,14 @@ public class LegacyGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        gameOverState = false;
-        gameCompletedState = false;
+        //gameOverState = false;
+        //gameCompletedState = false;
+
+        ScenesManager.gameState = GAME_STATE.ACTIVE;
+
+        ballRef.SetBallMinCollisionDistance(BallMinCollisionDistance);
+        LegacyHoleController.instance.SetHolesQuantity(HolesQuantity);
+        LegacyHoleController.instance.SetHolesMinDistance(HolesMinDistance);
 
         LegacyHoleController.instance.SpawnHoles();
 
@@ -176,7 +184,7 @@ public class LegacyGameController : MonoBehaviour
             CameraManager.instance.Transition(true);
         }
 
-        LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
+        LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
     }
@@ -205,7 +213,8 @@ public class LegacyGameController : MonoBehaviour
         }
         else
         {
-            gameCompletedState = true;
+            ScenesManager.gameState = GAME_STATE.GAME_COMPLETED;
+            //gameCompletedState = true;
 
             if (CameraManager.instance != null)
             {
@@ -224,14 +233,14 @@ public class LegacyGameController : MonoBehaviour
     {
         foreach(GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
         {
-            holeIndicator.GetComponent<HoleIndicator>().StartFlashing();
+            holeIndicator.GetComponent<LegacyHoleIndicator>().StartFlashing();
         }
 
         yield return new WaitForSeconds(5f);
 
         foreach (GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
         {
-            holeIndicator.GetComponent<HoleIndicator>().StopFlashing();
+            holeIndicator.GetComponent<LegacyHoleIndicator>().StopFlashing();
         }
 
         GlobalUIManager.instance.ReplayGame();
@@ -242,12 +251,12 @@ public class LegacyGameController : MonoBehaviour
     {
         if (currentBallNumber <= 0)
         {
-
-            gameOverState = true;
+            ScenesManager.gameState = GAME_STATE.GAME_OVER;
+            //gameOverState = true;
 
             RecalculateBestScore();
 
-            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
 
             if (GlobalUIManager.instance != null)
             {
@@ -268,7 +277,7 @@ public class LegacyGameController : MonoBehaviour
 
         if (rightHole)
         {
-            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
+            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
             RecalculateScore();
         }
         else
