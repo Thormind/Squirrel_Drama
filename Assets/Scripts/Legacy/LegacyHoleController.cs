@@ -26,8 +26,6 @@ public class LegacyHoleController : MonoBehaviour
     public float holesIndicatorYMin = -2.75f;
     public float holesIndicatorYMax = 2.75f;
 
-    private float currentY;
-    public float holesIndicatorMinDistance;
     public float minHolesIndicatorYDistance = 0.6f;
     public float maxHolesIndicatorYDistance = 0.9f;
 
@@ -65,6 +63,7 @@ public class LegacyHoleController : MonoBehaviour
 
             if (spawnPosition == Vector3.zero)
             {
+                Debug.Log("Could not find a valid spawn position after " + maxTries + " tries.");
                 break;
             }
 
@@ -77,69 +76,28 @@ public class LegacyHoleController : MonoBehaviour
     {
         maxHolesIndicatorYDistance = ((Mathf.Abs(holesIndicatorYMin - holesIndicatorYMax)) / 10) + 0.2f;
 
-        currentY = holesIndicatorYMin;
+        float currentY = holesIndicatorYMin;
 
         for (int i = 1; i <= 10; i++)
         {
-            Vector3 spawnPosition = GetRandomIndicatorSpawnPosition();
+            float randomX = Random.Range(holesIndicatorXMin, holesIndicatorXMax);
 
-            if (spawnPosition == Vector3.zero)
-            {
-                break;
-            }
+            Vector3 localPosition = new Vector3(randomX, currentY, 0);
+            Vector3 spawnPosition = holesParent.transform.TransformPoint(localPosition);
 
             GameObject holeInstantiated = Instantiate(holePrefab, spawnPosition, Quaternion.identity, holesParent.transform);
             holes.Add(holeInstantiated);
 
             GameObject holeIndicatorInstantiated = Instantiate(holeIndicatorPrefab, spawnPosition, Quaternion.identity, holesParent.transform);
-            holeIndicatorInstantiated.GetComponent<LegacyHoleIndicator>().SetHoleNumber(i);
             holeIndicatorList.Add(holeIndicatorInstantiated);
+
+            _spawnedHolesPositions.Add(localPosition);
+
+            holeIndicatorInstantiated.GetComponent<HoleIndicator>().SetHoleNumber(i);
 
             float randomY = Random.Range(minHolesIndicatorYDistance, maxHolesIndicatorYDistance);
             currentY += randomY;
         }
-    }
-
-    private Vector3 GetRandomIndicatorSpawnPosition()
-    {
-        Vector3 spawnPosition;
-        Vector3 localPosition;
-
-        int tries = 0;
-        do
-        {
-            float randomX = Random.Range(holesIndicatorXMin, holesIndicatorXMax);
-
-            localPosition = new Vector3(randomX, currentY, 0);
-            spawnPosition = holesParent.transform.TransformPoint(localPosition);
-
-            tries++;
-            if (tries >= maxTries)
-            {
-                spawnPosition = Vector3.zero;
-                break;
-            }
-        } while (!IsValidIndicatorPosition(localPosition));
-
-
-        if (spawnPosition != Vector3.zero)
-        {
-            _spawnedHolesPositions.Add(localPosition);
-        }
-
-        return spawnPosition;
-    }
-
-    private bool IsValidIndicatorPosition(Vector3 position)
-    {
-        foreach (Vector3 spawnedPosition in _spawnedHolesPositions)
-        {
-            if (Vector3.Distance(position, spawnedPosition) < holesIndicatorMinDistance)
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     private Vector3 GetRandomSpawnPosition()

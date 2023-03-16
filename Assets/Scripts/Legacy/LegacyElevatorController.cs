@@ -127,7 +127,7 @@ public class LegacyElevatorController : MonoBehaviour
 
         LegacyGameController.instance.ResetBall();
 
-        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
+        if (!LegacyGameController.instance.gameCompletedState && !LegacyGameController.instance.gameOverState)
         {
             StartCoroutine(MoveBarToStartPosition());
         }

@@ -49,7 +49,6 @@ public class UIPanelAnimation : MonoBehaviour
 
     private IEnumerator Animate(Vector3 startScale, Vector3 endScale)
     {
-        startScale = rectTransform.localScale;
         float startTime = Time.time;
         float endTime = startTime + duration;
         float easedTime;

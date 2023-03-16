@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   legacyElevatorMovementSpeed: 0.875
   legacyElevatorMaxDifference: 0.5
-  legacyBallGravityScale: 2.5
+  legacyBallGravityScale: 2.285
   legacyBallMinCollisionDistance: 0.07
-  legacyHolesQuantity: 120
-  legacyHolesMinDistance: 0.45
+  legacyHolesQuantity: 130
+  legacyHolesMinDistance: 0.4

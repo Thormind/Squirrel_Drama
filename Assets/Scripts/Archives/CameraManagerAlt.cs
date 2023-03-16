@@ -70,12 +70,12 @@ public class CameraManagerAlt : MonoBehaviour
     {
         if (isFocused)
         {
-            if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+            if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
             {
                 Vector3 desiredPosition = new Vector3(infiniteFocusedPosition.x, InfiniteGameController.instance.GetFruitPosition().y + infiniteVerticalOffset, infiniteFocusedPosition.z);
                 targetPosition = desiredPosition;
             }
-            if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+            if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
             {
                 Vector3 targetDirection = new Vector3(0, LegacyGameController.instance.GetBallPosition().y, 0) - transform.position;
                 targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up); 
@@ -93,7 +93,7 @@ public class CameraManagerAlt : MonoBehaviour
         isFocused = false;
         smoothSpeed = modeTransitionSpeed;
 
-        if (ScenesManager.gameMode == GAME_MODE.NONE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.NONE)
         {
             exteriorLightIntensity = 1;
             legacyMachine.SetActive(true);
@@ -102,13 +102,13 @@ public class CameraManagerAlt : MonoBehaviour
             targetRotation = menuRotation;
             targetFOV = menuFOV;
         }
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             targetPosition = infiniteUnfocusedPosition;
             targetRotation = infiniteRotation;
             targetFOV = unfocusedFOV;
         }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             exteriorLightIntensity = 0;
             legacyMachine.SetActive(false);
@@ -123,7 +123,7 @@ public class CameraManagerAlt : MonoBehaviour
     {
         smoothSpeed = focusUnfocusSpeed;
 
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             if (isFocused)
             {
@@ -138,7 +138,7 @@ public class CameraManagerAlt : MonoBehaviour
                 targetFOV = unfocusedFOV;
             }
         }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             if (isFocused)
             {

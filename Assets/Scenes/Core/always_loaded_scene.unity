@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1349242040}
-  m_IndirectSpecularColor: {r: 0.32004204, g: 0.6735718, b: 1.6491416, a: 1}
+  m_IndirectSpecularColor: {r: 0.29941857, g: 0.6283766, b: 1.750731, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -321,7 +321,6 @@ MonoBehaviour:
     prefabRef: {fileID: 1536668784578062082, guid: 437850890fc948840bb122fd323e491a, type: 3}
   - menuType: 0
     prefabRef: {fileID: 4412724153958774527, guid: 678564e9ec0c9a441b54575240b6de20, type: 3}
-  specificMenu: 0
   controllerIcon: {fileID: 1711588659}
 --- !u!114 &366574611
 MonoBehaviour:
@@ -698,6 +697,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadProgress: 0
   unloadProgress: 0
+  gameMode: 0
+  timeOfDay: 0
 --- !u!4 &1209707267
 Transform:
   m_ObjectHideFlags: 0

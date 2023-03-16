@@ -34,9 +34,6 @@ public class UIAnimation : MonoBehaviour
     [SerializeField] private RectTransform panelRectTransform;
     [SerializeField] private RectTransform panelRectTransform2;
 
-    public delegate void AnimationUIEventHandler();
-    public static event AnimationUIEventHandler OnAnimationUICalled;
-
     private void Awake()
     {
         targetScale = panelRectTransform.localScale;
@@ -61,8 +58,6 @@ public class UIAnimation : MonoBehaviour
 
     public void play()
     {
-        OnAnimationUICalled?.Invoke();
-
         // Get the RectTransform component of the UI element
         rectTransform = GetComponent<RectTransform>();
         rectTransform.anchorMin = new Vector2(0.5f, 0.5f);

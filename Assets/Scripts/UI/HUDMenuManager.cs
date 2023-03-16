@@ -49,15 +49,26 @@ public class HUDMenuManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    // Start is called before the first frame update
+    void Start()
     {
-        GlobalUIManager.instance.specificMenu = MENU.MENU_PAUSE;
-
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             SetInfiniteHUD();
         }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            SetLegacyHUD();
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            SetInfiniteHUD();
+        }
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             SetLegacyHUD();
         }

@@ -12,10 +12,7 @@ public class LegacyBallAudio : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (AudioManager.instance != null)
-        {
-            AudioManager.instance.gameListener = gameObject.GetComponent<AudioListener>();
-        }
+        AudioManager.instance.gameListener = gameObject.GetComponent<AudioListener>();
     }
 
     // Update is called once per frame
