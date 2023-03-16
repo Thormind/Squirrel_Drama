@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 
 public class FpsCounter : MonoBehaviour
 {
-    public TMP_Text fpsCounterText;
+    public TextMeshProUGUI fpsCounterText;
 
     private int frameIndex;
     private float[] frameDTs;
@@ -14,7 +14,7 @@ public class FpsCounter : MonoBehaviour
 
     private void Start()
     {
-        fpsCounterText = gameObject.GetComponent<TMP_Text>();
+        fpsCounterText = gameObject.GetComponent<TextMeshProUGUI>();
         frameIndex = 0;
         frameDTs = new float[60];
         isFpsShown = false;
@@ -31,7 +31,7 @@ public class FpsCounter : MonoBehaviour
 
             int fps = CalculFps();
 
-            fpsCounterText.SetText("FPS " + CalculFps().ToString());
+            fpsCounterText.text = $"FPS { CalculFps() }";
         }
     }
 
