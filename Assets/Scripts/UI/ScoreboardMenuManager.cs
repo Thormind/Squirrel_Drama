@@ -46,14 +46,14 @@ public class ScoreboardMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(cancelHomeButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelHomeButton.gameObject, true);
     }
 
     private void HandleCancelButton()
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject, true);
     }
 
     private void HandleReplayButton()

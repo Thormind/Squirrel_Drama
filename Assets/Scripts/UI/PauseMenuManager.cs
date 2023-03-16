@@ -49,14 +49,14 @@ public class PauseMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         retryPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(cancelRetryButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelRetryButton.gameObject, true);
     }
 
     private void HandleQuitButton()
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(cancelQuitButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelQuitButton.gameObject, true);
     }
 
     private void HandleCancelButton()
@@ -64,7 +64,7 @@ public class PauseMenuManager : MonoBehaviour
         retryPanel.SetActive(false);
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject, true);
     }
 
     private void HandleConfirmRetryButton()

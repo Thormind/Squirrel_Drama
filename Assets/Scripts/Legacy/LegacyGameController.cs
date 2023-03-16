@@ -196,6 +196,8 @@ public class LegacyGameController : MonoBehaviour
 
         UpdateHUD(GAME_DATA.BONUS_SCORE);
 
+        ScenesManager.gameState = GAME_STATE.ACTIVE;
+
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
@@ -214,7 +216,6 @@ public class LegacyGameController : MonoBehaviour
         else
         {
             ScenesManager.gameState = GAME_STATE.GAME_COMPLETED;
-            //gameCompletedState = true;
 
             if (CameraManager.instance != null)
             {
@@ -277,6 +278,7 @@ public class LegacyGameController : MonoBehaviour
 
         if (rightHole)
         {
+            ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
             LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
             RecalculateScore();
         }

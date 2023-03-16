@@ -80,19 +80,19 @@ public class SettingsMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         resetPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(cancelResetButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelResetButton.gameObject, true);
     }
 
     private void HandleCancelButton()
     {
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject, true);
     }
 
     private void HandleConfirmResetButton()
     {
-        GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject, true);
         SaveManager.instance.ResetBestScores();
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);

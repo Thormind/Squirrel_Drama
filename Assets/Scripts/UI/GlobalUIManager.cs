@@ -143,11 +143,11 @@ public class GlobalUIManager : MonoBehaviour
         if (lastMenu != MENU.NONE)
         {
             AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(lastMenu, false));
-            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true));
         }
         else
         {
-            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true));
         }
 
         //print($"LAST MENU: {lastMenu}");
@@ -503,11 +503,15 @@ public class GlobalUIManager : MonoBehaviour
         es.enabled = isEnabled;
     }
 
-    public void SetFirstSelected (GameObject firstSelected)
+    public void SetFirstSelected (GameObject firstSelected, bool alt = false)
     {
         es.SetSelectedGameObject(null); //Resetting the currently selected GO
         es.firstSelectedGameObject = firstSelected;
-        //es.SetSelectedGameObject(firstSelected, new BaseEventData(es));
+
+        if (alt && es.currentSelectedGameObject == null)
+        {
+            es.SetSelectedGameObject(firstSelected, new BaseEventData(es));
+        }
     }
 
 

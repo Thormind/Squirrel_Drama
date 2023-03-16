@@ -55,6 +55,8 @@ public class AnimationManager : MonoBehaviour
 
         // Set the playing flag to false
         isPlayingMenuAnimation = false;
+
+        GlobalUIManager.instance.EnableInputs(true);
     }
 
     public void ClearMenuQueue()

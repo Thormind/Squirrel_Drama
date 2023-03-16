@@ -58,13 +58,13 @@ public class MainMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(quitCancelButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(quitCancelButton.gameObject, true);
     }
 
     private void HandleCancelButton()
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(quitButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(quitButton.gameObject, true);
     }
 }
