@@ -137,7 +137,6 @@ public class CameraManager : MonoBehaviour
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.fixedDeltaTime * smoothSpeed);
         dayLightObj.transform.rotation = Quaternion.Lerp(dayLightObj.transform.rotation, targetLightRotation, Time.fixedDeltaTime * smoothSpeed);
         dayLight.color = Color.Lerp(dayLight.color, targetLightColor, Time.fixedDeltaTime * smoothSpeed);
-        //print($"DAYLIGHT COLOR : {dayLight.color}");
         dayLight.intensity = Mathf.Lerp(dayLight.intensity, dayLightIntensity, Time.fixedDeltaTime * smoothSpeed);
         loungeLight.intensity = Mathf.Lerp(loungeLight.intensity, loungeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
         arcadeLight.intensity = Mathf.Lerp(arcadeLight.intensity, arcadeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
@@ -272,11 +271,6 @@ public class CameraManager : MonoBehaviour
 
             targetLightColor = noonLightColor;
 
-
-            print($"{targetLightColor}");
-
-
-
             Skybox skybox = Camera.main.GetComponent<Skybox>();
             skybox.material = skyboxNoonMaterial;
         }
@@ -293,12 +287,7 @@ public class CameraManager : MonoBehaviour
 
             dayLightIntensity = nightLightIntensity;
 
-
             targetLightColor = nightLightColor;
-
-
-            print($"{targetLightColor}");
-
 
             Skybox skybox = Camera.main.GetComponent<Skybox>();
             skybox.material = skyboxNightMaterial;
