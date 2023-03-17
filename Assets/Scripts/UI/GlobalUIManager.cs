@@ -51,8 +51,12 @@ public class GlobalUIManager : MonoBehaviour
     private Stack<MENU> menuStack = new Stack<MENU>();
     private ushort menuStackSize = 0;
 
-    [SerializeField] private GameObject controllerIcon;
+    public DefaultInputActions UIControls;
+    private InputAction back;
+    private InputAction pause;
+    private InputAction confirm;
 
+    [SerializeField] private GameObject controllerIcon;
     public static bool isControllerConnected = false;
 
     public void Awake()
@@ -64,6 +68,75 @@ public class GlobalUIManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(this);
+        }
+
+        UIControls = new DefaultInputActions();
+    }
+
+    private void OnEnable()
+    {
+        pause = UIControls.UI.Pause;
+        confirm = UIControls.UI.Confirm;
+        back = UIControls.UI.Back;
+
+        pause.Enable();
+        confirm.Enable();
+        back.Enable();
+
+        pause.performed += OnPause;
+        back.performed += OnBack;
+    }
+
+    private void OnDisable()
+    {
+        pause.Disable();
+        confirm.Disable();
+        back.Disable();
+
+        pause.performed -= OnPause;
+        back.performed -= OnBack;
+    }
+
+    private void OnPause(InputAction.CallbackContext context)
+    {
+        print("Pause");
+
+        if (es.enabled)
+        {
+            switch (ScenesManager.gameState)
+            {
+                case GAME_STATE.PAUSED: // PAUSED_STATE
+                    ResumeGame();
+                    break;
+                case GAME_STATE.ACTIVE: // ACTIVE_STATE
+                    PauseGame();
+                    break;
+            }
+        }
+    }
+
+    private void OnBack(InputAction.CallbackContext context)
+    {
+        if (es.enabled)
+        {
+            switch (ScenesManager.gameState)
+            {
+                case GAME_STATE.GAME_OVER: // PAUSED_STATE
+                    ReturnToMainMenu();
+                    break;
+                case GAME_STATE.PRE_GAME: // PRE_GAME_STATE
+                    ReturnToMainMenu();
+                    break;
+                case GAME_STATE.PAUSED: // PAUSED_STATE
+                    ResumeGame();
+                    break;
+                case GAME_STATE.ACTIVE: // ACTIVE_STATE
+                    PauseGame();
+                    break;
+                case GAME_STATE.INACTIVE: // INACTIVE_STATE
+                    SetSpecificMenu();
+                    break;
+            }
         }
     }
 
@@ -81,37 +154,6 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_TITLE_SCREEN);
 
         DetectController();
-
-    }
-
-
-    void Update()
-    {
-        if (es.enabled)
-        {
-            // GAME_ACTIVE_STATE
-            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                switch (ScenesManager.gameState)
-                {
-                    case GAME_STATE.GAME_OVER: // PAUSED_STATE
-                        ReturnToMainMenu();
-                        break;
-                    case GAME_STATE.PRE_GAME: // PRE_GAME_STATE
-                        ReturnToMainMenu();
-                        break;
-                    case GAME_STATE.PAUSED: // PAUSED_STATE
-                        ResumeGame();
-                        break;
-                    case GAME_STATE.ACTIVE: // ACTIVE_STATE
-                        PauseGame();
-                        break;
-                    case GAME_STATE.INACTIVE: // INACTIVE_STATE
-                        SetSpecificMenu();
-                        break;
-                }
-            }
-        }
 
     }
 
@@ -312,10 +354,11 @@ public class GlobalUIManager : MonoBehaviour
     public void PauseGame()
     {
         ScenesManager.gameState = GAME_STATE.PAUSED;
-        AnimationManager.instance.PauseInGameAnimations();
-        SetMenu(MENU.MENU_PAUSE);
 
         Time.timeScale = 0f;
+        AnimationManager.instance.PauseInGameAnimations();
+
+        SetMenu(MENU.MENU_PAUSE);
 
         StartCoroutine(PauseResumeCallback());
     }

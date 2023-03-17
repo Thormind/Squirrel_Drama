@@ -253,7 +253,6 @@ public class LegacyGameController : MonoBehaviour
         if (currentBallNumber <= 0)
         {
             ScenesManager.gameState = GAME_STATE.GAME_OVER;
-            //gameOverState = true;
 
             RecalculateBestScore();
 
