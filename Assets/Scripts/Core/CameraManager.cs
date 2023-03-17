@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour
 
     private float menuUnfocusedSize = 150f;
     private Vector3 menuUnfocusedPosition = new Vector3(0f, 37.5f, -500f);
-    private Quaternion menuUnfocusedRotation = Quaternion.Euler(-30, 0, 0);
+    private Quaternion menuUnfocusedRotation = Quaternion.Euler(-32, 0, 0);
 
     private float menuFocusedSize2 = 75f;
     private Vector3 menuFocusedPosition2 = new Vector3(0f, 350f, -500f);
