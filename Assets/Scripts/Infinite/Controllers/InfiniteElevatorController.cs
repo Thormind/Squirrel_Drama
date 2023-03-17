@@ -71,7 +71,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToStartPosition()
     {
-        while (leftLifter.position.y < start.position.y)
+        while (leftLifter.position.y < start.position.y && ScenesManager.gameState == GAME_STATE.ACTIVE)
         {
             Vector2 newLifterPosition = leftLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
             Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
@@ -82,10 +82,11 @@ public class InfiniteElevatorController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        inputEnabled = true;
-
-        InfiniteGameController.instance.ReadyForLevel();
-
+        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
+        {
+            inputEnabled = true;
+            InfiniteGameController.instance.ReadyForLevel();
+        }
 
         yield return null;
     }
@@ -139,7 +140,6 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         inputEnabled = false;
         StopAllCoroutines();
-        StopCoroutine(MoveBarToStartPosition());
 
         StartCoroutine(MoveBarToBottomPosition());
     }
@@ -159,6 +159,12 @@ public class InfiniteElevatorController : MonoBehaviour
         float speed = m * height + b;
 
         return speed;
+    }
+
+
+    public bool ElevatorReachedBottom()
+    {
+        return (leftLifter.position.y == bottom.position.y || rightLifter.position.y == bottom.position.y);
     }
 
 
