@@ -86,6 +86,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
         InfiniteGameController.instance.ReadyForLevel();
 
+
         yield return null;
     }
 
@@ -111,19 +112,18 @@ public class InfiniteElevatorController : MonoBehaviour
 
         InfiniteGameController.instance.ResetFruit();
 
-
-        if (ScenesManager.gameState == GAME_STATE.LEVEL_COMPLETED)
-        {
-            InfiniteGameController.instance.StartGame();
-        }
         if (ScenesManager.gameState == GAME_STATE.ACTIVE)
         {
             if (AnimationManager.instance != null)
             {
                 AnimationManager.instance.PlayObstaclesAnimation(MoveBarToStartPosition());
             }
-            //StartCoroutine(MoveBarToStartPosition());
         }
+        if (ScenesManager.gameState == GAME_STATE.LEVEL_COMPLETED)
+        {
+            InfiniteGameController.instance.StartGame();
+        }
+
 
         yield return null;
     }
@@ -139,7 +139,8 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         inputEnabled = false;
         StopAllCoroutines();
-       
+        StopCoroutine(MoveBarToStartPosition());
+
         StartCoroutine(MoveBarToBottomPosition());
     }
 

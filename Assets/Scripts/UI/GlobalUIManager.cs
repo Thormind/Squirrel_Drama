@@ -99,8 +99,6 @@ public class GlobalUIManager : MonoBehaviour
 
     private void OnPause(InputAction.CallbackContext context)
     {
-        print("Pause");
-
         if (es.enabled)
         {
             switch (ScenesManager.gameState)
@@ -365,11 +363,12 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReplayGame()
     {
-        SetMenu(MENU.MENU_PREGAME);
+        ScenesManager.gameState = GAME_STATE.PRE_GAME;
+
         Time.timeScale = 1f;
         AnimationManager.instance.ClearInGameQueue();
 
-        ScenesManager.gameState = GAME_STATE.PRE_GAME;
+        SetMenu(MENU.MENU_PREGAME);
 
         StartCoroutine(PauseResumeCallback());
     }
