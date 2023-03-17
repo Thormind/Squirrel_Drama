@@ -30,7 +30,7 @@ public class CameraManager : MonoBehaviour
     private Quaternion nightLightRotation = Quaternion.Euler(15, 5, 0);
     private Color targetLightColor;
     private Color noonLightColor = new Color(1f, 0.98f, 0.68f);//HexToColor("FFFAAE");
-    private Color nightLightColor = new Color(0.45f, 0.61f, 0.851f); //HexToColor("739CD9");
+    private Color nightLightColor = new Color(0.58f, 0.753f, 1f); //HexToColor("739CD9");
     private float dayLightIntensity;
     private float noonLightIntensity = 4f;
     private float nightLightIntensity = 8f;
