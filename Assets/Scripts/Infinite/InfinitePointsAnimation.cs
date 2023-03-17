@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class InfinitePointsAnimation : MonoBehaviour
 {
+    public GameObject pointModel;
+
+    private float rotationSpeed = 25f;
+
     private float reachTheFruitTime = 2f;
 
     private Vector3 startPointPosition;
@@ -15,6 +19,12 @@ public class InfinitePointsAnimation : MonoBehaviour
         startPointPosition = transform.localPosition;
         startPointScale = transform.localScale;
     }
+
+    void Update()
+    {
+        pointModel.transform.Rotate(Vector3.up * Time.fixedDeltaTime * rotationSpeed, Space.World);
+    }
+
 
     public void HandleFruitInPointsFunction()
     {
