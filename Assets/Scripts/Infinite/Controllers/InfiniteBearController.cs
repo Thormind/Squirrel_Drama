@@ -46,7 +46,7 @@ public class InfiniteBearController : MonoBehaviour
         isSpawning = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (isSpawning && Time.time >= _nextSpawnTime && Random.value < BearSpawnProbability && bearInstantiated == null)
         {

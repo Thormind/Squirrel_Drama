@@ -25,8 +25,8 @@ public class LegacyGameController : MonoBehaviour
     public int bonusScoreIncrement = 1000;
     public int bonusScoreDecrement = 100;
 
-    //public bool gameCompletedState = false;
-    //public bool gameOverState = false;
+    public bool gameCompletedState = false;
+    public bool gameOverState = false;
 
     [SerializeField] private LegacyElevatorParametersSO elevatorParameters;
 
@@ -130,10 +130,8 @@ public class LegacyGameController : MonoBehaviour
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
 
-        //gameCompletedState = false;
-        //gameOverState = true;
-
-        ScenesManager.gameState = GAME_STATE.GAME_OVER;
+        gameCompletedState = false;
+        gameOverState = true;
 
         LegacyMachineLight.SetActive(false);
 
@@ -151,14 +149,8 @@ public class LegacyGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        //gameOverState = false;
-        //gameCompletedState = false;
-
-        ScenesManager.gameState = GAME_STATE.ACTIVE;
-
-        ballRef.SetBallMinCollisionDistance(BallMinCollisionDistance);
-        LegacyHoleController.instance.SetHolesQuantity(HolesQuantity);
-        LegacyHoleController.instance.SetHolesMinDistance(HolesMinDistance);
+        gameOverState = false;
+        gameCompletedState = false;
 
         LegacyHoleController.instance.SpawnHoles();
 
@@ -184,7 +176,7 @@ public class LegacyGameController : MonoBehaviour
             CameraManager.instance.Transition(true);
         }
 
-        LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().StartPulsating();
+        LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().StartPulsating();
 
         InvokeRepeating(nameof(DecreaseBonusScore), timePerDecrement, timePerDecrement);
     }
@@ -195,8 +187,6 @@ public class LegacyGameController : MonoBehaviour
         bonusScore = (currentHoleIndex + 1) * bonusScoreIncrement;
 
         UpdateHUD(GAME_DATA.BONUS_SCORE);
-
-        ScenesManager.gameState = GAME_STATE.ACTIVE;
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -215,7 +205,7 @@ public class LegacyGameController : MonoBehaviour
         }
         else
         {
-            ScenesManager.gameState = GAME_STATE.GAME_COMPLETED;
+            gameCompletedState = true;
 
             if (CameraManager.instance != null)
             {
@@ -234,14 +224,14 @@ public class LegacyGameController : MonoBehaviour
     {
         foreach(GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
         {
-            holeIndicator.GetComponent<LegacyHoleIndicator>().StartFlashing();
+            holeIndicator.GetComponent<HoleIndicator>().StartFlashing();
         }
 
         yield return new WaitForSeconds(5f);
 
         foreach (GameObject holeIndicator in LegacyHoleController.instance.holeIndicatorList)
         {
-            holeIndicator.GetComponent<LegacyHoleIndicator>().StopFlashing();
+            holeIndicator.GetComponent<HoleIndicator>().StopFlashing();
         }
 
         GlobalUIManager.instance.ReplayGame();
@@ -252,11 +242,12 @@ public class LegacyGameController : MonoBehaviour
     {
         if (currentBallNumber <= 0)
         {
-            ScenesManager.gameState = GAME_STATE.GAME_OVER;
+
+            gameOverState = true;
 
             RecalculateBestScore();
 
-            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
+            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
 
             if (GlobalUIManager.instance != null)
             {
@@ -277,8 +268,7 @@ public class LegacyGameController : MonoBehaviour
 
         if (rightHole)
         {
-            ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
-            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
+            LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<HoleIndicator>().EndPulsating();
             RecalculateScore();
         }
         else

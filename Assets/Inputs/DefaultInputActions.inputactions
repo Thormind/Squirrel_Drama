@@ -367,15 +367,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Back",
-                    "type": "Button",
-                    "id": "2864506f-e4f6-4d69-aabf-87cd124ae966",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -656,28 +647,6 @@
                 },
                 {
                     "name": "",
-                    "id": "858e13b2-5513-4d01-9e54-99fc4bd7be91",
-                    "path": "<Gamepad>/start",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d591e63b-0db6-42af-a998-f2dc3bbe4fc2",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Submit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "82627dcc-3b13-4ba9-841d-e4b746d6553e",
                     "path": "*/{Cancel}",
                     "interactions": "",
@@ -854,17 +823,6 @@
                 },
                 {
                     "name": "",
-                    "id": "05aec083-c8a1-4dfa-8fe2-659d699b3087",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "fda18e1b-9423-4234-9bb3-6a837e703f21",
                     "path": "<Gamepad>/start",
                     "interactions": "",
@@ -878,17 +836,6 @@
                     "name": "",
                     "id": "77a98b98-25c9-4f9f-ae28-6a32fc69955a",
                     "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0f2b3b0f-b468-45ca-9473-8585e402e3de",
-                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -920,23 +867,23 @@
                 },
                 {
                     "name": "",
-                    "id": "ee23ff8f-a53f-492f-a210-ae9be1fd0b65",
-                    "path": "<Keyboard>/escape",
+                    "id": "28d46c8f-6b79-476c-9367-366e332d8dc5",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Back",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d2ef7188-b04f-47c9-a78c-ff9fb1db90f3",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "52a14a5d-00e3-4c01-9e08-d72c9a57f5fd",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Back",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

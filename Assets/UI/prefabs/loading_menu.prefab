@@ -658,13 +658,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationDuration: 0
+  animationInOut: 0
   animationType: 0
-  floatingHeight: 0
+  startPosition: {x: 0, y: 0}
+  endPosition: {x: 0, y: 0}
+  startScale: {x: 0, y: 0, z: 0}
+  endScale: {x: 0, y: 0, z: 0}
   easedProgress: 0
-  isGoingIn: 1
+  startVisible: 0
+  panelRectTransform: {fileID: 1167603137713687062}
+  isVisible: 0
   targetScale: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0, z: 0}
-  targetScale2: {x: 0, y: 0, z: 0}
-  targetPosition2: {x: 0, y: 0, z: 0}
-  panelRectTransform: {fileID: 1167603137713687062}
-  panelRectTransform2: {fileID: 0}

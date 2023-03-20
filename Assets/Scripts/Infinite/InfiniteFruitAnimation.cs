@@ -23,7 +23,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         transform.Rotate(Vector3.up * Time.fixedDeltaTime * rotationSpeed, Space.World);
     }

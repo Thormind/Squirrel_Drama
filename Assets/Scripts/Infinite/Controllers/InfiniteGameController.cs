@@ -40,6 +40,9 @@ public class InfiniteGameController : MonoBehaviour
     public float maxTimeBeforeDecrement;
     private bool timerRunning = false;
 
+    public bool levelCompletedState;
+    public bool gameOverState;
+
     private void Awake()
     {
         if (instance == null)
@@ -54,6 +57,8 @@ public class InfiniteGameController : MonoBehaviour
 
     private void Start()
     {
+        gameOverState = false;
+        levelCompletedState = false;
 
         currentLevel = 1;
         difficultyLevel = 1;
@@ -259,8 +264,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public void LevelCompleted()
     {
-        //levelCompletedState = true;
-        ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
+        levelCompletedState = true;
 
         EnableFruitCollision(false);
 
@@ -317,6 +321,9 @@ public class InfiniteGameController : MonoBehaviour
 
         difficultyLevel = 1;
 
+        levelCompletedState = false;
+        gameOverState = true;
+
         // ==================== //
 
         RemoveObstacles();
@@ -332,7 +339,8 @@ public class InfiniteGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        ScenesManager.gameState = GAME_STATE.ACTIVE;
+        levelCompletedState = false;
+        gameOverState = false;
 
         SpawnObstacles();
 
@@ -370,7 +378,7 @@ public class InfiniteGameController : MonoBehaviour
     {
         if (currentFruitNumber <= 0)
         {
-            ScenesManager.gameState = GAME_STATE.GAME_OVER;
+            gameOverState = true;
 
             RecalculateBestScore();
 

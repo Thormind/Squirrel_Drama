@@ -359,7 +359,7 @@ public class HUDMenuManager : MonoBehaviour
         string resetTimerString = "00:00:00";
 
         // Loop until the timer reaches the animation duration
-        while (timer < animationDuration && gameObject.activeInHierarchy)
+        while (timer < animationDuration)
         {
             // Calculate the current timer string based on the animation progress
             string currentTimerString = GetAnimatedTimerString(startTimerString, resetTimerString, timer / animationDuration);
@@ -394,7 +394,7 @@ public class HUDMenuManager : MonoBehaviour
         float timer = 0f;
 
         // Loop until the timer reaches the animation duration
-        while (timer < animationDuration && gameObject.activeInHierarchy)
+        while (timer < animationDuration)
         {
             // Calculate the current timer string based on the animation progress
             string currentBonusScoreString = Mathf.FloorToInt(Mathf.Lerp(currentBonusScore, newBonusScore, timer / animationDuration)).ToString();
@@ -427,7 +427,7 @@ public class HUDMenuManager : MonoBehaviour
         float timer = 0f;
 
         // Loop until the timer reaches the animation duration
-        while (timer < animationDuration && gameObject.activeInHierarchy)
+        while (timer < animationDuration)
         {
             // Calculate the current timer string based on the animation progress
             string currentBonusScoreString = Mathf.FloorToInt(Mathf.Lerp(currentBonusScore, newBonusScore, timer / animationDuration)).ToString();

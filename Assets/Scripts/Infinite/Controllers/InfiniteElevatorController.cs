@@ -30,6 +30,8 @@ public class InfiniteElevatorController : MonoBehaviour
     private float rightUpInputValue;
     private float rightDownInputValue;
 
+    public AudioSource moveSound;
+
     private bool inputEnabled = false;
 
     private void Awake()
@@ -51,6 +53,8 @@ public class InfiniteElevatorController : MonoBehaviour
             Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
             movementOffset = input * Time.fixedDeltaTime * movementSpeed;
 
+            //AudioManager.instance.PlayElevatorSound(moveSound, input);
+
             ParticleSystem.MainModule leftVFX = leftLifterVFX.main;
             leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
             ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
@@ -71,7 +75,7 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToStartPosition()
     {
-        while (leftLifter.position.y < start.position.y && ScenesManager.gameState == GAME_STATE.ACTIVE)
+        while (leftLifter.position.y < start.position.y)
         {
             Vector2 newLifterPosition = leftLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
             Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
@@ -82,11 +86,9 @@ public class InfiniteElevatorController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
-        {
-            inputEnabled = true;
-            InfiniteGameController.instance.ReadyForLevel();
-        }
+        inputEnabled = true;
+
+        InfiniteGameController.instance.ReadyForLevel();
 
         yield return null;
     }
@@ -113,18 +115,19 @@ public class InfiniteElevatorController : MonoBehaviour
 
         InfiniteGameController.instance.ResetFruit();
 
-        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
+
+        if (InfiniteGameController.instance.levelCompletedState)
+        {
+            InfiniteGameController.instance.StartGame();
+        }
+        if (!InfiniteGameController.instance.gameOverState && !GlobalUIManager.isPreGame)
         {
             if (AnimationManager.instance != null)
             {
                 AnimationManager.instance.PlayObstaclesAnimation(MoveBarToStartPosition());
             }
+            //StartCoroutine(MoveBarToStartPosition());
         }
-        if (ScenesManager.gameState == GAME_STATE.LEVEL_COMPLETED)
-        {
-            InfiniteGameController.instance.StartGame();
-        }
-
 
         yield return null;
     }
@@ -140,7 +143,7 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         inputEnabled = false;
         StopAllCoroutines();
-
+       
         StartCoroutine(MoveBarToBottomPosition());
     }
 
@@ -159,12 +162,6 @@ public class InfiniteElevatorController : MonoBehaviour
         float speed = m * height + b;
 
         return speed;
-    }
-
-
-    public bool ElevatorReachedBottom()
-    {
-        return (leftLifter.position.y == bottom.position.y || rightLifter.position.y == bottom.position.y);
     }
 
 

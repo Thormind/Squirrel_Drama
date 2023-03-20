@@ -24,21 +24,15 @@ public class ScoreboardMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
+
         replayButton.onClick.AddListener(() => HandleReplayButton());
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
         homeButton.onClick.AddListener(() => HandleHomeButton());
         confirmHomeButton.onClick.AddListener(() => GlobalUIManager.instance.ReturnToMainMenu());
         cancelHomeButton.onClick.AddListener(() => HandleCancelButton());
-    }
 
-    private void OnEnable()
-    {
-        quitPanel.SetActive(false);
-        mainPanel.SetActive(true);
-
-        GlobalUIManager.instance.specificMenu = MENU.MENU_MAIN;
-        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject);
         SetFinalScore();
     }
 
@@ -46,24 +40,24 @@ public class ScoreboardMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(cancelHomeButton.gameObject, true);
+        GlobalUIManager.instance.SetControllerFirstSelected(cancelHomeButton.gameObject);
     }
 
     private void HandleCancelButton()
     {
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject, true);
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
     }
 
     private void HandleReplayButton()
     {
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             InfiniteGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
         }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             LegacyGameController.instance.ResetGame();
             GlobalUIManager.instance.ReplayGame();
@@ -72,15 +66,23 @@ public class ScoreboardMenuManager : MonoBehaviour
 
     public void SetFinalScore()
     {
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
         {
             ScoreText.text = InfiniteGameController.instance.score.ToString();
             BestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
         }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
         {
             ScoreText.text = LegacyGameController.instance.score.ToString();
             BestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.LEGACY_MODE).ToString();
         }
+    }
+
+    private void OnEnable()
+    {
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
+        SetFinalScore();
     }
 }
