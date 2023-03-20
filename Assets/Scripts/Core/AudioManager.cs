@@ -162,6 +162,21 @@ public class AudioManager : MonoBehaviour
         }
         mixer.SetFloat("musicVol", volume);
     }
+
+    public void PauseMusic()
+    {
+        float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
+        if (volume > 0)
+        {
+            volume = -10 - (1 / (volume * volume));
+        }
+        else
+        {
+            volume = -80;
+        }
+        mixer.SetFloat("musicVol", volume);
+    }
+
     public void AdjustSfx()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
@@ -223,7 +238,7 @@ public class AudioManager : MonoBehaviour
 
     public void Pause()
     {
-        mixer.SetFloat("musicVol", -15);
+        PauseMusic();
         AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
         foreach (AudioSource source in sources)
@@ -247,7 +262,7 @@ public class AudioManager : MonoBehaviour
 
     public void UnPause()
     {
-        mixer.SetFloat("musicVol", SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC));
+        AdjustMusic();
         AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
         foreach (AudioSource source in sources)
