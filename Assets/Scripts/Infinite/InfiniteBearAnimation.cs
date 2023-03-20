@@ -57,8 +57,8 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         isCoroutineRunning = true;
 
-        // ============== WARN ANIMATION ============== //
 
+        // ============== WARN ANIMATION ============== //
         float remainingCooldown = warnCooldown;
         AudioManager.instance.PlaySound(SOUND.BEAR_ROAR);
         PlayWarnIndicatorVFX();
@@ -126,7 +126,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         bearCollider.enabled = true;
         InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
 
-        AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
+        PlayImpactSFX();
         PlayImpactVFX();
         PlayImpactCameraShake();
 
@@ -160,20 +160,11 @@ public class InfiniteBearAnimation : MonoBehaviour
             float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, easedProgress);
             SetBearAlpha(bearAlpha);
 
-            //float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, easedProgress);
-            //SetShadowAlpha(shadowAlpha);
-
-            //float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, easedProgress);
-            //float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, easedProgress);
-            //shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
-
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
 
             t += Time.deltaTime / delayBeforeDestroy;
             yield return null;
         }
-
-        //yield return new WaitForSeconds(delayBeforeDestroy);
 
         Destroy(gameObject);
 
@@ -208,6 +199,15 @@ public class InfiniteBearAnimation : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+        }
+
+    }
+
+    private void PlayImpactSFX()
+    {
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
         }
 
     }

@@ -61,7 +61,7 @@ public class InfiniteGameController : MonoBehaviour
         bonusScoreIncrement = 1000;
         bonusScoreDecrement = 100;
         timePerDecrement = 5.0f;
-        maxTimeBeforeDecrement = 20f;
+        maxTimeBeforeDecrement = 30f;
         maxBonusScore = 1000;
 
         fruitScoreIncrement = 500;
@@ -189,7 +189,7 @@ public class InfiniteGameController : MonoBehaviour
 
     private void FruitBonusScoreIncrement()
     {
-        bonusScore += fruitScoreIncrement;
+        bonusScore += fruitScoreIncrement * difficultyLevel;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
@@ -206,14 +206,14 @@ public class InfiniteGameController : MonoBehaviour
     {
         float totalTime = Time.time - startTime;
 
-        if (totalTime <= 20f)
+        if (totalTime <= maxTimeBeforeDecrement)
         {
             return maxBonusScore * currentLevel;
         }
         else
         {
-            float timeAbove20 = totalTime - maxTimeBeforeDecrement;
-            int bonusScore = maxBonusScore - Mathf.FloorToInt(timeAbove20 / timePerDecrement) * bonusScoreDecrement;
+            float timeAboveMaxTimeBeforeDecrement = totalTime - maxTimeBeforeDecrement;
+            int bonusScore = maxBonusScore - Mathf.FloorToInt(timeAboveMaxTimeBeforeDecrement / timePerDecrement) * bonusScoreDecrement;
             bonusScore = Mathf.Max(bonusScore, 0); // ensure the bonus score is not negative
             return bonusScore * currentLevel;
         }

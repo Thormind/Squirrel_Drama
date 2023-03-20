@@ -81,7 +81,7 @@ public class ScenesManager : MonoBehaviour
 
 	private void HandleGameStateChanged(GAME_STATE newGameState)
 	{
-		print($"{gameState}");
+		//print($"{gameState}");
 	}
 
 
