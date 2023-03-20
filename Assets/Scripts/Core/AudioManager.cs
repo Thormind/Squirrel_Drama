@@ -221,6 +221,56 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void Pause()
+    {
+        mixer.SetFloat("musicVol", -15);
+        AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
+        foreach (AudioSource source in sources)
+        {
+            bool ismusic = false;
+
+            foreach(AudioSource music_source in music_sources)
+            {
+                if(source == music_source)
+                {
+                    ismusic = true;
+                    break;
+                }
+            }
+            if (source.isPlaying && !ismusic)
+            {
+                source.Pause();
+            }
+        }
+    }
+
+    public void UnPause()
+    {
+        mixer.SetFloat("musicVol", SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC));
+        AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
+        foreach (AudioSource source in sources)
+        {
+            bool ismusic = false;
+
+            foreach (AudioSource music_source in music_sources)
+            {
+                if (source == music_source)
+                {
+                    ismusic = true;
+                    break;
+                }
+            }
+
+            if (source.time != 0 && !ismusic)
+            {
+                source.Play();
+            }
+        }
+    }
+
+
     public void PlaySound(SOUND sound)
     {
         if (AudioManager.instance != null)

@@ -101,6 +101,7 @@ public class GlobalUIManager : MonoBehaviour
     {
         if (es.enabled)
         {
+            AudioManager.instance.Pause();
             switch (ScenesManager.gameState)
             {
                 case GAME_STATE.PAUSED: // PAUSED_STATE
@@ -340,6 +341,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        AudioManager.instance.UnPause();
         AnimationManager.instance.ResumeInGameAnimations();
         SetMenu(MENU.MENU_HUD);
 
