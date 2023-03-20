@@ -11,30 +11,28 @@ public class InfiniteBearAnimation : MonoBehaviour
     public GameObject bearPaw;
     public GameObject shadowImage;
 
-    public GameObject warnIndicatorImage;
-    public GameObject warnIndicatorVFX;
-    public float flashInterval = 0.5f;
-
     private float warnCooldown;
 
     public float translationSpeed = 10f;
     public float delayBeforeDestroy = 0.05f;
 
-    private float shadowMinAlpha = 75f;
-    private float shadowMaxAlpha = 200f;
+    public float shadowMinScale = 0.25f;
+
+    public float shadowMinAlpha = 100f;
+    public float shadowMaxAlpha = 200f;
 
     public float bearMinAlpha = 170f;
     public float bearMaxAlpha = 255f;
 
     private bool isCoroutineRunning = false;
-    private EdgeCollider2D bearCollider;
+    private BoxCollider2D bearCollider;
 
     public GameObject impactVFX;
 
 
     private void Start()
     {
-        bearCollider = GetComponent<EdgeCollider2D>();
+        bearCollider = GetComponent<BoxCollider2D>();
         bearCollider.enabled = false;
 
         bearPaw.SetActive(false);
@@ -57,19 +55,16 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         isCoroutineRunning = true;
 
-
         // ============== WARN ANIMATION ============== //
         float remainingCooldown = warnCooldown;
         AudioManager.instance.PlaySound(SOUND.BEAR_ROAR);
-        PlayWarnIndicatorVFX();
-
         while (remainingCooldown > 0f)
         {
             // Update countdown text
             countdownText.text = remainingCooldown.ToString("0.0");
 
             // Update shadow image scale and alpha
-            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 1f, (warnCooldown - remainingCooldown) / warnCooldown);
+            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.75f, (warnCooldown - remainingCooldown) / warnCooldown);
             float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 1f, (warnCooldown - remainingCooldown) / warnCooldown);
             shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
 
@@ -99,7 +94,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         float duration = distance / translationSpeed;
 
         float t = 0f;
-
+        AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
         while (t < 1f && bearPaw.transform.localRotation.x <= endRotation.x)
         {
             float easedProgress = EaseInCirc(t);
@@ -118,7 +113,6 @@ public class InfiniteBearAnimation : MonoBehaviour
         bearPaw.transform.localPosition = endPosition;
         bearPaw.transform.localRotation = endRotation;
         SetBearAlpha(bearMaxAlpha);
-        SetShadowAlpha(0);
 
         // ============== IMPACT ANIMATION ============== //
         SetSlowMotion(false);
@@ -126,14 +120,13 @@ public class InfiniteBearAnimation : MonoBehaviour
         bearCollider.enabled = true;
         InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
 
-        PlayImpactSFX();
         PlayImpactVFX();
         PlayImpactCameraShake();
 
         yield return new WaitForSeconds(0.1f);
 
         bearCollider.enabled = false;
-        bearPaw.GetComponent<EdgeCollider2D>().enabled = true;
+        bearPaw.GetComponent<BoxCollider2D>().enabled = true;
 
         t = 0f;
 
@@ -143,7 +136,7 @@ public class InfiniteBearAnimation : MonoBehaviour
             yield return null;
         }
 
-        bearPaw.GetComponent<EdgeCollider2D>().enabled = false;
+        bearPaw.GetComponent<BoxCollider2D>().enabled = false;
 
 
         // ============== POST IMPACT ANIMATION ============== //
@@ -160,11 +153,20 @@ public class InfiniteBearAnimation : MonoBehaviour
             float bearAlpha = Mathf.Lerp(bearMaxAlpha, bearMinAlpha, easedProgress);
             SetBearAlpha(bearAlpha);
 
+            float shadowAlpha = Mathf.Lerp(shadowMaxAlpha, shadowMinAlpha, easedProgress);
+            SetShadowAlpha(shadowAlpha);
+
+            float shadowXScale = Mathf.Lerp(shadowImage.transform.localScale.x, 0.6f, easedProgress);
+            float shadowYScale = Mathf.Lerp(shadowImage.transform.localScale.y, 0.8f, easedProgress);
+            shadowImage.transform.localScale = new Vector3(shadowXScale, shadowYScale, 1f);
+
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
 
             t += Time.deltaTime / delayBeforeDestroy;
             yield return null;
         }
+
+        //yield return new WaitForSeconds(delayBeforeDestroy);
 
         Destroy(gameObject);
 
@@ -183,9 +185,9 @@ public class InfiniteBearAnimation : MonoBehaviour
 
     private void SetBearAlpha(float bearAlpha)
     {
-        Color bearColor = bearPaw.GetComponentInChildren<MeshRenderer>().material.color;
+        Color bearColor = bearPaw.GetComponent<MeshRenderer>().material.color;
         bearColor.a = bearAlpha / 255f;
-        bearPaw.GetComponentInChildren<MeshRenderer>().material.color = bearColor;
+        bearPaw.GetComponent<MeshRenderer>().material.color = bearColor;
     }
 
     private void SetSlowMotion(bool isSlowMotion)
@@ -199,15 +201,6 @@ public class InfiniteBearAnimation : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
-        }
-
-    }
-
-    private void PlayImpactSFX()
-    {
-        if (AudioManager.instance != null)
-        {
-            AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
         }
 
     }
@@ -230,32 +223,6 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         }
     }
-
-    private void PlayWarnIndicatorVFX()
-    {
-        warnIndicatorVFX.SetActive(true);
-        var mod = warnIndicatorVFX.GetComponent<ParticleSystem>().main;
-        mod.simulationSpeed = 0.5f;
-        warnIndicatorVFX.GetComponent<ParticleSystem>().Play();
-    }
-
-    /*
-    private void Flash()
-    {
-        warnIndicatorImage.SetActive(!warnIndicatorImage.gameObject.activeSelf);
-    }
-
-    public void StartFlashingWarnIndicator()
-    {
-        InvokeRepeating($"Flash", 0, flashInterval);
-    }
-
-    public void StopFlashingWarnIndicator()
-    {
-        CancelInvoke("Flash");
-        warnIndicatorImage.SetActive(false);
-    }
-    */
 
 
     // ====================================== //

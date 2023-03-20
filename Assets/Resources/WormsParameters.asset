@@ -84,11 +84,11 @@ MonoBehaviour:
   - 4
   _wormsAnimationSpeed:
   - 300
-  - 325
   - 350
   - 400
   - 450
   - 500
   - 550
   - 600
+  - 650
   - 700

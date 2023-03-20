@@ -3,20 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-[System.Serializable]
-public enum GAME_STATE
-{
-	ACTIVE,
-	INACTIVE,
-	PAUSED,
-	PRE_GAME,
-	LEVEL_COMPLETED,
-	GAME_COMPLETED,
-	GAME_OVER,
-	LOADING
-};
-
 public enum GAME_MODE
 {
 	NONE, 
@@ -37,22 +23,8 @@ public class ScenesManager : MonoBehaviour
     public float loadProgress;
     public float unloadProgress;
 
-	public static GAME_MODE gameMode;
-	public static TIME_OF_DAY timeOfDay;
-
-	public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
-	public static event GameStateChangedEventHandler OnGameStateChanged;
-
-	public static GAME_STATE gameState
-	{
-		get { return _gameState; }
-		set
-		{
-			_gameState = value;
-			OnGameStateChanged?.Invoke(_gameState);
-		}
-	}
-	private static GAME_STATE _gameState;
+	public GAME_MODE gameMode;
+	public TIME_OF_DAY timeOfDay;
 
 	private void Awake()
     {
@@ -68,20 +40,7 @@ public class ScenesManager : MonoBehaviour
 
 	private void Start()
 	{
-		OnGameStateChanged += HandleGameStateChanged;
-
-		gameState = GAME_STATE.INACTIVE;
 		gameMode = GAME_MODE.NONE;
-	}
-
-	private void OnDestroy()
-	{
-		OnGameStateChanged -= HandleGameStateChanged;
-	}
-
-	private void HandleGameStateChanged(GAME_STATE newGameState)
-	{
-		//print($"{gameState}");
 	}
 
 
