@@ -405,9 +405,6 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        AudioManager.instance.Stopwind();
-        AudioManager.instance.PlayUiMusic();
-
         AnimationManager.instance.ClearInGameQueue();
         AnimationManager.instance.ClearObstaclesQueue();
 
@@ -447,6 +444,9 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
+
+        AudioManager.instance.StopWind();
+        AudioManager.instance.PlayUiMusic();
 
         SetMenu(MENU.MENU_MAIN);
         ScenesManager.gameState = GAME_STATE.INACTIVE;

@@ -252,7 +252,7 @@ public class AudioManager : MonoBehaviour
         infiniteMusic.Play();
     }
 
-    public void Playwind()
+    public void PlayWind()
     {
         if (!wind.isPlaying)
         {
@@ -260,9 +260,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void Stopwind()
+    public void StopWind()
     {
-        if (wind.isPlaying && ScenesManager.gameMode == GAME_MODE.NONE)
+        if (wind.isPlaying)
         {
             wind.Stop();
         }

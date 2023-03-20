@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler
+public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
 {
     private Vector3 targetScale;
     private Vector3 originalScale;
@@ -27,6 +27,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        AudioManager.instance.PlaySound(SOUND.MOUSEOVER);
         StartCoroutine(AnimateButton(transform.localScale, targetScale));
     }
 
@@ -37,6 +38,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        AudioManager.instance.PlaySound(SOUND.CLICK);
         //StartCoroutine(AnimateButton(transform.localScale, targetScale));
     }
 
@@ -47,6 +49,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnSelect(BaseEventData eventData)
     {
+        AudioManager.instance.PlaySound(SOUND.MOUSEOVER);
         StartCoroutine(AnimateButton(transform.localScale, targetScale));
     }
 
@@ -54,6 +57,14 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         StartCoroutine(AnimateButton(transform.localScale, originalScale));
     }
+
+
+    public void OnSubmit(BaseEventData eventData)
+    {
+        AudioManager.instance.PlaySound(SOUND.CLICK);
+        //StartCoroutine(AnimateButton(transform.localScale, targetScale));
+    }
+
 
     private IEnumerator AnimateButton(Vector3 startScale, Vector3 endScale)
     {
