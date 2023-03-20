@@ -40,7 +40,7 @@ public class InfiniteWormsController : MonoBehaviour
         isSpawning = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (isSpawning && Time.time >= _nextSpawnTime && Random.value < WormsSpawnProbability)
         {

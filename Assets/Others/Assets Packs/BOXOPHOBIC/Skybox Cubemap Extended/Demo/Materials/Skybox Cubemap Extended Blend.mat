@@ -97,8 +97,8 @@ Material:
     - _Exposure: 1.14
     - _Float0: -0.21
     - _FogFill: 0
-    - _FogHeight: 1
-    - _FogIntensity: 1
+    - _FogHeight: 0.056
+    - _FogIntensity: 0.399
     - _FogMessage: 0
     - _FogPosition: 0
     - _FogSmoothness: 0.01

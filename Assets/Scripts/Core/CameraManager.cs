@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+
 
 public class CameraManager : MonoBehaviour
 {
@@ -13,13 +16,23 @@ public class CameraManager : MonoBehaviour
     public Material skyboxNoonMaterial;
     public Material skyboxNightMaterial;
 
+    public GameObject dayLightObj;
+    //public Light dayLight;
     public Light dayLight;
-    public Light nightLight;
 
     public Light loungeLight;
     public Light arcadeLight;
 
-    private float dayLightIntensity = 4f;
+
+    // LIGHT
+    private Quaternion targetLightRotation;
+    private Quaternion noonLightRotation = Quaternion.Euler(20, 15, 0);
+    private Quaternion nightLightRotation = Quaternion.Euler(15, 5, 0);
+    private Color targetLightColor;
+    private Color noonLightColor = new Color(1f, 0.98f, 0.68f);//HexToColor("FFFAAE");
+    private Color nightLightColor = new Color(0.58f, 0.753f, 1f); //HexToColor("739CD9");
+    private float dayLightIntensity;
+    private float noonLightIntensity = 4f;
     private float nightLightIntensity = 8f;
     private float loungeLightIntensity = 2000f;
     private float arcadeLightIntensity = 175f;
@@ -29,6 +42,8 @@ public class CameraManager : MonoBehaviour
     private float targetSize;
     private float smoothSpeed;
 
+
+
     // MENU
     private float menuFocusedSize = 75f;
     private Vector3 menuFocusedPosition = new Vector3(0f, 480f, -500f);
@@ -36,7 +51,7 @@ public class CameraManager : MonoBehaviour
 
     private float menuUnfocusedSize = 150f;
     private Vector3 menuUnfocusedPosition = new Vector3(0f, 37.5f, -500f);
-    private Quaternion menuUnfocusedRotation = Quaternion.Euler(-30, 0, 0);
+    private Quaternion menuUnfocusedRotation = Quaternion.Euler(-32, 0, 0);
 
     private float menuFocusedSize2 = 75f;
     private Vector3 menuFocusedPosition2 = new Vector3(0f, 350f, -500f);
@@ -76,6 +91,7 @@ public class CameraManager : MonoBehaviour
     private float modeTransitionSpeed = 2.5f;
 
     public bool isFocused = false;
+
 
     public void Awake()
     {
@@ -119,8 +135,9 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * smoothSpeed);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, targetSize, Time.fixedDeltaTime * smoothSpeed);
+        dayLightObj.transform.rotation = Quaternion.Lerp(dayLightObj.transform.rotation, targetLightRotation, Time.fixedDeltaTime * smoothSpeed);
+        dayLight.color = Color.Lerp(dayLight.color, targetLightColor, Time.fixedDeltaTime * smoothSpeed);
         dayLight.intensity = Mathf.Lerp(dayLight.intensity, dayLightIntensity, Time.fixedDeltaTime * smoothSpeed);
-        nightLight.intensity = Mathf.Lerp(nightLight.intensity, nightLightIntensity, Time.fixedDeltaTime * smoothSpeed);
         loungeLight.intensity = Mathf.Lerp(loungeLight.intensity, loungeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
         arcadeLight.intensity = Mathf.Lerp(arcadeLight.intensity, arcadeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
 
@@ -128,6 +145,7 @@ public class CameraManager : MonoBehaviour
 
     public void Transition(bool focused)
     {
+        
         smoothSpeed = modeTransitionSpeed;
 
         isFocused = focused;
@@ -228,13 +246,11 @@ public class CameraManager : MonoBehaviour
     {
         if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
         {
-            dayLightIntensity = 4f;
-            nightLightIntensity = 0f;
+            dayLightIntensity = noonLightIntensity;
         }
         if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NIGHT)
         {
-            dayLightIntensity = 0f;
-            nightLightIntensity = 8f;
+            dayLightIntensity = nightLightIntensity;
         }
     }
 
@@ -248,11 +264,12 @@ public class CameraManager : MonoBehaviour
                 targetRotation = isFocused ? menuFocusedRotation : menuUnfocusedRotation;
                 targetSize = isFocused ? menuFocusedSize : menuUnfocusedSize;
             }
-            
 
+            targetLightRotation = noonLightRotation;
 
-            dayLightIntensity = 4f;
-            nightLightIntensity = 0f;
+            dayLightIntensity = noonLightIntensity;
+
+            targetLightColor = noonLightColor;
 
             Skybox skybox = Camera.main.GetComponent<Skybox>();
             skybox.material = skyboxNoonMaterial;
@@ -266,10 +283,11 @@ public class CameraManager : MonoBehaviour
                 targetSize = isFocused ? menuFocusedSize2 : menuUnfocusedSize2;
             }
 
+            targetLightRotation = nightLightRotation;
 
+            dayLightIntensity = nightLightIntensity;
 
-            dayLightIntensity = 0f;
-            nightLightIntensity = 8f;
+            targetLightColor = nightLightColor;
 
             Skybox skybox = Camera.main.GetComponent<Skybox>();
             skybox.material = skyboxNightMaterial;
@@ -279,7 +297,6 @@ public class CameraManager : MonoBehaviour
     public void ShakeCamera(float distanceToObstacle)
     {
         float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 1.25f; // Set a max force for the shake
-        //print($"Shake force: {shakeForce}");
         StartCoroutine(DoShakeCamera(shakeForce));
     }
 

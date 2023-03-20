@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+
 [System.Serializable]
 public enum MENU
 {
@@ -46,15 +47,16 @@ public class GlobalUIManager : MonoBehaviour
 
     private MENU currentMenu;
     private MENU lastMenu;
+    public MENU specificMenu;
     private Stack<MENU> menuStack = new Stack<MENU>();
     private ushort menuStackSize = 0;
 
-    public static bool gameIsActive = false;
-    public static bool gameIsPaused = false;
-    public static bool isPreGame = false;
+    public DefaultInputActions UIControls;
+    private InputAction back;
+    private InputAction pause;
+    private InputAction confirm;
 
     [SerializeField] private GameObject controllerIcon;
-
     public static bool isControllerConnected = false;
 
     public void Awake()
@@ -66,6 +68,73 @@ public class GlobalUIManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(this);
+        }
+
+        UIControls = new DefaultInputActions();
+    }
+
+    private void OnEnable()
+    {
+        pause = UIControls.UI.Pause;
+        confirm = UIControls.UI.Confirm;
+        back = UIControls.UI.Back;
+
+        pause.Enable();
+        confirm.Enable();
+        back.Enable();
+
+        pause.performed += OnPause;
+        back.performed += OnBack;
+    }
+
+    private void OnDisable()
+    {
+        pause.Disable();
+        confirm.Disable();
+        back.Disable();
+
+        pause.performed -= OnPause;
+        back.performed -= OnBack;
+    }
+
+    private void OnPause(InputAction.CallbackContext context)
+    {
+        if (es.enabled)
+        {
+            switch (ScenesManager.gameState)
+            {
+                case GAME_STATE.PAUSED: // PAUSED_STATE
+                    ResumeGame();
+                    break;
+                case GAME_STATE.ACTIVE: // ACTIVE_STATE
+                    PauseGame();
+                    break;
+            }
+        }
+    }
+
+    private void OnBack(InputAction.CallbackContext context)
+    {
+        if (es.enabled)
+        {
+            switch (ScenesManager.gameState)
+            {
+                case GAME_STATE.GAME_OVER: // PAUSED_STATE
+                    ReturnToMainMenu();
+                    break;
+                case GAME_STATE.PRE_GAME: // PRE_GAME_STATE
+                    ReturnToMainMenu();
+                    break;
+                case GAME_STATE.PAUSED: // PAUSED_STATE
+                    ResumeGame();
+                    break;
+                case GAME_STATE.ACTIVE: // ACTIVE_STATE
+                    PauseGame();
+                    break;
+                case GAME_STATE.INACTIVE: // INACTIVE_STATE
+                    SetSpecificMenu();
+                    break;
+            }
         }
     }
 
@@ -86,60 +155,7 @@ public class GlobalUIManager : MonoBehaviour
 
     }
 
-
-    void Update()
-    {
-     
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (gameIsActive && es.enabled)
-            {
-                if (isPreGame)
-                {
-                    ReturnToMainMenu();
-                }
-                else
-                {
-                    if (gameIsPaused)
-                    {
-                        ResumeGame();
-                    }
-                    else
-                    {
-                        PauseGame();
-                    }
-                }
-            }
-        }
-        
-    }
-
-    /*
-    private void OnPause()
-    {
-        print("SUP");
-        if (gameIsActive && es.enabled)
-        {
-            if (isPreGame)
-            {
-                ReturnToMainMenu();
-            }
-            else
-            {
-                if (gameIsPaused)
-                {
-                    ResumeGame();
-                }
-                else
-                {
-                    PauseGame();
-                }
-            }
-        }
-    }
-    */
-
-    private void SetMenuInternal(MENU desiredMenu, bool addToStack = true)
+    private void SetMenuInternal(MENU desiredMenu)
     {
         StopAllCoroutines();
 
@@ -162,17 +178,20 @@ public class GlobalUIManager : MonoBehaviour
             menu.transform.localPosition = new Vector2(Screen.width, Screen.height);
         }
 
+        SetCameraAnimation(desiredMenu);
 
         if (lastMenu != MENU.NONE)
         {
-            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[lastMenu], false));
-            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(lastMenu, false));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true));
         }
         else
         {
-            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(runtimeMenuRefs[desiredMenu], true), () => EnableInputs(true));
+            AnimationManager.instance.PlayMenuAnimation(SetMenuAnimation(desiredMenu, true));
         }
 
+        //print($"LAST MENU: {lastMenu}");
+        //print($"CURRENT MENU: {desiredMenu}");
 
     }
 
@@ -189,14 +208,12 @@ public class GlobalUIManager : MonoBehaviour
             lastMenu = MENU.NONE;
         }
 
-
         menuStack.Push(desiredMenu);
         menuStackSize++;
-
         currentMenu = desiredMenu;
+
         SetMenuInternal(desiredMenu);
     }
-
 
     public void SetLastMenu()
     {
@@ -207,6 +224,7 @@ public class GlobalUIManager : MonoBehaviour
             Debug.LogAssertion("Can't go back, no menu left.");
         }
 
+
         if (menuStack.Count > 0)
         {
             lastMenu = menuStack.Peek();
@@ -216,16 +234,32 @@ public class GlobalUIManager : MonoBehaviour
             lastMenu = MENU.NONE;
         }
 
-        menuStack.Pop();
-        menuStackSize--;
 
-        currentMenu = menuStack.Peek();
-        SetMenuInternal(menuStack.Peek());
+        if (menuStack.Count > 1)
+        {
+            menuStack.Pop();
+            menuStackSize--;
+
+            currentMenu = menuStack.Peek();
+            SetMenuInternal(menuStack.Peek());
+        }
+        else
+        {
+            EnableInputs(true);
+        }
     }
 
-    public IEnumerator SetMenuAnimation(GameObject currentMenuObject, bool isGoingIn)
+    public void SetSpecificMenu()
     {
-        UIAnimation animation = currentMenuObject.GetComponent<UIAnimation>();
+        if (specificMenu != MENU.NONE)
+        {
+            SetMenu(specificMenu);
+        }
+    }
+
+    public IEnumerator SetMenuAnimation(MENU desiredMenu, bool isGoingIn)
+    {
+        UIAnimation animation = runtimeMenuRefs[desiredMenu].GetComponent<UIAnimation>();
         animation.isGoingIn = isGoingIn;
         animation.play();
 
@@ -239,16 +273,33 @@ public class GlobalUIManager : MonoBehaviour
         }
     }
 
+    public void SetCameraAnimation(MENU desiredMenu)
+    {
+        switch (desiredMenu)
+        {
+            case MENU.MENU_TITLE_SCREEN:
+                CameraManager.instance.Transition(false);
+                break;
+            case MENU.MENU_MAIN:
+                CameraManager.instance.Transition(true);
+                break;
+            case MENU.MENU_CREDITS:
+                CameraManager.instance.TransitionToCredits();
+                break;
+            case MENU.MENU_PREGAME:
+                CameraManager.instance.Transition(false);
+                break;
+        }
+    }
+
     public void SetTitleScreenMenu()
     {
-        CameraManager.instance.Transition(false);
         SetMenu(MENU.MENU_TITLE_SCREEN);
     }
 
 
     public void SetMainMenu()
     {
-        CameraManager.instance.Transition(true);
         SetMenu(MENU.MENU_MAIN);
     }
 
@@ -279,7 +330,6 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetCreditsMenu()
     {
-        CameraManager.instance.TransitionToCredits();
         SetMenu(MENU.MENU_CREDITS);
     }
 
@@ -295,34 +345,37 @@ public class GlobalUIManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        gameIsPaused = false;
+        ScenesManager.gameState = GAME_STATE.ACTIVE;
         StartCoroutine(PauseResumeCallback());
     }
 
     public void PauseGame()
     {
-        AnimationManager.instance.PauseInGameAnimations();
-        SetMenu(MENU.MENU_PAUSE);
+        ScenesManager.gameState = GAME_STATE.PAUSED;
 
         Time.timeScale = 0f;
+        AnimationManager.instance.PauseInGameAnimations();
 
-        gameIsPaused = true;
+        SetMenu(MENU.MENU_PAUSE);
+
         StartCoroutine(PauseResumeCallback());
     }
 
     public void ReplayGame()
     {
-        SetMenu(MENU.MENU_PREGAME);
+        ScenesManager.gameState = GAME_STATE.PRE_GAME;
+
         Time.timeScale = 1f;
         AnimationManager.instance.ClearInGameQueue();
-        gameIsPaused = false;
+
+        SetMenu(MENU.MENU_PREGAME);
+
         StartCoroutine(PauseResumeCallback());
     }
 
     public IEnumerator PauseResumeCallback()
     {
         yield return new WaitForSecondsRealtime(1f);
-        gameIsActive = true;
     }
 
     public void LoadGame(GAME_MODE gameMode)
@@ -330,8 +383,9 @@ public class GlobalUIManager : MonoBehaviour
         AudioManager.instance.PlaySound(SOUND.SWEEP);
         
         SetMenu(MENU.MENU_LOADING);
-        
-        ScenesManager.instance.gameMode = gameMode;
+        ScenesManager.gameState = GAME_STATE.LOADING;
+
+        ScenesManager.gameMode = gameMode;
 
         switch (gameMode)
         {
@@ -347,21 +401,19 @@ public class GlobalUIManager : MonoBehaviour
         }
 
         Time.timeScale = 1f;
-        gameIsPaused = false;
-        gameIsActive = true;
-        isPreGame = true;
     }
 
     public void ReturnToMainMenu()
     {
-        AudioManager.instance.Stopwind();
         AudioManager.instance.PlayUiMusic();
 
         AnimationManager.instance.ClearInGameQueue();
+        AnimationManager.instance.ClearObstaclesQueue();
 
         SetMenu(MENU.MENU_LOADING);
+        ScenesManager.gameState = GAME_STATE.LOADING;
 
-        switch (ScenesManager.instance.gameMode)
+        switch (ScenesManager.gameMode)
         {
             case GAME_MODE.INFINITE_MODE:
                 ScenesManager.instance.UnloadSceneAsync("infinite_game_scene", UnloadGameCompletedCallback());
@@ -374,12 +426,33 @@ public class GlobalUIManager : MonoBehaviour
                 break;
         }
 
-        ScenesManager.instance.gameMode = GAME_MODE.NONE;
+        ScenesManager.gameMode = GAME_MODE.NONE;
 
         Time.timeScale = 1f;
-        gameIsPaused = false;
-        gameIsActive = false;
-        isPreGame = false;
+    }
+
+    IEnumerator LoadGameCompletedCallback()
+    {
+        yield return null;
+
+        SetMenu(MENU.MENU_PREGAME);
+        ScenesManager.gameState = GAME_STATE.PRE_GAME;
+
+        AudioManager.instance.SwitchAudioListener(ScenesManager.gameMode);
+
+        ClearMenusException();
+    }
+
+    IEnumerator UnloadGameCompletedCallback()
+    {
+        yield return null;
+
+        SetMenu(MENU.MENU_MAIN);
+        ScenesManager.gameState = GAME_STATE.INACTIVE;
+
+        AudioManager.instance.SwitchAudioListener(ScenesManager.gameMode);
+
+        ClearMenusException();
     }
 
     public void QuitApplication()
@@ -398,10 +471,16 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ClearMenusException()
     {
+        menuStack.Clear();
+        menuStack.Push(lastMenu);
+        menuStack.Push(currentMenu);
+        menuStackSize = 2;
+
         var keysToRemove = new List<MENU>();
 
         foreach (var menu in runtimeMenuRefs)
         {
+            // && lastMenu != menu.Key
             if (currentMenu != menu.Key && lastMenu != menu.Key)
             {
                 Destroy(menu.Value);
@@ -412,24 +491,6 @@ public class GlobalUIManager : MonoBehaviour
         {
             runtimeMenuRefs.Remove(key);
         }
-    }
-
-    IEnumerator LoadGameCompletedCallback()
-    {
-        yield return null;
-        ClearMenusException();
-        CameraManager.instance.Transition(false);
-        AudioManager.instance.SwitchAudioListener(ScenesManager.instance.gameMode);
-        SetMenu(MENU.MENU_PREGAME);
-    }
-
-    IEnumerator UnloadGameCompletedCallback()
-    {
-        yield return null;
-        ClearMenusException();
-        CameraManager.instance.Transition(true);
-        AudioManager.instance.SwitchAudioListener(ScenesManager.instance.gameMode);
-        SetMenu(MENU.MENU_MAIN);
     }
 
 
@@ -484,11 +545,14 @@ public class GlobalUIManager : MonoBehaviour
         es.enabled = isEnabled;
     }
 
-    public void SetControllerFirstSelected (GameObject firstSelected)
+    public void SetFirstSelected (GameObject firstSelected, bool alt = false)
     {
-        if (isControllerConnected)
+        es.SetSelectedGameObject(null); //Resetting the currently selected GO
+        es.firstSelectedGameObject = firstSelected;
+
+        if (alt && es.currentSelectedGameObject == null)
         {
-            es.SetSelectedGameObject(firstSelected);
+            es.SetSelectedGameObject(firstSelected, new BaseEventData(es));
         }
     }
 

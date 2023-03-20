@@ -2,6 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public enum ANIMATION_TYPE
+{
+    // INACTIVE
+    MENU,
+    // ACTIVE / INGAME
+    HUD,
+    OBSTACLES,
+    ELEVATOR,
+    LEVEL_COMPLETED,
+    SQUIRREL
+};
+
+[System.Serializable]
+public struct AnimationQueue
+{
+    public Queue<IEnumerator> animationQueue;
+    public bool isPlayingAnimation;
+    public bool isPausedAnimation;
+}
+
 public class AnimationManager : MonoBehaviour
 {
     public static AnimationManager instance;
@@ -15,6 +36,8 @@ public class AnimationManager : MonoBehaviour
     private bool isPlayingObstaclesAnimation = false;
 
     private bool isPausedInGameAnimation = false;
+
+    //[SerializeField] private Dictionary<ANIMATION_TYPE, AnimationQueue> runtimeAnimationRefs = new Dictionary<ANIMATION_TYPE, AnimationQueue>();
 
     private void Awake()
     {
@@ -55,6 +78,8 @@ public class AnimationManager : MonoBehaviour
 
         // Set the playing flag to false
         isPlayingMenuAnimation = false;
+
+        GlobalUIManager.instance.EnableInputs(true);
     }
 
     public void ClearMenuQueue()

@@ -23,8 +23,6 @@ public class PauseMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
-
         resumeButton.onClick.AddListener(() => GlobalUIManager.instance.ResumeGame());
         optionButton.onClick.AddListener(() => GlobalUIManager.instance.SetSettingsMenu());
 
@@ -37,18 +35,28 @@ public class PauseMenuManager : MonoBehaviour
         cancelQuitButton.onClick.AddListener(() => HandleCancelButton());
     }
 
+    private void OnEnable()
+    {
+        retryPanel.SetActive(false);
+        quitPanel.SetActive(false);
+        mainPanel.SetActive(true);
+
+        GlobalUIManager.instance.specificMenu = MENU.MENU_HUD;
+        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject);
+    }
+
     private void HandleRetryButton()
     {
         mainPanel.SetActive(false);
         retryPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(cancelRetryButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelRetryButton.gameObject, true);
     }
 
     private void HandleQuitButton()
     {
         mainPanel.SetActive(false);
         quitPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(cancelQuitButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(cancelQuitButton.gameObject, true);
     }
 
     private void HandleCancelButton()
@@ -56,28 +64,20 @@ public class PauseMenuManager : MonoBehaviour
         retryPanel.SetActive(false);
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
+        GlobalUIManager.instance.SetFirstSelected(replayButton.gameObject, true);
     }
 
     private void HandleConfirmRetryButton()
     {
-        if (ScenesManager.instance.gameMode == GAME_MODE.INFINITE_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
         {
             GlobalUIManager.instance.ReplayGame();
             InfiniteGameController.instance.ResetGame();
         }
-        if (ScenesManager.instance.gameMode == GAME_MODE.LEGACY_MODE)
+        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
         {
             GlobalUIManager.instance.ReplayGame();
             LegacyGameController.instance.ResetGame();
         }
-    }
-
-    private void OnEnable()
-    {
-        retryPanel.SetActive(false);
-        quitPanel.SetActive(false);
-        mainPanel.SetActive(true);
-        GlobalUIManager.instance.SetControllerFirstSelected(replayButton.gameObject);
     }
 }
