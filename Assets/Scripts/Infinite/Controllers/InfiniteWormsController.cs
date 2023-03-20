@@ -124,8 +124,8 @@ public class InfiniteWormsController : MonoBehaviour
         {
             GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
 
-            float randomInAnimationTime = Random.Range(WormsInAnimationTime - 1f, WormsInAnimationTime + 1f);
-            float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 2f, WormsDerpAnimationTime + 2f);
+            float randomInAnimationTime = Random.Range(WormsInAnimationTime - 0.5f, WormsInAnimationTime + 0.5f);
+            float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 1f, WormsDerpAnimationTime + 1f);
             float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
 
             wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleWormAnimationFunction(
