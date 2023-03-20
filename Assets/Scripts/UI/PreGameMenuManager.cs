@@ -24,6 +24,10 @@ public class PreGameMenuManager : MonoBehaviour
     private void OnEnable()
     {
         AudioManager.instance.StopCurrentMusic();
+        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+        {
+            AudioManager.instance.Playwind();
+        }
 
         Flash(true);
 

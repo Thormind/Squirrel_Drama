@@ -30,7 +30,7 @@ public class InfiniteFruitAudio : MonoBehaviour
         }
         else
         {
-            movement.pitch = Mathf.Abs(velocity/6);
+            movement.pitch = Mathf.Abs(velocity/4);
             if(!movement.isPlaying)
             {
                 movement.Play();
@@ -44,7 +44,7 @@ public class InfiniteFruitAudio : MonoBehaviour
     {
         if(collision.gameObject.tag == "Border")
         {
-            collide.volume = Mathf.Abs(velocity / 90);
+            collide.volume = Mathf.Abs(velocity / 70);
             collide.Play(); 
         }
     }

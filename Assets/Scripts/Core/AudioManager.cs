@@ -29,7 +29,7 @@ public enum SOUND
     SQUIRREL_PANIC,             // Implanted: false
     SQUIRREL_CAUTION,           // Implanted: false
     BEAR_ROAR,                  // Implanted: true
-    BEAR_HIT,                   // Implanted: true Note: correct pitch
+    BEAR_HIT,                   // Implanted: true
     WORM_BLINK,                 // Implanted: false
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
     BUNNY_SFX,                  // Implanted: false
@@ -48,6 +48,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource uiMusic;
     public AudioSource infiniteMusic;
     public AudioSource legacyMusic;
+    public AudioSource wind;
 
     [SerializeField] public AudioListener cameraListener;
     public AudioListener gameListener;
@@ -124,7 +125,7 @@ public class AudioManager : MonoBehaviour
                 }
                 if (gameListener != null)
                 {
-                    cameraListener.enabled = true;
+                    gameListener.enabled = true;
                 }
                 break;
             case GAME_MODE.LEGACY_MODE:
@@ -134,7 +135,7 @@ public class AudioManager : MonoBehaviour
                 }
                 if (gameListener != null)
                 {
-                    cameraListener.enabled = true;
+                    gameListener.enabled = true;
                 }
                 break;
         }
@@ -153,7 +154,7 @@ public class AudioManager : MonoBehaviour
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
         if (volume > 0)
         {
-            volume = 1 - (1 / (volume*volume));
+            volume = 1 - (1 / (volume * volume));
         }
         else
         {
@@ -205,7 +206,7 @@ public class AudioManager : MonoBehaviour
             {
                 if (!source.isPlaying)
                 {
-                    source.clip = soundDictionary[sound];   
+                    source.clip = soundDictionary[sound];
                     source.Play();
                     return;
                 }
@@ -217,12 +218,12 @@ public class AudioManager : MonoBehaviour
             newSource.clip = soundDictionary[sound];
             newSource.volume = audioSource.volume;
             newSource.Play();
-        }    
+        }
     }
-    
+
     public void PlaySound(SOUND sound)
     {
-        if(AudioManager.instance != null)
+        if (AudioManager.instance != null)
         {
             PlaySoundAllowed(sound);
         }
@@ -249,6 +250,34 @@ public class AudioManager : MonoBehaviour
     {
         StopCurrentMusic();
         infiniteMusic.Play();
+    }
+
+    public void Playwind()
+    {
+        if (!wind.isPlaying)
+        {
+            wind.Play();
+        }
+    }
+
+    public void Stopwind()
+    {
+        if (wind.isPlaying && ScenesManager.gameMode == GAME_MODE.NONE)
+        {
+            wind.Stop();
+        }
+    }
+
+    public void PlayElevatorSound(AudioSource source, Vector2 input)
+    {
+        if ((input.x == 0 && input.y == 0) && source.isPlaying)
+        {
+            source.Stop();
+        }
+        if ((input.x != 0 || input.y != 0) && !source.isPlaying)
+        {
+            source.Play();
+        }
     }
 
 
