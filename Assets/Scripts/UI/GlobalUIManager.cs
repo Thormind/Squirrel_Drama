@@ -341,7 +341,8 @@ public class GlobalUIManager : MonoBehaviour
     public void ResumeGame()
     {
         AnimationManager.instance.ResumeInGameAnimations();
-        SetMenu(MENU.MENU_HUD);
+        AnimationManager.instance.ResumeObstaclesAnimations();
+        SetMenu(MENU.MENU_HUD); 
 
         Time.timeScale = 1f;
 
@@ -355,6 +356,7 @@ public class GlobalUIManager : MonoBehaviour
 
         Time.timeScale = 0f;
         AnimationManager.instance.PauseInGameAnimations();
+        AnimationManager.instance.PauseObstaclesAnimations();
 
         SetMenu(MENU.MENU_PAUSE);
 

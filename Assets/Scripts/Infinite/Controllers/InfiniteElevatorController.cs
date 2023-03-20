@@ -71,13 +71,16 @@ public class InfiniteElevatorController : MonoBehaviour
 
     IEnumerator MoveBarToStartPosition()
     {
-        while (leftLifter.position.y < start.position.y && ScenesManager.gameState == GAME_STATE.ACTIVE)
+        while (leftLifter.position.y < start.position.y)
         {
-            Vector2 newLifterPosition = leftLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
-            Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
+            if (ScenesManager.gameState == GAME_STATE.ACTIVE)
+            {
+                Vector2 newLifterPosition = leftLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
+                Vector2 newRightLifterPosition = rightLifter.position + Vector2.up * startMovementSpeed * Time.fixedDeltaTime;
 
-            leftLifter.MovePosition(newLifterPosition);
-            rightLifter.MovePosition(newRightLifterPosition);
+                leftLifter.MovePosition(newLifterPosition);
+                rightLifter.MovePosition(newRightLifterPosition);
+            }
 
             yield return new WaitForEndOfFrame();
         }

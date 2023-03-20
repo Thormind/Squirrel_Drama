@@ -36,6 +36,8 @@ public class AnimationManager : MonoBehaviour
     private bool isPlayingObstaclesAnimation = false;
 
     private bool isPausedInGameAnimation = false;
+    private bool isPausedObstaclesAnimation = false;
+
 
     //[SerializeField] private Dictionary<ANIMATION_TYPE, AnimationQueue> runtimeAnimationRefs = new Dictionary<ANIMATION_TYPE, AnimationQueue>();
 
@@ -171,12 +173,33 @@ public class AnimationManager : MonoBehaviour
 
         while (obstaclesAnimationQueue.Count > 0)
         {
-            // Dequeue the next animation coroutine and start it
-            yield return StartCoroutine(obstaclesAnimationQueue.Dequeue());
+            if (!isPausedObstaclesAnimation)
+            {
+                // Dequeue the next animation coroutine and start it
+                yield return StartCoroutine(obstaclesAnimationQueue.Dequeue());
+            }
+            else
+            {
+                // Pause the coroutine and wait until we're unpaused
+                yield return null;
+            }
+
         }
 
         // Set the playing flag to false
         isPlayingObstaclesAnimation = false;
+    }
+
+    public void PauseObstaclesAnimations()
+    {
+        // Set the paused flag to true
+        isPausedObstaclesAnimation = true;
+    }
+
+    public void ResumeObstaclesAnimations()
+    {
+        // Set the paused flag to false
+        isPausedObstaclesAnimation = false;
     }
 
     public void ClearObstaclesQueue()
@@ -186,6 +209,7 @@ public class AnimationManager : MonoBehaviour
         // Set the playing flag to false
         isPlayingObstaclesAnimation = false;
 
+        isPausedObstaclesAnimation = false;
     }
 
     // ============================ //

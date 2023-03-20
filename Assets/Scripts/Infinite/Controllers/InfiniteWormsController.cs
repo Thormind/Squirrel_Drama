@@ -145,8 +145,11 @@ public class InfiniteWormsController : MonoBehaviour
 
     private Vector3 GetRandomHoleNearFruit()
     {
+        Vector3 spawnPosition = Vector3.zero;
         Vector3 fruitPosition = InfiniteGameController.instance.GetFruitLocalPosition();
+
         int tries = 0;
+
         do
         {
             if (InfiniteHolesController.instance != null)
@@ -173,6 +176,7 @@ public class InfiniteWormsController : MonoBehaviour
                 break;
             }
         } while (!IsValidPosition(spawnPosition));
+
         return spawnPosition;
     }
 
