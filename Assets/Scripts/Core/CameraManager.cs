@@ -296,7 +296,7 @@ public class CameraManager : MonoBehaviour
 
     public void ShakeCamera(float distanceToObstacle)
     {
-        float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 1.25f; // Set a max force for the shake
+        float shakeForce = Mathf.Clamp(7f - distanceToObstacle, 1f, 7f) * 7f; // Set a max force for the shake
         StartCoroutine(DoShakeCamera(shakeForce));
     }
 

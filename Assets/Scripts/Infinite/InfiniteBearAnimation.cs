@@ -84,9 +84,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
 
         // ============== SLOW MOTION BEFORE IMPACT ANIMATION ============== //
-        InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
         bearPaw.SetActive(true);
-
         SetSlowMotion(true);
 
         Vector3 startPosition = bearPaw.transform.localPosition;
@@ -121,11 +119,9 @@ public class InfiniteBearAnimation : MonoBehaviour
         SetShadowAlpha(0);
 
         // ============== IMPACT ANIMATION ============== //
-        SetSlowMotion(false);
-
         bearCollider.enabled = true;
-        InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
 
+        SetSlowMotion(false);
         PlayImpactSFX();
         PlayImpactVFX();
         PlayImpactCameraShake();
@@ -192,12 +188,14 @@ public class InfiniteBearAnimation : MonoBehaviour
     {
         if (isSlowMotion)
         {
+            InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
             float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.15f;
+            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.10f;
             Time.timeScale = slowMotion;
         }
         else
         {
+            InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
             Time.timeScale = 1f;
         }
 
@@ -223,7 +221,6 @@ public class InfiniteBearAnimation : MonoBehaviour
         if (CameraManager.instance != null)
         {
             CameraManager.instance.ShakeCamera(distance);
-
         }
     }
 
@@ -234,24 +231,6 @@ public class InfiniteBearAnimation : MonoBehaviour
         mod.simulationSpeed = 0.5f;
         warnIndicatorVFX.GetComponent<ParticleSystem>().Play();
     }
-
-    /*
-    private void Flash()
-    {
-        warnIndicatorImage.SetActive(!warnIndicatorImage.gameObject.activeSelf);
-    }
-
-    public void StartFlashingWarnIndicator()
-    {
-        InvokeRepeating($"Flash", 0, flashInterval);
-    }
-
-    public void StopFlashingWarnIndicator()
-    {
-        CancelInvoke("Flash");
-        warnIndicatorImage.SetActive(false);
-    }
-    */
 
 
     // ====================================== //

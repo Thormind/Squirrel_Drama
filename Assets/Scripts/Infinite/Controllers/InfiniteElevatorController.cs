@@ -42,22 +42,26 @@ public class InfiniteElevatorController : MonoBehaviour
     {
         if (inputEnabled)
         {
+            Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
+            movementOffset = input * Time.fixedDeltaTime * movementSpeed;
+
+            HandleElevatorVFX(input);
+            AudioManager.instance.HandleElevatorSFX(gameObject.GetComponent<AudioSource>(), input);
+
             if (leftLifter.position.y >= end.position.y
                 && rightLifter.position.y >= end.position.y)
             {
                 inputEnabled = false;
+
+                HandleElevatorVFX(Vector2.zero);
+
+                if (elevatorSFX.isPlaying)
+                {
+                    elevatorSFX.Stop();
+                }
+
                 InfiniteGameController.instance.LevelCompleted();
             }
-
-            Vector2 input = new Vector2(leftUpInputValue - leftDownInputValue, rightUpInputValue - rightDownInputValue);
-            movementOffset = input * Time.fixedDeltaTime * movementSpeed;
-
-            ParticleSystem.MainModule leftVFX = leftLifterVFX.main;
-            leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
-            ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
-            rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
-
-            AudioManager.instance.HandleElevatorSFX(gameObject.GetComponent<AudioSource>(), input);
 
             Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
             Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
@@ -220,6 +224,14 @@ public class InfiniteElevatorController : MonoBehaviour
     public void SetElevatorMaxDifference(float maxDiff)
     {
         maxDifference = maxDiff;
+    }
+
+    public void HandleElevatorVFX(Vector2 input)
+    {
+        ParticleSystem.MainModule leftVFX = leftLifterVFX.main;
+        leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
+        ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
+        rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
     }
 
 
