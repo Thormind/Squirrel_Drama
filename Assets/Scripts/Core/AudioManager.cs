@@ -58,6 +58,8 @@ public class AudioManager : MonoBehaviour
     public AudioItem[] AudioItemArray;
     public Dictionary<SOUND, SoundAudioClip> soundDictionary = new Dictionary<SOUND, SoundAudioClip>();
 
+    public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
+
     [System.Serializable]
     public class AudioItem
     {
@@ -94,6 +96,8 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ScenesManager.OnGameStateChanged += HandleGameStateChanged;
+
         AdjustMaster();
         AdjustMusic();
         AdjustSfx();
@@ -101,13 +105,56 @@ public class AudioManager : MonoBehaviour
         uiMusic.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        //if(Input.GetKeyDown("space"))
-        //{
-        //    PlaySound(SOUND.MOUSEOVER);
-        //}
+        ScenesManager.OnGameStateChanged -= HandleGameStateChanged;
+    }
+
+    private void HandleGameStateChanged(GAME_STATE newGameState)
+    {
+        print($"{newGameState}");
+        switch (newGameState)
+        {
+            case GAME_STATE.PRE_GAME:
+                Resume();
+                StopCurrentMusic();
+                if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+                {
+                    PlayWind();
+                }
+                break;
+            case GAME_STATE.PAUSED:
+                Pause();
+                break;
+            case GAME_STATE.ACTIVE:
+                Resume();
+                if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+                {
+                    PlayInfinite();
+                }
+                if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+                {
+                    PlayLegacy();
+                }
+                break;
+            case GAME_STATE.INACTIVE:
+                AdjustMusic();
+                StopWind();
+                PlayUiMusic();
+                break;
+            case GAME_STATE.LOADING:
+                PlaySound(SOUND.SWEEP);
+                break;
+            case GAME_STATE.GAME_OVER:
+                //ReturnToMainMenu();
+                break;
+            case GAME_STATE.LEVEL_COMPLETED:
+                //PlayUiMusic();
+                break;
+            case GAME_STATE.GAME_COMPLETED:
+                //PlayUiMusic();
+                break;
+        }
     }
 
 
@@ -326,21 +373,29 @@ public class AudioManager : MonoBehaviour
         legacyMusic.Stop();
         infiniteMusic.Stop();
     }
+
     public void PlayUiMusic()
     {
         StopCurrentMusic();
         uiMusic.Play();
     }
+
     public void PlayLegacy()
     {
-        StopCurrentMusic();
-        legacyMusic.Play();
+        if (!legacyMusic.isPlaying)
+        {
+            StopCurrentMusic();
+            legacyMusic.Play();
+        }
     }
 
     public void PlayInfinite()
     {
-        StopCurrentMusic();
-        infiniteMusic.Play();
+        if (!infiniteMusic.isPlaying)
+        {
+            StopCurrentMusic();
+            infiniteMusic.Play();
+        }
     }
 
     public void PlayWind()

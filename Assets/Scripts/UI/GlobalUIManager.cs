@@ -340,7 +340,6 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        AudioManager.instance.Resume();
         AnimationManager.instance.ResumeInGameAnimations();
         AnimationManager.instance.ResumeObstaclesAnimations();
 
@@ -356,8 +355,6 @@ public class GlobalUIManager : MonoBehaviour
     {
         ScenesManager.gameState = GAME_STATE.PAUSED;
 
-        AudioManager.instance.Pause();
-
         Time.timeScale = 0f;
         AnimationManager.instance.PauseInGameAnimations();
         AnimationManager.instance.PauseObstaclesAnimations();
@@ -369,7 +366,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReplayGame()
     {
-        AudioManager.instance.Resume();
+        //AudioManager.instance.Resume();
 
         ScenesManager.gameState = GAME_STATE.PRE_GAME;
 
@@ -387,9 +384,7 @@ public class GlobalUIManager : MonoBehaviour
     }
 
     public void LoadGame(GAME_MODE gameMode)
-    {
-        AudioManager.instance.PlaySound(SOUND.SWEEP);
-        
+    {        
         SetMenu(MENU.MENU_LOADING);
         ScenesManager.gameState = GAME_STATE.LOADING;
 
@@ -413,7 +408,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        AudioManager.instance.Resume();
+        //AudioManager.instance.Resume();
         AnimationManager.instance.ClearInGameQueue();
         AnimationManager.instance.ClearObstaclesQueue();
 
@@ -453,9 +448,6 @@ public class GlobalUIManager : MonoBehaviour
     IEnumerator UnloadGameCompletedCallback()
     {
         yield return null;
-
-        AudioManager.instance.StopWind();
-        AudioManager.instance.PlayUiMusic();
 
         SetMenu(MENU.MENU_MAIN);
         ScenesManager.gameState = GAME_STATE.INACTIVE;

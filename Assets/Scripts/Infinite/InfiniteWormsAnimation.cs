@@ -107,4 +107,14 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         yield return null;
     }
+
+    [ContextMenu("Test Animation")]
+    public void TestWormAnimationFunction()
+    {
+        inAnimationTime = 2f;
+        derpAnimationTime = 2f;
+        derpSpeed = 300f;
+
+        StartCoroutine(HandleWormInAnimation());
+    }
 }
