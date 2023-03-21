@@ -56,6 +56,9 @@ public class InfiniteElevatorController : MonoBehaviour
             ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
             rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
 
+            Debug.Log(input);
+            AudioManager.instance.ManageElevatorSound(gameObject.GetComponent<AudioSource>(), input);
+
             Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
             Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
 

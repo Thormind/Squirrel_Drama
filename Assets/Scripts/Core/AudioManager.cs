@@ -54,14 +54,21 @@ public class AudioManager : MonoBehaviour
     public AudioListener gameListener;
 
     public GameObject soundplayer;
-    public SoundAudioClip[] soundAudioClipArray;
-    public Dictionary<SOUND, AudioClip> soundDictionary = new Dictionary<SOUND, AudioClip>();
+    public AudioItem[] AudioItemArray;
+    public Dictionary<SOUND, SoundAudioClip> soundDictionary = new Dictionary<SOUND, SoundAudioClip>();
+
+    [System.Serializable]
+    public class AudioItem
+    {
+        public SOUND sound;
+        public SoundAudioClip sound_audio_clip;
+    }
 
     [System.Serializable]
     public class SoundAudioClip
     {
-        public SOUND sound;
         public AudioClip clip;
+        public float sound_vol;
     }
 
     public UnityEngine.Audio.AudioMixerGroup sfx;
@@ -143,9 +150,9 @@ public class AudioManager : MonoBehaviour
     }
     private void FillSoundDictionary()
     {
-        foreach (SoundAudioClip soundAudioClip in soundAudioClipArray)
+        foreach (AudioItem item in AudioItemArray)
         {
-            soundDictionary.Add(soundAudioClip.sound, soundAudioClip.clip);
+            soundDictionary.Add(item.sound, item.sound_audio_clip);
         }
     }
 
@@ -210,7 +217,8 @@ public class AudioManager : MonoBehaviour
         AudioSource audioSource = soundplayer.GetComponent<AudioSource>();
         if (!audioSource.isPlaying)
         {
-            audioSource.clip = soundDictionary[sound];
+            audioSource.clip = soundDictionary[sound].clip;
+            audioSource.volume = soundDictionary[sound].sound_vol;
             audioSource.Play();
         }
 
@@ -221,7 +229,8 @@ public class AudioManager : MonoBehaviour
             {
                 if (!source.isPlaying)
                 {
-                    source.clip = soundDictionary[sound];
+                    source.clip = soundDictionary[sound].clip;
+                    source.volume = soundDictionary[sound].sound_vol;
                     source.Play();
                     return;
                 }
@@ -230,9 +239,22 @@ public class AudioManager : MonoBehaviour
             newSource.outputAudioMixerGroup = sfx;
             newSource.loop = false;
             newSource.playOnAwake = false;
-            newSource.clip = soundDictionary[sound];
-            newSource.volume = audioSource.volume;
+            newSource.clip = soundDictionary[sound].clip;
+            newSource.volume = soundDictionary[sound].sound_vol;
             newSource.Play();
+        }
+    }
+
+    public void ManageElevatorSound(AudioSource elev_sound, Vector2 input)
+    {
+        float total_intensity = Mathf.Abs(input.x + input.y);
+        if (elev_sound.volume < 0.05f + total_intensity / 10)
+        {
+            elev_sound.volume += 0.01f;
+        }
+        else
+        {
+            elev_sound.volume -= 0.02f;
         }
     }
 

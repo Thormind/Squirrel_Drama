@@ -205,11 +205,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
     private void PlayImpactSFX()
     {
-        if (AudioManager.instance != null)
-        {
-            AudioManager.instance.PlaySound(SOUND.BEAR_HIT);
-        }
-
+            gameObject.GetComponent<AudioSource>().Play();
     }
 
     private void PlayImpactVFX()
