@@ -34,6 +34,7 @@ public enum SOUND
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
     BUNNY_SFX,                  // Implanted: false
     OBSTACLE_SPAWN,             // Implanted: false Note: correct pitch
+    SCORE_BONUS,
     // Legacy mode
 };
 

@@ -347,6 +347,8 @@ public class HUDMenuManager : MonoBehaviour
         string startTimerString = infiniteTimerText.text;
         string resetTimerString = "00:00:00";
 
+        AudioManager.instance.PauseMusic();
+        AudioManager.instance.PlaySound(SOUND.SCORE_BONUS);
         // Loop until the timer reaches the animation duration
         while (timer < animationDuration && gameObject.activeInHierarchy)
         {
@@ -373,6 +375,7 @@ public class HUDMenuManager : MonoBehaviour
 
         // Set the final timer string to "00:00:00"
         infiniteTimerText.text = resetTimerString;
+        AudioManager.instance.AdjustMusic();
     }
 
     public IEnumerator AnimateInfiniteScore(int currentBonusScore, int newBonusScore, int currentScore, int newScore)
