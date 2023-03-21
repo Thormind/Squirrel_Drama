@@ -48,20 +48,7 @@ public class InfiniteElevatorController : MonoBehaviour
             HandleElevatorVFX(input);
             AudioManager.instance.HandleElevatorSFX(gameObject.GetComponent<AudioSource>(), input);
 
-            if (leftLifter.position.y >= end.position.y
-                && rightLifter.position.y >= end.position.y)
-            {
-                inputEnabled = false;
-
-                HandleElevatorVFX(Vector2.zero);
-
-                if (elevatorSFX.isPlaying)
-                {
-                    elevatorSFX.Stop();
-                }
-
-                InfiniteGameController.instance.LevelCompleted();
-            }
+            LevelCompletedCheck();
 
             Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
             Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
@@ -232,6 +219,24 @@ public class InfiniteElevatorController : MonoBehaviour
         leftVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.x));
         ParticleSystem.MainModule rightVFX = rightLifterVFX.main;
         rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
+    }
+
+    public void LevelCompletedCheck()
+    {
+        if (leftLifter.position.y >= end.position.y
+            && rightLifter.position.y >= end.position.y)
+        {
+            inputEnabled = false;
+
+            HandleElevatorVFX(Vector2.zero);
+
+            if (elevatorSFX.isPlaying)
+            {
+                elevatorSFX.Stop();
+            }
+
+            InfiniteGameController.instance.LevelCompleted();
+        }
     }
 
 
