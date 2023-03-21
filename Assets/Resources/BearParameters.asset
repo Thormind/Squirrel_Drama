@@ -63,15 +63,15 @@ MonoBehaviour:
   - 0.55
   - 0.55
   _bearWarnAnimationTime:
-  - 3.5
-  - 3.5
-  - 3.5
+  - 3
+  - 3
+  - 3
   - 2.5
   - 2.5
   - 2.5
-  - 1.5
-  - 1.5
-  - 1.5
+  - 2
+  - 2
+  - 2
   _bearImpactRange:
   - 3
   - 3

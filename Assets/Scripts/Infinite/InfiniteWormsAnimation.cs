@@ -108,13 +108,102 @@ public class InfiniteWormsAnimation : MonoBehaviour
         yield return null;
     }
 
-    [ContextMenu("Test Animation")]
-    public void TestWormAnimationFunction()
-    {
-        inAnimationTime = 2f;
-        derpAnimationTime = 2f;
-        derpSpeed = 300f;
 
-        StartCoroutine(HandleWormInAnimation());
+    // ===== NEW ANIMATION ===== //
+
+    [ContextMenu("Test Animation")]
+    public void HandleNewWormAnimationFunction(float inTime, float derpTime, float animationSpeed)
+    {
+        inAnimationTime = inTime;
+        derpAnimationTime = derpTime;
+        derpSpeed = animationSpeed;
+
+        StartCoroutine(HandleNewWormInAnimation());
+    }
+
+    IEnumerator HandleNewWormInAnimation()
+    {
+        float t = 0;
+
+        while (t <= 1)
+        {
+            t += Time.fixedDeltaTime / inAnimationTime;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StartCoroutine(HandleNewWormOutAnimation());
+
+        yield return null;
+    }
+
+    IEnumerator HandleNewWormOutAnimation()
+    {
+        Vector3 _initialPosition = transform.localPosition;
+        Quaternion _initialRotation = transform.localRotation;
+
+        Vector3 outStartPosition = new Vector3(_initialPosition.x, _initialPosition.y, 0);
+        Quaternion outStartRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, outAnimationRotationOffset));
+
+        float t = 0;
+
+        wormSound.Play();
+
+        while (t <= 1)
+        {
+            t += Time.fixedDeltaTime / 0.5f;
+
+            transform.localPosition = Vector3.Lerp(_initialPosition, outStartPosition, t);
+            transform.localRotation = Quaternion.Lerp(_initialRotation, outStartRotation, t);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StartCoroutine(HandleNewWormDerpAnimation());
+
+        yield return null;
+    }
+
+    IEnumerator HandleNewWormDerpAnimation()
+    {
+        float t = 0;
+
+        while (t <= 1)
+        {
+            transform.Rotate(Vector3.forward * Time.fixedDeltaTime * derpSpeed, Space.World);
+
+            t += Time.fixedDeltaTime / derpAnimationTime;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        StartCoroutine(HandleNewWormBackInAnimation());
+
+        yield return null;
+    }
+
+    IEnumerator HandleNewWormBackInAnimation()
+    {
+        Vector3 _initialPosition = transform.localPosition;
+        Quaternion _initialRotation = transform.localRotation;
+
+        Vector3 inStartPosition = new Vector3(_initialPosition.x, _initialPosition.y, 1f);
+        Quaternion inStartRotation = Quaternion.Euler(-90f, 0f, 0f);
+
+        float t = 0;
+
+        while (t <= 1)
+        {
+            t += Time.fixedDeltaTime / 0.5f;
+
+            transform.localPosition = Vector3.Lerp(_initialPosition, inStartPosition, t);
+            transform.localRotation = Quaternion.Lerp(_initialRotation, inStartRotation, t);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        Destroy(gameObject);
+
+        yield return null;
     }
 }

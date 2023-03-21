@@ -51,7 +51,7 @@ public class WormSpawner : MonoBehaviour
         float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 1f, WormsDerpAnimationTime + 1f);
         float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
 
-        wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleWormAnimationFunction(
+        wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleNewWormAnimationFunction(
             randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed);
     }
 
