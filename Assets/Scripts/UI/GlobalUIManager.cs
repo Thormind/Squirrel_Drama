@@ -101,7 +101,6 @@ public class GlobalUIManager : MonoBehaviour
     {
         if (es.enabled)
         {
-            AudioManager.instance.Pause();
             switch (ScenesManager.gameState)
             {
                 case GAME_STATE.PAUSED: // PAUSED_STATE
@@ -341,9 +340,10 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        AudioManager.instance.UnPause();
+        AudioManager.instance.Resume();
         AnimationManager.instance.ResumeInGameAnimations();
         AnimationManager.instance.ResumeObstaclesAnimations();
+
         SetMenu(MENU.MENU_HUD); 
 
         Time.timeScale = 1f;
@@ -356,6 +356,8 @@ public class GlobalUIManager : MonoBehaviour
     {
         ScenesManager.gameState = GAME_STATE.PAUSED;
 
+        AudioManager.instance.Pause();
+
         Time.timeScale = 0f;
         AnimationManager.instance.PauseInGameAnimations();
         AnimationManager.instance.PauseObstaclesAnimations();
@@ -367,6 +369,8 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReplayGame()
     {
+        AudioManager.instance.Resume();
+
         ScenesManager.gameState = GAME_STATE.PRE_GAME;
 
         Time.timeScale = 1f;
@@ -409,7 +413,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        AudioManager.instance.UnPause();
+        AudioManager.instance.Resume();
         AnimationManager.instance.ClearInGameQueue();
         AnimationManager.instance.ClearObstaclesQueue();
 

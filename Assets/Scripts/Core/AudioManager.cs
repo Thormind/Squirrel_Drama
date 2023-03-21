@@ -245,9 +245,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void ManageElevatorSound(AudioSource elev_sound, Vector2 input)
+    public void HandleElevatorSFX(AudioSource elev_sound, Vector2 input)
     {
         float total_intensity = Mathf.Abs(input.x + input.y);
+
         if (elev_sound.volume < 0.05f + total_intensity / 10)
         {
             elev_sound.volume += 0.01f;
@@ -261,8 +262,10 @@ public class AudioManager : MonoBehaviour
     public void Pause()
     {
         PauseMusic();
+
         AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
+
         foreach (AudioSource source in sources)
         {
             bool ismusic = false;
@@ -282,7 +285,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void UnPause()
+    public void Resume()
     {
         AdjustMusic();
         AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
