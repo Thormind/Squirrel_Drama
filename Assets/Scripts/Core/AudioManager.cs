@@ -34,7 +34,8 @@ public enum SOUND
     ELEVATOR_MOVEMENT_INFINITE, // Implanted: false
     BUNNY_SFX,                  // Implanted: false
     OBSTACLE_SPAWN,             // Implanted: false Note: correct pitch
-    SCORE_BONUS,
+    SCORE_BONUS_1,
+    SCORE_BONUS_2,
     // Legacy mode
 };
 
@@ -344,7 +345,7 @@ public class AudioManager : MonoBehaviour
 
             foreach (AudioSource music_source in music_sources)
             {
-                if (source == music_source)
+                if (source == music_source || source.clip == soundDictionary[SOUND.SWEEP].clip)
                 {
                     ismusic = true;
                     break;
