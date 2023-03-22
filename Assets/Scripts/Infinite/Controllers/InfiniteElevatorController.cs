@@ -33,9 +33,21 @@ public class InfiniteElevatorController : MonoBehaviour
 
     private bool inputEnabled = false;
 
+    public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
+
     private void Awake()
     {
         elevatorRigidBody = GetComponent<Rigidbody2D>();
+    }
+
+    void Start()
+    {
+        ScenesManager.OnGameStateChanged += HandleGameStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        ScenesManager.OnGameStateChanged -= HandleGameStateChanged;
     }
 
     private void FixedUpdate()
@@ -47,8 +59,6 @@ public class InfiniteElevatorController : MonoBehaviour
 
             HandleElevatorVFX(input);
             AudioManager.instance.HandleElevatorSFX(gameObject.GetComponent<AudioSource>(), input);
-
-            LevelCompletedCheck();
 
             Vector2 targetLeftLifterPosition = leftLifter.position + Vector2.up * movementOffset.x;
             Vector2 targetRightLifterPosition = rightLifter.position + Vector2.up * movementOffset.y;
@@ -63,7 +73,7 @@ public class InfiniteElevatorController : MonoBehaviour
         }
     }
 
-    IEnumerator MoveBarToStartPosition()
+    public IEnumerator MoveBarToStartPosition()
     {
         while (leftLifter.position.y < start.position.y)
         {
@@ -88,14 +98,13 @@ public class InfiniteElevatorController : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator MoveBarToBottomPosition()
+    public IEnumerator MoveBarToBottomPosition()
     {
 
         bottomMovementSpeed = CalculateBottomMovementSpeed();
 
         while (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y)
         {
-
             if (leftLifter.position.y > bottom.position.y)
             {
                 leftLifter.MovePosition(leftLifter.position - Vector2.up * bottomMovementSpeed * Time.fixedDeltaTime);
@@ -107,33 +116,6 @@ public class InfiniteElevatorController : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
-
-        InfiniteGameController.instance.ResetFruit();
-
-        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
-        {
-            if (!elevatorSFX.isPlaying)
-            {
-                elevatorSFX.Play();
-            }
-
-            if (AnimationManager.instance != null)
-            {
-                AnimationManager.instance.PlayObstaclesAnimation(MoveBarToStartPosition());
-            }
-        }
-        if (ScenesManager.gameState == GAME_STATE.LEVEL_COMPLETED)
-        {
-            InfiniteGameController.instance.StartGame();
-        }
-        if (ScenesManager.gameState == GAME_STATE.GAME_OVER && ScenesManager.gameState == GAME_STATE.PRE_GAME)
-        {
-            if (elevatorSFX.isPlaying)
-            {
-                elevatorSFX.Stop();
-            }
-        }
-
 
         yield return null;
     }
@@ -171,9 +153,14 @@ public class InfiniteElevatorController : MonoBehaviour
     }
 
 
-    public bool ElevatorReachedBottom()
+    public bool HasNotReachedBottom()
     {
-        return (leftLifter.position.y == bottom.position.y || rightLifter.position.y == bottom.position.y);
+        return (leftLifter.position.y > bottom.position.y || rightLifter.position.y > bottom.position.y);
+    }
+
+    public bool HasReachedEnd()
+    {
+        return (leftLifter.position.y >= end.position.y && rightLifter.position.y >= end.position.y);
     }
 
 
@@ -221,21 +208,48 @@ public class InfiniteElevatorController : MonoBehaviour
         rightVFX.startSize = Mathf.Lerp(3f, 6f, Mathf.Abs(input.y));
     }
 
-    public void LevelCompletedCheck()
+    private void HandleGameStateChanged(GAME_STATE newGameState)
     {
-        if (leftLifter.position.y >= end.position.y
-            && rightLifter.position.y >= end.position.y)
+        switch (newGameState)
         {
-            inputEnabled = false;
+            case GAME_STATE.PRE_GAME:
+                if (elevatorSFX.isPlaying)
+                {
+                    elevatorSFX.Stop();
+                }
+                MoveBarToBottomPositionFunction();
+                break;
+            case GAME_STATE.PREPARING:
+                break;
+            case GAME_STATE.ACTIVE:
+                if (!elevatorSFX.isPlaying)
+                {
+                    elevatorSFX.Play();
+                }
+                break;
+            case GAME_STATE.INACTIVE:
+                break;
+            case GAME_STATE.LOADING:
+                break;
+            case GAME_STATE.GAME_OVER:
+                if (elevatorSFX.isPlaying)
+                {
+                    elevatorSFX.Stop();
+                }
+                MoveBarToBottomPositionFunction();
+                break;
+            case GAME_STATE.LEVEL_COMPLETED:
+                inputEnabled = false;
 
-            HandleElevatorVFX(Vector2.zero);
+                HandleElevatorVFX(Vector2.zero);
 
-            if (elevatorSFX.isPlaying)
-            {
-                elevatorSFX.Stop();
-            }
-
-            InfiniteGameController.instance.LevelCompleted();
+                if (elevatorSFX.isPlaying)
+                {
+                    elevatorSFX.Stop();
+                }
+                break;
+            case GAME_STATE.GAME_COMPLETED:
+                break;
         }
     }
 

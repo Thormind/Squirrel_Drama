@@ -58,16 +58,7 @@ public class ScoreboardMenuManager : MonoBehaviour
 
     private void HandleReplayButton()
     {
-        if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
-        {
-            InfiniteGameController.instance.ResetGame();
-            GlobalUIManager.instance.ReplayGame();
-        }
-        if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
-        {
-            LegacyGameController.instance.ResetGame();
-            GlobalUIManager.instance.ReplayGame();
-        }
+        GlobalUIManager.instance.ReplayGame();
     }
 
     public void SetFinalScore()

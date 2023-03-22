@@ -17,6 +17,9 @@ public class InfiniteFruit : MonoBehaviour
 
     private Vector3 startFruitScale;
 
+    public Transform fruitStackPosition;
+    public Transform fruitResetPosition;
+
     private void Awake()
     {
         fruitRigidbody = GetComponent<Rigidbody2D>();
@@ -26,6 +29,8 @@ public class InfiniteFruit : MonoBehaviour
     void Start()
     {
         startFruitScale = transform.localScale;
+
+        transform.position = fruitStackPosition.position;
 
         collisionEnabled = true;
     }
@@ -118,8 +123,10 @@ public class InfiniteFruit : MonoBehaviour
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
 
-        holeTransform.isTrigger = true;
-
+        if (holeTransform != null)
+        {
+            holeTransform.isTrigger = true;
+        }
     }
 
     IEnumerator FallFromTreeCoroutine(Transform obstacleTransform)
@@ -178,15 +185,47 @@ public class InfiniteFruit : MonoBehaviour
 
     }
 
-    public void ResetFruitPosition(Vector3 elevatorPostion)
+    public void ResetFruitPosition()
     {
-        GetComponent<CircleCollider2D>().enabled = true;
-
-        transform.localPosition = elevatorPostion;
+        GetComponent<CircleCollider2D>().enabled = false;
+        fruitRigidbody.simulated = false;
         fruitRigidbody.velocity = Vector2.zero;
         fruitRigidbody.angularVelocity = 0;
+        transform.position = fruitStackPosition.position;
+    }
+
+    public IEnumerator AnimateFruitReset()
+    {
+        fruitRigidbody.simulated = true;
+        transform.position = fruitStackPosition.position;
         transform.localScale = startFruitScale;
 
+        //transform.localPosition = elevatorPostion;
+
+        float t = 0f;
+        float resetDuration = 2f;
+
+        Vector3 startPosition = fruitStackPosition.position;
+        Vector3 endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
+        //Vector3 endPosition = fruitResetPosition.position;
+
+        while (t < 1f && transform.position != InfiniteGameController.instance.GetElevatorPositionForFruitReset())
+        {
+            float easedProgress = EaseInQuart(t);
+
+            endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
+
+            transform.position = Vector3.Lerp(startPosition, endPosition, easedProgress);
+
+            t += Time.deltaTime / resetDuration;
+            yield return null;
+        }
+
+        transform.position = endPosition;
+
+        GetComponent<CircleCollider2D>().enabled = true;
+        fruitRigidbody.velocity = Vector2.zero;
+        fruitRigidbody.angularVelocity = 0;
         fruitRigidbody.gravityScale = fruitGravityScale;
     }
 
@@ -209,5 +248,25 @@ public class InfiniteFruit : MonoBehaviour
     public void SetFruitMinCollisionDistance(float minCollDis)
     {
         MinCollisionDistance = minCollDis;
+    }
+
+    public void SetFruitActive(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
+
+
+    // ====================================== //
+    // ========== EASING FUNCTIONS ========== //
+    // ====================================== //
+
+    float EaseInQuart(float t)
+    {
+        return t * t * t * t;
+    }
+
+    float EaseOutQuart(float t)
+    {
+        return 1 - Mathf.Pow(1 - t, 4);
     }
 }

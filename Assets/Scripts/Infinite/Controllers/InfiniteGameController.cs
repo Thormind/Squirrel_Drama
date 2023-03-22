@@ -4,6 +4,16 @@ using UnityEngine;
 using UnityEngine.VFX;
 using TMPro;
 
+[System.Serializable]
+public enum PREPERATION_STATE
+{
+    AFTER_START,
+    AFTER_RESET,
+    AFTER_DEATH,
+    AFTER_LEVEL_COMPLETED,
+    AFTER_GAME_OVER
+};
+
 public class InfiniteGameController : MonoBehaviour
 {
     public static InfiniteGameController instance = null;
@@ -40,6 +50,8 @@ public class InfiniteGameController : MonoBehaviour
     public float maxTimeBeforeDecrement;
     private bool timerRunning = false;
 
+    public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
+
     private void Awake()
     {
         if (instance == null)
@@ -54,6 +66,7 @@ public class InfiniteGameController : MonoBehaviour
 
     private void Start()
     {
+        ScenesManager.OnGameStateChanged += HandleGameStateChanged;
 
         currentLevel = 1;
         difficultyLevel = 1;
@@ -87,10 +100,17 @@ public class InfiniteGameController : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        ScenesManager.OnGameStateChanged -= HandleGameStateChanged;
+    }
+
     private void FixedUpdate()
     {
         UpdateTimer();
         UpdateHUD(GAME_DATA.MAP);
+
+        LevelCompletedCheck();
     }
 
     public void UpdateHUD(GAME_DATA gameData)
@@ -152,12 +172,6 @@ public class InfiniteGameController : MonoBehaviour
 
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null && timerBonus > 0)
         {
-            /*
-            AnimationManager.instance.PlayInGameAnimation(
-                HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus), 
-                () => { RecalculateScore(); 
-            });
-            */
             AnimationManager.instance.PlayInGameAnimation( HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus));
         }
         else if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null && timerBonus <= 0)
@@ -170,14 +184,8 @@ public class InfiniteGameController : MonoBehaviour
 
     public void RecalculateScore()
     {
-        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && bonusScore > 0)
         {
-            /*
-            AnimationManager.instance.PlayInGameAnimation(
-                HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore),
-                () => { NextLevel();
-            });
-            */
             AnimationManager.instance.PlayInGameAnimation(HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore));
         }
         score += bonusScore;
@@ -243,10 +251,13 @@ public class InfiniteGameController : MonoBehaviour
 
     // ========== ANIMATIONS ========== //
 
-    public void ResetFruit()
+    public void ResetNReady()
     {
-        Vector3 positon = new Vector3(0, elevatorControllerRef.transform.localPosition.y + 0.5f, 0);
-        fruitRef.ResetFruitPosition(positon);
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayInGameAnimation(fruitRef.AnimateFruitReset());
+            AnimationManager.instance.PlayInGameAnimation(elevatorControllerRef.MoveBarToStartPosition());
+        }
     }
 
 
@@ -263,9 +274,6 @@ public class InfiniteGameController : MonoBehaviour
 
     public void LevelCompleted()
     {
-        //levelCompletedState = true;
-        ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
-
         EnableFruitCollision(false);
 
         RemoveObstacles();
@@ -299,10 +307,9 @@ public class InfiniteGameController : MonoBehaviour
 
         // ==================== //
 
-        PrepareForLevel();
+        fruitRef.ResetFruitPosition();
 
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
-
+        PrepareForLevel(PREPERATION_STATE.AFTER_LEVEL_COMPLETED);
     }
 
     public void ResetGame()
@@ -328,7 +335,15 @@ public class InfiniteGameController : MonoBehaviour
         ResetTimer();
         UpdateHUD(GAME_DATA.TIMER);
 
-        PrepareForLevel();
+        fruitRef.ResetFruitPosition();
+        Time.timeScale = 1f;
+        EnableFruitCollision(false);
+        SetRigidBodyExtrapolate(false);
+
+        if (CameraManager.instance != null)
+        {
+            CameraManager.instance.Transition(false);
+        }
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -336,9 +351,59 @@ public class InfiniteGameController : MonoBehaviour
     [ContextMenu("Start Game")]
     public void StartGame()
     {
-        ScenesManager.gameState = GAME_STATE.ACTIVE;
+        ScenesManager.gameState = GAME_STATE.PREPARING;
 
         SpawnObstacles();
+
+        if (AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayInGameAnimation(PreparingAfterDeathCallback());
+        }
+
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    }
+
+    public IEnumerator PreparingAfterDeathCallback()
+    {
+        while (AnimationManager.instance.ObstaclesAnimationIsPlaying() || elevatorControllerRef.HasNotReachedBottom())
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        if (ScenesManager.gameState != GAME_STATE.GAME_OVER && ScenesManager.gameState != GAME_STATE.PRE_GAME)
+        {
+            ScenesManager.gameState = GAME_STATE.ACTIVE;
+        }
+    }
+
+    public IEnumerator PreparingAfterLevelCompletedCallback()
+    {
+        while (elevatorControllerRef.HasNotReachedBottom())
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (ScenesManager.gameState != GAME_STATE.PRE_GAME)
+        {
+            SpawnObstacles();
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        while (AnimationManager.instance.ObstaclesAnimationIsPlaying())
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+
+
+        if (ScenesManager.gameState != GAME_STATE.PRE_GAME)
+        {
+            ScenesManager.gameState = GAME_STATE.ACTIVE;
+        }
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -356,8 +421,10 @@ public class InfiniteGameController : MonoBehaviour
         StartTimer();
     }
 
-    public void PrepareForLevel()
+    public void PrepareForLevel(PREPERATION_STATE prepState)
     {
+        ScenesManager.gameState = GAME_STATE.PREPARING;
+
         PauseTimer();
 
         Time.timeScale = 1f;
@@ -368,6 +435,21 @@ public class InfiniteGameController : MonoBehaviour
         {
             CameraManager.instance.Transition(false);
         }
+
+        if (AnimationManager.instance != null)
+        {
+            switch (prepState)
+            {
+                case PREPERATION_STATE.AFTER_DEATH:
+                    AnimationManager.instance.PlayInGameAnimation(PreparingAfterDeathCallback());
+                    break;
+                case PREPERATION_STATE.AFTER_LEVEL_COMPLETED:
+                    AnimationManager.instance.PlayInGameAnimation(PreparingAfterLevelCompletedCallback());
+                    break;
+            }
+        }
+        
+        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void GameOverCheck()
@@ -375,15 +457,49 @@ public class InfiniteGameController : MonoBehaviour
         if (currentFruitNumber <= 0)
         {
             ScenesManager.gameState = GAME_STATE.GAME_OVER;
-
-            RecalculateBestScore();
-
-            if (GlobalUIManager.instance != null)
-            {
-                GlobalUIManager.instance.SetScoreBoardMenu();
-            }
         }
     }
+
+    public void LevelCompletedCheck()
+    {
+        if (elevatorControllerRef.HasReachedEnd() 
+            && ScenesManager.gameState != GAME_STATE.LEVEL_COMPLETED 
+            && ScenesManager.gameState != GAME_STATE.PREPARING)
+        {
+            ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
+        }
+    }
+
+
+    private void HandleGameStateChanged(GAME_STATE newGameState)
+    {
+        switch (newGameState)
+        {
+            case GAME_STATE.PRE_GAME:
+                ResetGame();
+                break;
+            case GAME_STATE.PREPARING:
+                break;
+            case GAME_STATE.ACTIVE:
+                if (!elevatorControllerRef.HasNotReachedBottom())
+                {
+                    ResetNReady();
+                }
+                break;
+            case GAME_STATE.GAME_OVER:
+                RemoveObstacles();
+                fruitRef.ResetFruitPosition();
+                RecalculateBestScore();
+                break;
+            case GAME_STATE.LEVEL_COMPLETED:
+                LevelCompleted();
+                break;
+        }
+    }
+
+
+
+
 
 
 
@@ -398,38 +514,37 @@ public class InfiniteGameController : MonoBehaviour
 
     public void HandleFruitInHole()
     {
-        PrepareForLevel();
+        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
 
         FruitNumberDecrement();
-
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void HandleFruitInBee()
     {
-        PrepareForLevel();
+        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
 
         FruitNumberDecrement();
-
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void HandleFruitInWorm()
     {
-        PrepareForLevel();
+        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
 
         FruitNumberDecrement();
-
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void HandleFruitInBear()
     {
-        PrepareForLevel();
+        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
 
         FruitNumberDecrement();
+    }
 
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
+    public void HandleFruitFalling()
+    {
+        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+
+        FruitNumberDecrement();
     }
 
     public void HandleFruitInPoints()
@@ -447,15 +562,6 @@ public class InfiniteGameController : MonoBehaviour
         {
             FruitBonusScoreIncrement();
         }
-    }
-
-    public void HandleFruitFalling()
-    {
-        PrepareForLevel();
-
-        FruitNumberDecrement();
-
-        elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
     public void SpawnObstacles()
@@ -535,6 +641,55 @@ public class InfiniteGameController : MonoBehaviour
 
 
 
+
+
+
+
+
+
+    // ========================================== //
+    // ========== COLLISIONS FUNCTIONS ========== //
+    // ========================================== //
+
+    public void SetRigidBodyExtrapolate(bool extrapolate)
+    {
+        if (extrapolate)
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        }
+        else
+        {
+            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.None;
+            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
+            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
+        }
+
+    }
+
+
+    private void EnableFruitCollision(bool enableCollision)
+    {
+        fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ============================= //
     // ========== GETTERS ========== //
     // ============================= //
@@ -572,6 +727,11 @@ public class InfiniteGameController : MonoBehaviour
     public float GetElevatorLocalHeight()
     {
         return elevatorControllerRef.gameObject.transform.localPosition.y;
+    }
+
+    public Vector3 GetElevatorPositionForFruitReset()
+    {
+        return elevatorControllerRef.gameObject.transform.position + Vector3.up * 2f;
     }
 
 
@@ -651,35 +811,6 @@ public class InfiniteGameController : MonoBehaviour
 
 
 
-
-    // ========================================== //
-    // ========== COLLISIONS FUNCTIONS ========== //
-    // ========================================== //
-
-    public void SetRigidBodyExtrapolate(bool extrapolate)
-    {
-        if (extrapolate)
-        {
-            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
-        }
-        else
-        {
-            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.None;
-            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.None;
-            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
-            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
-        }
-
-    }
-
-
-    private void EnableFruitCollision(bool enableCollision)
-    {
-        fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
-    }
 
 
 

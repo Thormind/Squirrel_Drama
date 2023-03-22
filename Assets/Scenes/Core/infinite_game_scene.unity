@@ -268,6 +268,37 @@ MonoBehaviour:
   bearInstantiated: {fileID: 0}
   _bearParameters: {fileID: 11400000, guid: cf03719ea0c0fca468ab50a57c3e5525, type: 2}
   isAllSpawned: 0
+--- !u!1 &106993693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 106993694}
+  m_Layer: 0
+  m_Name: fruitReset
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &106993694
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106993693}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -5.5, z: 0}
+  m_LocalScale: {x: 0.083333336, y: 0.083333336, z: 0.083333336}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 475743738}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &149299622
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,6 +841,8 @@ Transform:
   - {fileID: 236103733}
   - {fileID: 1450611958}
   - {fileID: 149299623}
+  - {fileID: 688465987}
+  - {fileID: 106993694}
   m_Father: {fileID: 1688894348}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -955,6 +988,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionEnabled: 0
   fruitRigidbody: {fileID: 0}
+  fruitStackPosition: {fileID: 688465987}
+  fruitResetPosition: {fileID: 106993694}
 --- !u!114 &506127054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,6 +1239,37 @@ Transform:
   - {fileID: 1249040317}
   m_Father: {fileID: 1688894348}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &688465986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 688465987}
+  m_Layer: 0
+  m_Name: fruits
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &688465987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688465986}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10.68, y: -5.86, z: -0.6}
+  m_LocalScale: {x: 0.083333336, y: 0.083333336, z: 0.083333336}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 475743738}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &706388242
 GameObject:

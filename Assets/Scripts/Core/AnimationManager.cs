@@ -107,6 +107,12 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+    public bool InGameAnimationIsPlaying()
+    {
+        // Set the paused flag to false
+        return isPlayingInGameAnimation;
+    }
+
     public void PauseInGameAnimations()
     {
         // Set the paused flag to true
@@ -200,6 +206,12 @@ public class AnimationManager : MonoBehaviour
     {
         // Set the paused flag to false
         isPausedObstaclesAnimation = false;
+    }
+
+    public bool ObstaclesAnimationIsPlaying()
+    {
+        // Set the paused flag to false
+        return isPlayingObstaclesAnimation;
     }
 
     public void ClearObstaclesQueue()

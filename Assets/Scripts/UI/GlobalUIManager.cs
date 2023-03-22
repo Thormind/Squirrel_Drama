@@ -59,6 +59,8 @@ public class GlobalUIManager : MonoBehaviour
     [SerializeField] private GameObject controllerIcon;
     public static bool isControllerConnected = false;
 
+    public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
+
     public void Awake()
     {
         if (instance == null)
@@ -75,6 +77,9 @@ public class GlobalUIManager : MonoBehaviour
 
     private void OnEnable()
     {
+        ScenesManager.OnGameStateChanged += HandleGameStateChanged;
+
+
         pause = UIControls.UI.Pause;
         confirm = UIControls.UI.Confirm;
         back = UIControls.UI.Back;
@@ -89,6 +94,8 @@ public class GlobalUIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ScenesManager.OnGameStateChanged -= HandleGameStateChanged;
+
         pause.Disable();
         confirm.Disable();
         back.Disable();
@@ -127,6 +134,9 @@ public class GlobalUIManager : MonoBehaviour
                     break;
                 case GAME_STATE.PAUSED: // PAUSED_STATE
                     ResumeGame();
+                    break;
+                case GAME_STATE.PREPARING: // PREPARING_STATE
+                    PauseGame();
                     break;
                 case GAME_STATE.ACTIVE: // ACTIVE_STATE
                     PauseGame();
@@ -558,6 +568,28 @@ public class GlobalUIManager : MonoBehaviour
         }
     }
 
-
+    private void HandleGameStateChanged(GAME_STATE newGameState)
+    {
+        switch (newGameState)
+        {
+            case GAME_STATE.PRE_GAME:
+                break;
+            case GAME_STATE.PREPARING:
+                break;
+            case GAME_STATE.ACTIVE:
+                break;
+            case GAME_STATE.INACTIVE:
+                break;
+            case GAME_STATE.LOADING:
+                break;
+            case GAME_STATE.GAME_OVER:
+                SetScoreBoardMenu();
+                break;
+            case GAME_STATE.LEVEL_COMPLETED:
+                break;
+            case GAME_STATE.GAME_COMPLETED:
+                break;
+        }
+    }
 
 }

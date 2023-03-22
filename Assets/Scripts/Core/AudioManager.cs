@@ -127,6 +127,16 @@ public class AudioManager : MonoBehaviour
             case GAME_STATE.PAUSED:
                 Pause();
                 break;
+            case GAME_STATE.PREPARING:
+                if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+                {
+                    PlayInfinite();
+                }
+                if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+                {
+                    PlayLegacy();
+                }
+                break;
             case GAME_STATE.ACTIVE:
                 Resume();
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
@@ -147,7 +157,11 @@ public class AudioManager : MonoBehaviour
                 PlaySound(SOUND.SWEEP);
                 break;
             case GAME_STATE.GAME_OVER:
-                //ReturnToMainMenu();
+                StopCurrentMusic();
+                if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+                {
+                    PlayWind();
+                }
                 break;
             case GAME_STATE.LEVEL_COMPLETED:
                 //PlayUiMusic();
