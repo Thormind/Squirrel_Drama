@@ -271,7 +271,7 @@ public class HUDMenuManager : MonoBehaviour
         StartCoroutine(AnimateInfiniteTimerReset());
     }
 
-    private IEnumerator AnimateInfiniteTimerReset()
+    public IEnumerator AnimateInfiniteTimerReset()
     {
         // Get the duration of the animation
         float animationDuration = 1.75f;
@@ -299,6 +299,10 @@ public class HUDMenuManager : MonoBehaviour
             // Update the timer
             timer += Time.deltaTime;
         }
+
+        StartCoroutine(AnimateText(infiniteTimerText, resetTimerString));
+
+        yield return new WaitForSeconds(2f);
 
         // Set the final timer string to "00:00:00"
         infiniteTimerText.text = resetTimerString;

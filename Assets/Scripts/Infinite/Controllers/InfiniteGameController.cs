@@ -150,7 +150,7 @@ public class InfiniteGameController : MonoBehaviour
     {
         int timerBonus = CalculateTimerBonusScore();
 
-        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null && timerBonus > 0)
         {
             /*
             AnimationManager.instance.PlayInGameAnimation(
@@ -159,6 +159,10 @@ public class InfiniteGameController : MonoBehaviour
             });
             */
             AnimationManager.instance.PlayInGameAnimation( HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus));
+        }
+        else if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null && timerBonus <= 0)
+        {
+            AnimationManager.instance.PlayInGameAnimation(HUDMenuManager.instance.AnimateInfiniteTimerReset());
         }
 
         bonusScore += timerBonus;

@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 153380518}
   - component: {fileID: 153380520}
   - component: {fileID: 153380519}
+  - component: {fileID: 153380521}
   m_Layer: 0
   m_Name: icb-light
   m_TagString: Untagged
@@ -321,6 +322,22 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &153380521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153380517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2635fd46e09604a4db8270c17cc39c9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 0}
+  minIntensity: 0
+  maxIntensity: 100
+  smoothing: 15
 --- !u!1 &211511314
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,6 +2473,7 @@ GameObject:
   - component: {fileID: 2013214297}
   - component: {fileID: 2013214299}
   - component: {fileID: 2013214298}
+  - component: {fileID: 2013214300}
   m_Layer: 0
   m_Name: icb-light2
   m_TagString: Untagged
@@ -2560,6 +2578,22 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &2013214300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013214296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2635fd46e09604a4db8270c17cc39c9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 0}
+  minIntensity: 0
+  maxIntensity: 20
+  smoothing: 15
 --- !u!1 &2079670506
 GameObject:
   m_ObjectHideFlags: 0
