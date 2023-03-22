@@ -78,7 +78,7 @@ public class LegacyGameController : MonoBehaviour
 
     private void RecalculateScore()
     {
-        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && bonusScore > 0)
         {
             AnimationManager.instance.PlayInGameAnimation(
                 HUDMenuManager.instance.AnimateLegacyScore(bonusScore, 0, score, score + bonusScore),
@@ -86,8 +86,11 @@ public class LegacyGameController : MonoBehaviour
                     GameCompletedCheck();
                 });
         }
+        else if (bonusScore <= 0)
+        {
+            GameCompletedCheck();
+        }
         score += bonusScore;
-        UpdateHUD(GAME_DATA.SCORE);
     }
 
     private void RecalculateBestScore()
@@ -328,6 +331,32 @@ public class LegacyGameController : MonoBehaviour
     public GameObject GetCurrentHole()
     {
         return LegacyHoleController.instance.holes[currentHoleIndex];
+    }
+
+
+    public IEnumerator SetLegacyMachineLights(bool isOn)
+    {
+        LegacyMachineLight.SetActive(isOn);
+
+        LightFlickering[] lightsFlickers = LegacyMachineLight.GetComponentsInChildren<LightFlickering>();
+        int minSmoothing = 1;
+        int maxSmoothing = 15;
+
+        float t = 0f;
+        float duration = Random.Range(1, 2);
+
+        while (t < 1f)
+        {
+            foreach (LightFlickering lf in lightsFlickers)
+            {
+                lf.smoothing = (int)Mathf.Lerp(minSmoothing, maxSmoothing, t);
+            }
+
+            t += Time.deltaTime / duration;
+            yield return null;
+        }
+
+        yield return null;
     }
 
 
