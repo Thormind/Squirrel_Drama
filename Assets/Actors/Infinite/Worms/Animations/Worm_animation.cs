@@ -13,6 +13,7 @@ public class Worm_animation : MonoBehaviour
     public Slider animationSpeedSlider;
     public Button startButton;
     public Toggle getBackToggle;
+    public GameObject wormModel;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +28,19 @@ public class Worm_animation : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("inactive"))
+        {
+            wormModel.SetActive(false);
+            Debug.Log("inactive");
+        }
+    }
+
 
     public void StartAnimation()
     {
+        wormModel.SetActive(true);
         animator.Play("exitHole");
     }
 

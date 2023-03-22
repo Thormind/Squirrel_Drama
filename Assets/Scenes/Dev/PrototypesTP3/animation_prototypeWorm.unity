@@ -565,6 +565,7 @@ MonoBehaviour:
   animationSpeedSlider: {fileID: 1798061336}
   startButton: {fileID: 632142861}
   getBackToggle: {fileID: 1096582489}
+  wormModel: {fileID: 558616055}
 --- !u!1 &591620125
 GameObject:
   m_ObjectHideFlags: 0
