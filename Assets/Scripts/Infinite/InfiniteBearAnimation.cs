@@ -27,14 +27,14 @@ public class InfiniteBearAnimation : MonoBehaviour
     public float bearMaxAlpha = 255f;
 
     private bool isCoroutineRunning = false;
-    private EdgeCollider2D bearCollider;
+    private PolygonCollider2D bearCollider;
 
     public GameObject impactVFX;
 
 
     private void Start()
     {
-        bearCollider = GetComponent<EdgeCollider2D>();
+        bearCollider = GetComponent<PolygonCollider2D>();
         bearCollider.enabled = false;
 
         bearPaw.SetActive(false);
@@ -120,6 +120,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         // ============== IMPACT ANIMATION ============== //
         bearCollider.enabled = true;
+        bearCollider.isTrigger = true;
 
         SetSlowMotion(false);
         PlayImpactSFX();
@@ -128,8 +129,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-        bearCollider.enabled = false;
-        bearPaw.GetComponent<EdgeCollider2D>().enabled = true;
+        bearCollider.isTrigger = false;
 
         t = 0f;
 
@@ -139,13 +139,15 @@ public class InfiniteBearAnimation : MonoBehaviour
             yield return null;
         }
 
-        bearPaw.GetComponent<EdgeCollider2D>().enabled = false;
+        bearCollider.enabled = false;
 
 
         // ============== POST IMPACT ANIMATION ============== //
 
         startPosition = bearPaw.transform.localPosition;
         endPosition = new Vector3(0f, 0f, -0.5f);
+        startRotation = bearPaw.transform.localRotation;
+        endRotation = Quaternion.Euler(15, 0, 0);
 
         t = 0f;
 
@@ -157,6 +159,7 @@ public class InfiniteBearAnimation : MonoBehaviour
             SetBearAlpha(bearAlpha);
 
             bearPaw.transform.localPosition = Vector3.Lerp(startPosition, endPosition, easedProgress);
+            bearPaw.transform.localRotation = Quaternion.Lerp(startRotation, endRotation, easedProgress);
 
             t += Time.deltaTime / delayBeforeDestroy;
             yield return null;

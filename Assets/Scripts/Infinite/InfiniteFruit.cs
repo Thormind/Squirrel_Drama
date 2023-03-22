@@ -49,7 +49,6 @@ public class InfiniteFruit : MonoBehaviour
         {
             if (collision.transform.gameObject.tag == "Bee")
             {
-                AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
                 InfiniteGameController.instance.HandleFruitInBee();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -57,7 +56,6 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Worm")
             {
-                AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -65,7 +63,6 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Bear")
             {
-                AudioManager.instance.PlaySound(SOUND.FRUIT_SQUASH);
                 InfiniteGameController.instance.HandleFruitInBear();
 
                 StartCoroutine(CrushedCoroutine(collision.transform));
@@ -129,6 +126,8 @@ public class InfiniteFruit : MonoBehaviour
     {
         fruitRigidbody.simulated = false;
 
+        AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
+
         float t = 0;
         Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z - 1f);
         Vector3 fruitPosition = transform.localPosition;
@@ -154,6 +153,8 @@ public class InfiniteFruit : MonoBehaviour
     IEnumerator CrushedCoroutine(Transform bearTransform)
     {
         fruitRigidbody.simulated = false;
+
+        AudioManager.instance.PlaySound(SOUND.FRUIT_SQUASH);
 
         float t = 0;
         Vector3 fruitTargetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 5f);
