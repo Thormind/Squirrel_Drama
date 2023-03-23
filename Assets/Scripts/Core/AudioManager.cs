@@ -222,56 +222,44 @@ public class AudioManager : MonoBehaviour
     public void AdjustMusic()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
-        if (volume > 0)
-        {
-            volume = 1 - (1 / (volume * volume));
-        }
+        float dB;
+        if (volume != 0)
+            dB = (20.0f * Mathf.Log10(volume));
         else
-        {
-            volume = -80;
-        }
-        mixer.SetFloat("musicVol", volume);
+            dB = -144.0f;
+        mixer.SetFloat("musicVol", dB);
     }
 
     public void PauseMusic()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MUSIC);
-        if (volume > 0)
-        {
-            volume = -10 - (1 / (volume * volume));
-        }
+        float dB;
+        if (volume != 0)
+            dB = (20.0f * Mathf.Log10(volume));
         else
-        {
-            volume = -80;
-        }
-        mixer.SetFloat("musicVol", volume);
+            dB = -144.0f;
+        mixer.SetFloat("musicVol", dB - 10);
     }
 
     public void AdjustSfx()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.SFX);
-        if (volume > 0)
-        {
-            volume = 1 - (1 / (volume * volume));
-        }
+        float dB;
+        if (volume != 0)
+            dB = (20.0f * Mathf.Log10(volume));
         else
-        {
-            volume = -80;
-        }
-        mixer.SetFloat("sfxVol", volume);
+            dB = -144.0f;
+        mixer.SetFloat("sfxVol", dB);
     }
     public void AdjustMaster()
     {
         float volume = SaveManager.instance.GetAudioSettings(AUDIO_CHANNEL.MASTER);
-        if (volume > 0)
-        {
-            volume = 1 - (1 / (volume * volume));
-        }
+        float dB;
+        if (volume != 0)
+            dB = (20.0f * Mathf.Log10(volume));
         else
-        {
-            volume = -80;
-        }
-        mixer.SetFloat("masterVol", volume);
+            dB = -144.0f;
+        mixer.SetFloat("masterVol", dB);
     }
 
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
