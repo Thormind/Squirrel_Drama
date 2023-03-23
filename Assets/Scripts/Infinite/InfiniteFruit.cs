@@ -18,7 +18,8 @@ public class InfiniteFruit : MonoBehaviour
     private Vector3 startFruitScale;
 
     public Transform fruitStackPosition;
-    public Transform fruitResetPosition;
+    public Transform fruitBottomPosition;
+    public Transform fruitStartPosition;
 
     private void Awake()
     {
@@ -196,26 +197,36 @@ public class InfiniteFruit : MonoBehaviour
 
     public IEnumerator AnimateFruitReset()
     {
+
         fruitRigidbody.simulated = true;
         transform.position = fruitStackPosition.position;
         transform.localScale = startFruitScale;
-
-        //transform.localPosition = elevatorPostion;
 
         float t = 0f;
         float resetDuration = 2f;
 
         Vector3 startPosition = fruitStackPosition.position;
-        Vector3 endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
-        //Vector3 endPosition = fruitResetPosition.position;
+        Vector3 endPosition = fruitStartPosition.position;
+        //Vector3 endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
 
-        while (t < 1f && transform.position != InfiniteGameController.instance.GetElevatorPositionForFruitReset())
+        float distance = Vector3.Distance(startPosition, endPosition);
+        float height = distance * 0.25f; // You can adjust the height as desired
+
+        while (t < 1f)
         {
-            float easedProgress = EaseInQuart(t);
+            float easedProgress = EaseOutQuart(t);
 
+            // Calculate the position based on projectile motion
+            float x = Mathf.Lerp(startPosition.x, endPosition.x, easedProgress);
+            float y = endPosition.y + height * Mathf.Sin(Mathf.Lerp(0f, Mathf.PI, easedProgress));
+            float z = Mathf.Lerp(startPosition.z, endPosition.z, easedProgress);
+            transform.position = new Vector3(x, y, z);
+
+            /*
             endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
 
             transform.position = Vector3.Lerp(startPosition, endPosition, easedProgress);
+            */
 
             t += Time.deltaTime / resetDuration;
             yield return null;

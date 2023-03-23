@@ -8,10 +8,8 @@ using TMPro;
 public enum PREPERATION_STATE
 {
     AFTER_START,
-    AFTER_RESET,
     AFTER_DEATH,
     AFTER_LEVEL_COMPLETED,
-    AFTER_GAME_OVER
 };
 
 public class InfiniteGameController : MonoBehaviour
@@ -52,6 +50,8 @@ public class InfiniteGameController : MonoBehaviour
 
     public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
 
+    private Coroutine currentPreparingCoroutine;
+
     private void Awake()
     {
         if (instance == null)
@@ -81,7 +81,6 @@ public class InfiniteGameController : MonoBehaviour
         pointsScoreIncrement = 25;
 
         score = 0;
-
         bonusScore = 0;
 
         if (SaveManager.instance != null)
@@ -123,7 +122,6 @@ public class InfiniteGameController : MonoBehaviour
 
     // ========== TIME FUNCTIONS ========== //
 
-    // Call this method to start or resume the timer
     public void StartTimer()
     {
         if (!timerRunning)
@@ -133,7 +131,6 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
-    // Call this method to pause the timer
     public void PauseTimer()
     {
         if (timerRunning)
@@ -143,14 +140,12 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
   
-    // Call this method to reset the timer to 0
     public void ResetTimer()
     {
         elapsedTime = 0f;
         timerRunning = false;
     }
 
-    // Call this method to reset the timer to 0
     public void UpdateTimer()
     {
         if (timerRunning)
@@ -164,7 +159,7 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
-    // ========== SCORE FUNCTIONS ========== //
+    // ========== SCORE & LIFE FUNCTIONS ========== //
 
     private void RecalculateBonusScore()
     {
@@ -188,6 +183,7 @@ public class InfiniteGameController : MonoBehaviour
         {
             AnimationManager.instance.PlayInGameAnimation(HUDMenuManager.instance.AnimateInfiniteScore(bonusScore, 0, score, score + bonusScore));
         }
+
         score += bonusScore;
         bonusScore = 0;
     }
@@ -203,6 +199,20 @@ public class InfiniteGameController : MonoBehaviour
     {
         bonusScore += fruitScoreIncrement * difficultyLevel;
         UpdateHUD(GAME_DATA.BONUS_SCORE);
+    }
+
+    private void FruitNumberIncrement()
+    {
+        currentFruitNumber++;
+        UpdateHUD(GAME_DATA.LIFE);
+    }
+
+    private void FruitNumberDecrement()
+    {
+        currentFruitNumber--;
+        UpdateHUD(GAME_DATA.LIFE);
+
+        GameOverCheck();
     }
 
     private void RecalculateBestScore()
@@ -231,34 +241,6 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
-    // ========== FRUITS FUNCTIONS ========== //
-
-    private void FruitNumberIncrement()
-    {
-        currentFruitNumber++;
-        UpdateHUD(GAME_DATA.LIFE);
-    }
-
-    private void FruitNumberDecrement()
-    {
-        currentFruitNumber--;
-        UpdateHUD(GAME_DATA.LIFE);
-
-        GameOverCheck();
-    }
-
-
-
-    // ========== ANIMATIONS ========== //
-
-    public void ResetNReady()
-    {
-        if (AnimationManager.instance != null)
-        {
-            AnimationManager.instance.PlayInGameAnimation(fruitRef.AnimateFruitReset());
-            AnimationManager.instance.PlayInGameAnimation(elevatorControllerRef.MoveBarToStartPosition());
-        }
-    }
 
 
 
@@ -271,6 +253,13 @@ public class InfiniteGameController : MonoBehaviour
     // ======================================= //
     // ========== LEVEL TRANSITIONS ========== //
     // ======================================= //
+
+    public void ResetNReady()
+    {
+        StartCoroutine(elevatorControllerRef.MoveBarToStartPosition());
+        StartCoroutine(fruitRef.AnimateFruitReset());
+    }
+
 
     public void LevelCompleted()
     {
@@ -335,7 +324,7 @@ public class InfiniteGameController : MonoBehaviour
         ResetTimer();
         UpdateHUD(GAME_DATA.TIMER);
 
-        fruitRef.ResetFruitPosition();
+
         Time.timeScale = 1f;
         EnableFruitCollision(false);
         SetRigidBodyExtrapolate(false);
@@ -345,6 +334,15 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.Transition(false);
         }
 
+        if (currentPreparingCoroutine != null)
+        {
+            StopCoroutine(currentPreparingCoroutine);
+            currentPreparingCoroutine = null;
+        }
+
+        StopAllCoroutines();
+
+        fruitRef.ResetFruitPosition();
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
@@ -355,10 +353,14 @@ public class InfiniteGameController : MonoBehaviour
 
         SpawnObstacles();
 
-        if (AnimationManager.instance != null)
+
+        if (currentPreparingCoroutine != null)
         {
-            AnimationManager.instance.PlayInGameAnimation(PreparingAfterDeathCallback());
+            StopCoroutine(currentPreparingCoroutine);
+            currentPreparingCoroutine = null;
         }
+
+        currentPreparingCoroutine = StartCoroutine(PreparingAfterDeathCallback());
 
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
@@ -436,40 +438,36 @@ public class InfiniteGameController : MonoBehaviour
             CameraManager.instance.Transition(false);
         }
 
-        if (AnimationManager.instance != null)
+        if (currentPreparingCoroutine != null)
         {
-            switch (prepState)
-            {
-                case PREPERATION_STATE.AFTER_DEATH:
-                    AnimationManager.instance.PlayInGameAnimation(PreparingAfterDeathCallback());
-                    break;
-                case PREPERATION_STATE.AFTER_LEVEL_COMPLETED:
-                    AnimationManager.instance.PlayInGameAnimation(PreparingAfterLevelCompletedCallback());
-                    break;
-            }
+            StopCoroutine(currentPreparingCoroutine);
+            currentPreparingCoroutine = null;
+        }
+
+        switch (prepState)
+        {
+            case PREPERATION_STATE.AFTER_DEATH:
+                currentPreparingCoroutine = StartCoroutine(PreparingAfterDeathCallback());
+                break;
+            case PREPERATION_STATE.AFTER_LEVEL_COMPLETED:
+                currentPreparingCoroutine = StartCoroutine(PreparingAfterLevelCompletedCallback());
+                break;
         }
         
         elevatorControllerRef.MoveBarToBottomPositionFunction();
     }
 
-    public void GameOverCheck()
-    {
-        if (currentFruitNumber <= 0)
-        {
-            ScenesManager.gameState = GAME_STATE.GAME_OVER;
-        }
-    }
 
-    public void LevelCompletedCheck()
-    {
-        if (elevatorControllerRef.HasReachedEnd() 
-            && ScenesManager.gameState != GAME_STATE.LEVEL_COMPLETED 
-            && ScenesManager.gameState != GAME_STATE.PREPARING)
-        {
-            ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
-        }
-    }
 
+
+
+
+
+
+
+    // ======================================= //
+    // ========== GAME STATE CHECKS ========== //
+    // ======================================= //
 
     private void HandleGameStateChanged(GAME_STATE newGameState)
     {
@@ -496,6 +494,27 @@ public class InfiniteGameController : MonoBehaviour
                 break;
         }
     }
+
+
+    public void GameOverCheck()
+    {
+        if (currentFruitNumber <= 0)
+        {
+            ScenesManager.gameState = GAME_STATE.GAME_OVER;
+        }
+    }
+
+
+    public void LevelCompletedCheck()
+    {
+        if (elevatorControllerRef.HasReachedEnd() 
+            && ScenesManager.gameState != GAME_STATE.LEVEL_COMPLETED 
+            && ScenesManager.gameState != GAME_STATE.PREPARING)
+        {
+            ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
+        }
+    }
+
 
 
 
@@ -675,6 +694,7 @@ public class InfiniteGameController : MonoBehaviour
     {
         fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
     }
+
 
 
 

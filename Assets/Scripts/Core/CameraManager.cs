@@ -107,12 +107,14 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
+
         transform.position = menuUnfocusedPosition;
         transform.rotation = menuUnfocusedRotation;
 
         Transition(false);
         SetTimeOfDay(SaveManager.instance.TimeOfDay);
     }
+
 
     void FixedUpdate()
     {    
@@ -142,6 +144,7 @@ public class CameraManager : MonoBehaviour
         arcadeLight.intensity = Mathf.Lerp(arcadeLight.intensity, arcadeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
 
     }
+
 
     public void Transition(bool focused)
     {

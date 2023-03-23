@@ -418,7 +418,6 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        //AudioManager.instance.Resume();
         AnimationManager.instance.ClearInGameQueue();
         AnimationManager.instance.ClearObstaclesQueue();
 
