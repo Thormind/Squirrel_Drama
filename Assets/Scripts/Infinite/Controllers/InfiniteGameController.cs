@@ -754,6 +754,16 @@ public class InfiniteGameController : MonoBehaviour
         return elevatorControllerRef.gameObject.transform.position + Vector3.up * 2f;
     }
 
+    public bool ElevatorHasNotReachedStartPosition()
+    {
+        return elevatorControllerRef.HasNotReachedStart();
+    }
+
+    public float ElevatorDistanceBetweenStartBottom()
+    {
+        return elevatorControllerRef.GetClampedDistanceBetweenBottomStart();
+    }
+
 
 
 

@@ -202,12 +202,10 @@ public class InfiniteFruit : MonoBehaviour
         transform.position = fruitStackPosition.position;
         transform.localScale = startFruitScale;
 
-        float t = 0f;
-        float resetDuration = 2f;
+        float t = InfiniteGameController.instance.ElevatorDistanceBetweenStartBottom();
 
         Vector3 startPosition = fruitStackPosition.position;
         Vector3 endPosition = fruitStartPosition.position;
-        //Vector3 endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
 
         float distance = Vector3.Distance(startPosition, endPosition);
         float height = distance * 0.25f; // You can adjust the height as desired
@@ -222,13 +220,8 @@ public class InfiniteFruit : MonoBehaviour
             float z = Mathf.Lerp(startPosition.z, endPosition.z, easedProgress);
             transform.position = new Vector3(x, y, z);
 
-            /*
-            endPosition = InfiniteGameController.instance.GetElevatorPositionForFruitReset();
+            t = InfiniteGameController.instance.ElevatorDistanceBetweenStartBottom();
 
-            transform.position = Vector3.Lerp(startPosition, endPosition, easedProgress);
-            */
-
-            t += Time.deltaTime / resetDuration;
             yield return null;
         }
 

@@ -152,6 +152,10 @@ public class InfiniteElevatorController : MonoBehaviour
         return speed;
     }
 
+    public bool HasNotReachedStart()
+    {
+        return (leftLifter.position.y < start.position.y);
+    }
 
     public bool HasNotReachedBottom()
     {
@@ -163,42 +167,15 @@ public class InfiniteElevatorController : MonoBehaviour
         return (leftLifter.position.y >= end.position.y && rightLifter.position.y >= end.position.y);
     }
 
-
-    private void OnLeftEndUp(InputValue leftUpValue)
+    public float GetClampedDistanceBetweenBottomStart()
     {
-        leftUpInputValue = leftUpValue.Get<float>();
-    }
-
-    private void OnLeftEndDown(InputValue leftDownValue)
-    {
-        leftDownInputValue = leftDownValue.Get<float>();
-    }
-
-    private void OnRightEndUp(InputValue rightUpValue)
-    {
-        rightUpInputValue = rightUpValue.Get<float>();
-    }
-
-    private void OnRightEndDown(InputValue rightDownValue)
-    {
-        rightDownInputValue = rightDownValue.Get<float>();
+        float distanceBottomStart = Mathf.Abs(bottom.position.y) - Mathf.Abs(start.position.y);
+        float distance = Mathf.Abs(bottom.position.y) - Mathf.Abs(leftLifter.position.y);
+        float clampedDistance = distance / distanceBottomStart;
+        return clampedDistance;
     }
 
 
-    public void SetElevatorMovementSpeed(float mSpeed)
-    {
-        movementSpeed = mSpeed;
-    }
-
-    public void SetElevatorStartMovementSpeed(float startSpeed)
-    {
-        startMovementSpeed = startSpeed;
-    }
-
-    public void SetElevatorMaxDifference(float maxDiff)
-    {
-        maxDifference = maxDiff;
-    }
 
     public void HandleElevatorVFX(Vector2 input)
     {
@@ -252,6 +229,55 @@ public class InfiniteElevatorController : MonoBehaviour
                 break;
         }
     }
+
+
+
+
+    public void SetElevatorMovementSpeed(float mSpeed)
+    {
+        movementSpeed = mSpeed;
+    }
+
+    public void SetElevatorStartMovementSpeed(float startSpeed)
+    {
+        startMovementSpeed = startSpeed;
+    }
+
+    public void SetElevatorMaxDifference(float maxDiff)
+    {
+        maxDifference = maxDiff;
+    }
+
+
+    private void OnLeftEndUp(InputValue leftUpValue)
+    {
+        leftUpInputValue = leftUpValue.Get<float>();
+    }
+
+    private void OnLeftEndDown(InputValue leftDownValue)
+    {
+        leftDownInputValue = leftDownValue.Get<float>();
+    }
+
+    private void OnRightEndUp(InputValue rightUpValue)
+    {
+        rightUpInputValue = rightUpValue.Get<float>();
+    }
+
+    private void OnRightEndDown(InputValue rightDownValue)
+    {
+        rightDownInputValue = rightDownValue.Get<float>();
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
