@@ -85,7 +85,12 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         // ============== SLOW MOTION BEFORE IMPACT ANIMATION ============== //
         bearPaw.SetActive(true);
-        SetSlowMotion(true);
+
+        if (ScenesManager.gameState == GAME_STATE.ACTIVE)
+        {
+            SetSlowMotion(true);
+        }
+
 
         Vector3 startPosition = bearPaw.transform.localPosition;
         Vector3 endPosition = new Vector3(0f, 0f, 0f);

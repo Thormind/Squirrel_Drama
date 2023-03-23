@@ -695,6 +695,11 @@ public class InfiniteGameController : MonoBehaviour
         fruitRef.GetComponent<InfiniteFruit>().collisionEnabled = enableCollision;
     }
 
+    public void ResetFruitPosition()
+    {
+        fruitRef.ResetFruitPosition();
+    }
+
 
 
 
