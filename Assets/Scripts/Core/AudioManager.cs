@@ -227,6 +227,10 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
+        if (ScenesManager.gameState == GAME_STATE.PAUSED)
+        {
+            dB -= 10;
+        }
         mixer.SetFloat("musicVol", dB);
     }
 
@@ -249,6 +253,10 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
+        if(ScenesManager.gameState == GAME_STATE.PAUSED)
+        {
+            dB -= 10;
+        }
         mixer.SetFloat("sfxVol", dB);
     }
     public void AdjustMaster()
@@ -259,6 +267,10 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
+        if (ScenesManager.gameState == GAME_STATE.PAUSED)
+        {
+            dB -= 10;
+        }
         mixer.SetFloat("masterVol", dB);
     }
 
