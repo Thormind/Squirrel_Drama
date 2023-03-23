@@ -113,7 +113,6 @@ public class AudioManager : MonoBehaviour
 
     private void HandleGameStateChanged(GAME_STATE newGameState)
     {
-        print($"{newGameState}");
         switch (newGameState)
         {
             case GAME_STATE.PRE_GAME:

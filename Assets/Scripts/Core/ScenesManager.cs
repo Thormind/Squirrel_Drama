@@ -45,11 +45,13 @@ public class ScenesManager : MonoBehaviour
 	public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
 	public static event GameStateChangedEventHandler OnGameStateChanged;
 
+	public static GAME_STATE previousGameState;
 	public static GAME_STATE gameState
 	{
 		get { return _gameState; }
 		set
 		{
+			previousGameState = _gameState;
 			_gameState = value;
 			OnGameStateChanged?.Invoke(_gameState);
 		}
@@ -72,6 +74,7 @@ public class ScenesManager : MonoBehaviour
 	{
 		OnGameStateChanged += HandleGameStateChanged;
 
+		previousGameState = GAME_STATE.INACTIVE;
 		gameState = GAME_STATE.INACTIVE;
 		gameMode = GAME_MODE.NONE;
 	}
@@ -83,7 +86,8 @@ public class ScenesManager : MonoBehaviour
 
 	private void HandleGameStateChanged(GAME_STATE newGameState)
 	{
-		//print($"{gameState}");
+		print($"PREVIOUS: {previousGameState}");
+		print($"CURRENT: {newGameState}");
 	}
 
 

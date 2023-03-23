@@ -357,7 +357,7 @@ public class GlobalUIManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        ScenesManager.gameState = GAME_STATE.ACTIVE;
+        ScenesManager.gameState = ScenesManager.previousGameState;
         StartCoroutine(PauseResumeCallback());
     }
 
