@@ -36,6 +36,10 @@ public enum SOUND
     OBSTACLE_SPAWN,             // Implanted: false Note: correct pitch
     SCORE_BONUS_1,
     SCORE_BONUS_2,
+    POINT_SPAWN,
+    LIFE_SPAWN,
+    FRUIT_HOLE,
+    FAIL,
     // Legacy mode
 };
 
@@ -50,6 +54,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource uiMusic;
     public AudioSource infiniteMusic;
     public AudioSource legacyMusic;
+    public AudioSource gameOverMusic;
     public AudioSource wind;
 
     [SerializeField] public AudioListener cameraListener;
@@ -156,17 +161,16 @@ public class AudioManager : MonoBehaviour
                 PlaySound(SOUND.SWEEP);
                 break;
             case GAME_STATE.GAME_OVER:
-                StopCurrentMusic();
+                PlayGameOver();
+                AudioManager.instance.PlaySound(SOUND.FAIL);
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
                     PlayWind();
                 }
                 break;
             case GAME_STATE.LEVEL_COMPLETED:
-                //PlayUiMusic();
                 break;
             case GAME_STATE.GAME_COMPLETED:
-                //PlayUiMusic();
                 break;
         }
     }
@@ -349,27 +353,31 @@ public class AudioManager : MonoBehaviour
 
     public void Resume()
     {
-        AdjustMusic();
-        AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
-        AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
-        foreach (AudioSource source in sources)
+        if (ScenesManager.previousGameState != GAME_STATE.PREPARING)
         {
-            bool ismusic = false;
-
-            foreach (AudioSource music_source in music_sources)
+            AdjustMusic();
+            AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+            AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
+            foreach (AudioSource source in sources)
             {
-                if (source == music_source || source.clip == soundDictionary[SOUND.SWEEP].clip)
+                bool ismusic = false;
+
+                foreach (AudioSource music_source in music_sources)
                 {
-                    ismusic = true;
-                    break;
+                    if (source == music_source || source.clip == soundDictionary[SOUND.SWEEP].clip)
+                    {
+                        ismusic = true;
+                        break;
+                    }
+                }
+
+                if (source.time != 0 && !ismusic)
+                {
+                    source.Play();
                 }
             }
-
-            if (source.time != 0 && !ismusic)
-            {
-                source.Play();
-            }
         }
+        
     }
 
 
@@ -386,6 +394,7 @@ public class AudioManager : MonoBehaviour
         uiMusic.Stop();
         legacyMusic.Stop();
         infiniteMusic.Stop();
+        gameOverMusic.Stop();
     }
 
     public void PlayUiMusic()
@@ -409,6 +418,15 @@ public class AudioManager : MonoBehaviour
         {
             StopCurrentMusic();
             infiniteMusic.Play();
+        }
+    }
+
+    public void PlayGameOver()
+    {
+        if (!gameOverMusic.isPlaying)
+        {
+            StopCurrentMusic();
+            gameOverMusic.Play();
         }
     }
 

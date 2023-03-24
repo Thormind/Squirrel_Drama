@@ -100,7 +100,7 @@ public class InfiniteFruit : MonoBehaviour
     IEnumerator MoveToHoleCoroutine(Collider2D holeTransform)
     {
         fruitRigidbody.simulated = false;
-        AudioManager.instance.PlaySound(SOUND.FRUIT_FALL);
+        AudioManager.instance.PlaySound(SOUND.FRUIT_HOLE);
         float t = 0;
         Vector3 fruitPosition = transform.localPosition;
         Vector3 holePosition = new Vector3(holeTransform.transform.localPosition.x, holeTransform.transform.localPosition.y, holeTransform.transform.localPosition.z + 2f);

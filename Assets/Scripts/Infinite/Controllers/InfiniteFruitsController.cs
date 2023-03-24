@@ -104,7 +104,8 @@ public class InfiniteFruitsController : MonoBehaviour
 
     private IEnumerator AnimateInstantiate(Vector3 position, bool spawn, GameObject obj = null)
     {
-        //play sound 
+        if(ScenesManager.gameState != GAME_STATE.GAME_OVER)
+            AudioManager.instance.PlaySound(SOUND.LIFE_SPAWN);
 
         Instantiate(InfiniteGameController.instance.fruitInstanciateVFX, position, Quaternion.identity, fruitsParent.transform);
 

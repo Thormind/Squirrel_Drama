@@ -186,8 +186,9 @@ public class HUDMenuManager : MonoBehaviour
 
         float t = 0f;
 
+
         while (t < 1f)
-        {
+        {     
             easedTime = EaseOutQuint(t);
 
 
@@ -354,6 +355,7 @@ public class HUDMenuManager : MonoBehaviour
         AudioManager.instance.PauseMusic();
         AudioManager.instance.PlaySound(SOUND.SCORE_BONUS_1);
 
+        int i = 0;
         // Loop until the timer reaches the animation duration
         while (timer < animationDuration && gameObject.activeInHierarchy)
         {
@@ -388,6 +390,7 @@ public class HUDMenuManager : MonoBehaviour
         float animationDuration = 1.75f;
 
         float timer = 0f;
+
         AudioManager.instance.PlaySound(SOUND.SCORE_BONUS_2);
 
         // Loop until the timer reaches the animation duration
