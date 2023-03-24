@@ -352,12 +352,11 @@ public class GlobalUIManager : MonoBehaviour
     {
         AnimationManager.instance.ResumeInGameAnimations();
         AnimationManager.instance.ResumeObstaclesAnimations();
-
-        SetMenu(MENU.MENU_HUD); 
-
         Time.timeScale = 1f;
 
         ScenesManager.gameState = ScenesManager.previousGameState;
+
+        SetMenu(MENU.MENU_HUD);
         StartCoroutine(PauseResumeCallback());
     }
 
@@ -370,21 +369,17 @@ public class GlobalUIManager : MonoBehaviour
         AnimationManager.instance.PauseObstaclesAnimations();
 
         SetMenu(MENU.MENU_PAUSE);
-
         StartCoroutine(PauseResumeCallback());
     }
 
     public void ReplayGame()
     {
-        //AudioManager.instance.Resume();
-
         ScenesManager.gameState = GAME_STATE.PRE_GAME;
 
         Time.timeScale = 1f;
         AnimationManager.instance.ClearInGameQueue();
 
         SetMenu(MENU.MENU_PREGAME);
-
         StartCoroutine(PauseResumeCallback());
     }
 
@@ -397,7 +392,6 @@ public class GlobalUIManager : MonoBehaviour
     {        
         SetMenu(MENU.MENU_LOADING);
         ScenesManager.gameState = GAME_STATE.LOADING;
-
         ScenesManager.gameMode = gameMode;
 
         switch (gameMode)
