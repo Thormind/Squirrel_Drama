@@ -106,6 +106,7 @@ public class InfinitePointsController : MonoBehaviour
     {
         if (spawn)
         {
+            AudioManager.instance.PlaySound(SOUND.POINT_SPAWN);
             GameObject pointInstantiated = Instantiate(pointPrefab, position, Quaternion.identity, pointsParent.transform);
         }
         if (!spawn && obj != null)

@@ -1640,11 +1640,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1994687802012974149, guid: a4457ffe3ebaf974996da388d6a43729, type: 2}
-  m_audioClip: {fileID: 8300000, guid: f5525f04d86d1c241be316be18f29f1d, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 954ecc6832120a04eba9b6d9358924df, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.45
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -17249,7 +17249,7 @@ PrefabInstance:
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: AudioItemArray.Array.data[12].sound_audio_clip.clip
       value: 
-      objectReference: {fileID: 8300000, guid: f8d628871dd5a784b8f35d0b8783ea51, type: 3}
+      objectReference: {fileID: 8300000, guid: 3cf76f456ad51a64da51943f6d3d7fac, type: 3}
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: AudioItemArray.Array.data[13].sound_audio_clip.clip
       value: 
@@ -17312,7 +17312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: AudioItemArray.Array.data[12].sound_audio_clip.sound_vol
-      value: 0.6
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: AudioItemArray.Array.data[13].sound_audio_clip.sound_vol

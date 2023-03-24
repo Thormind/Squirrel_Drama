@@ -353,9 +353,9 @@ public class AudioManager : MonoBehaviour
 
     public void Resume()
     {
+        AdjustMusic();
         if (ScenesManager.previousGameState != GAME_STATE.PREPARING)
         {
-            AdjustMusic();
             AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
             AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
             foreach (AudioSource source in sources)
