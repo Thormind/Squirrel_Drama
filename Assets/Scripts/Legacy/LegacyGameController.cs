@@ -239,6 +239,9 @@ public class LegacyGameController : MonoBehaviour
         {
             ScenesManager.gameState = GAME_STATE.GAME_COMPLETED;
 
+
+            RecalculateBestScore();
+
             if (CameraManager.instance != null)
             {
                 CameraManager.instance.Transition(false);
