@@ -232,7 +232,7 @@ public class AudioManager : MonoBehaviour
             dB = -144.0f;
         if (ScenesManager.gameState == GAME_STATE.PAUSED)
         {
-            dB -= 10;
+            dB -= 15;
         }
         mixer.SetFloat("musicVol", dB);
     }
@@ -256,10 +256,6 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
-        if(ScenesManager.gameState == GAME_STATE.PAUSED)
-        {
-            dB -= 10;
-        }
         mixer.SetFloat("sfxVol", dB);
     }
     public void AdjustMaster()
@@ -270,10 +266,6 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
-        if (ScenesManager.gameState == GAME_STATE.PAUSED)
-        {
-            dB -= 10;
-        }
         mixer.SetFloat("masterVol", dB);
     }
 
@@ -327,7 +319,7 @@ public class AudioManager : MonoBehaviour
 
     public void Pause()
     {
-        PauseMusic();
+        AdjustMusic();
 
         AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         AudioSource[] music_sources = gameObject.GetComponents<AudioSource>();
@@ -354,6 +346,8 @@ public class AudioManager : MonoBehaviour
     public void Resume()
     {
         AdjustMusic();
+        AdjustMaster();
+        AdjustSfx();
         if (ScenesManager.previousGameState != GAME_STATE.PREPARING)
         {
             AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
