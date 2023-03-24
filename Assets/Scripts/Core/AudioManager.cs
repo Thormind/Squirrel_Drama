@@ -132,6 +132,7 @@ public class AudioManager : MonoBehaviour
                 Pause();
                 break;
             case GAME_STATE.PREPARING:
+                AdjustMusic();
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
                     PlayInfinite();
