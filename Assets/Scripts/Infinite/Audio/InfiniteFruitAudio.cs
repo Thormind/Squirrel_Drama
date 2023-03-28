@@ -47,6 +47,5 @@ public class InfiniteFruitAudio : MonoBehaviour
             collide.volume = Mathf.Abs(velocity / 70);
             collide.Play(); 
         }
-        print($"{collision.gameObject.tag}");
     }
 }

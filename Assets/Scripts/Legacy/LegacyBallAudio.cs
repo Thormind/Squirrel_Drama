@@ -31,7 +31,6 @@ public class LegacyBallAudio : MonoBehaviour
         }
         else
         {
-            Debug.Log(velocity);
             movement.pitch = velocity/2;
             if (!movement.isPlaying && ScenesManager.gameState == GAME_STATE.ACTIVE)
             {

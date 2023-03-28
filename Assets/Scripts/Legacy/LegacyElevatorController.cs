@@ -102,6 +102,7 @@ public class LegacyElevatorController : MonoBehaviour
         }
 
         inputEnabled = true;
+        AudioManager.instance.AdjustMusic();
 
         LegacyGameController.instance.ReadyForNextHole();
 

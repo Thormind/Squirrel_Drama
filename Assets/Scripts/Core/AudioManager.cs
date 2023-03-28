@@ -41,6 +41,8 @@ public enum SOUND
     FRUIT_HOLE,
     FAIL,
     // Legacy mode
+    FAIL_HOLE,
+    GOOD_HOLE,
 };
 
 //CLASS AUDIOMANAGER
@@ -132,6 +134,7 @@ public class AudioManager : MonoBehaviour
                 Pause();
                 break;
             case GAME_STATE.PREPARING:
+                PauseMusic();
                 AdjustMusic();
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
@@ -249,6 +252,10 @@ public class AudioManager : MonoBehaviour
             dB = (20.0f * Mathf.Log10(volume));
         else
             dB = -144.0f;
+        if(ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+        {
+            dB = -144.0f;
+        }
         mixer.SetFloat("musicVol", dB - 10);
     }
 

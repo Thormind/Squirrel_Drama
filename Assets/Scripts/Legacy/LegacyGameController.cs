@@ -296,12 +296,16 @@ public class LegacyGameController : MonoBehaviour
 
         if (rightHole)
         {
+            AudioManager.instance.PauseMusic();
+            AudioManager.instance.PlaySound(SOUND.GOOD_HOLE);
             ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
             LegacyHoleController.instance.holeIndicatorList[currentHoleIndex].GetComponent<LegacyHoleIndicator>().EndPulsating();
             RecalculateScore();
         }
         else
         {
+            AudioManager.instance.PauseMusic();
+            AudioManager.instance.PlaySound(SOUND.FAIL_HOLE);
             currentBallNumber--;
             UpdateHUD(GAME_DATA.LIFE);
             elevatorControllerRef.MoveBarToBottomPositionFunction();
