@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LegacyBallAudio : MonoBehaviour
 {
-    //public AudioSource movement;
-    //public AudioSource collide;
+    public AudioSource movement;
+    public AudioSource collide;
     private float velocity;
 
 
@@ -21,9 +21,6 @@ public class LegacyBallAudio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        /*
-
         velocity = GetComponent<Rigidbody2D>().velocity.x;
 
         if (velocity == 0.0f)
@@ -33,25 +30,22 @@ public class LegacyBallAudio : MonoBehaviour
         }
         else
         {
-            movement.pitch = Mathf.Abs(velocity / 6);
+            movement.pitch = Mathf.Abs(velocity / 8);
             if (!movement.isPlaying)
             {
                 movement.Play();
             }
         }
-
-        */
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        /*
-        if (collision.gameObject.tag == "Border")
+        if (collision.transform.tag == "Border")
         {
-            collide.volume = Mathf.Abs(velocity / 90);
+            
+            collide.volume = Mathf.Abs(velocity / 40);
             collide.Play();
         }
-        */
+        print($"{collision.gameObject.tag}");
     }
 }
