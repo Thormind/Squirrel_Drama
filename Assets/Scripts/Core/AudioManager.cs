@@ -162,8 +162,11 @@ public class AudioManager : MonoBehaviour
                 PlaySound(SOUND.SWEEP);
                 break;
             case GAME_STATE.GAME_OVER:
-                PlayGameOver();
-                AudioManager.instance.PlaySound(SOUND.FAIL);
+                if(ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
+                {
+                    PlayGameOver();
+                    AudioManager.instance.PlaySound(SOUND.FAIL);
+                } 
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
                     PlayWind();

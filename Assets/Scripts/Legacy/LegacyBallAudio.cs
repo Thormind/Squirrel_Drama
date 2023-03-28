@@ -22,16 +22,18 @@ public class LegacyBallAudio : MonoBehaviour
     void Update()
     {
         velocity = GetComponent<Rigidbody2D>().velocity.x;
+        velocity = Mathf.Abs(velocity);
 
-        if (velocity == 0.0f)
+        if (velocity < 0.01f)
         {
             movement.Stop();
             return;
         }
         else
         {
-            movement.pitch = Mathf.Abs(velocity / 8);
-            if (!movement.isPlaying)
+            Debug.Log(velocity);
+            movement.pitch = velocity/2;
+            if (!movement.isPlaying && ScenesManager.gameState == GAME_STATE.ACTIVE)
             {
                 movement.Play();
             }
@@ -41,11 +43,9 @@ public class LegacyBallAudio : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.tag == "Border")
-        {
-            
-            collide.volume = Mathf.Abs(velocity / 40);
+        { 
+            collide.volume = velocity / 30;
             collide.Play();
         }
-        print($"{collision.gameObject.tag}");
     }
 }
