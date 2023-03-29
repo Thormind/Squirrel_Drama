@@ -304,12 +304,14 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetTitleScreenMenu()
     {
+        AudioManager.instance.PlayIntro();
         SetMenu(MENU.MENU_TITLE_SCREEN);
     }
 
 
     public void SetMainMenu()
     {
+        AudioManager.instance.PlayUiMusic();
         SetMenu(MENU.MENU_MAIN);
     }
 

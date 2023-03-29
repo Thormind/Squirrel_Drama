@@ -54,6 +54,7 @@ public class AudioManager : MonoBehaviour
     // ===== VARIABLES DECLARATIONS ===== //
 
     public AudioSource uiMusic;
+    public AudioSource intro;
     public AudioSource infiniteMusic;
     public AudioSource legacyMusic;
     public AudioSource gameOverMusic;
@@ -110,7 +111,7 @@ public class AudioManager : MonoBehaviour
         AdjustMusic();
         AdjustSfx();
         FillSoundDictionary();
-        uiMusic.Play();
+        intro.Play();
     }
 
     private void OnDestroy()
@@ -159,7 +160,8 @@ public class AudioManager : MonoBehaviour
             case GAME_STATE.INACTIVE:
                 AdjustMusic();
                 StopWind();
-                PlayUiMusic();
+                if (!intro.isPlaying)
+                    PlayUiMusic();
                 break;
             case GAME_STATE.LOADING:
                 PlaySound(SOUND.SWEEP);
@@ -397,12 +399,18 @@ public class AudioManager : MonoBehaviour
 
     public void StopCurrentMusic()
     {
+        intro.Stop();
         uiMusic.Stop();
         legacyMusic.Stop();
         infiniteMusic.Stop();
         gameOverMusic.Stop();
     }
 
+    public void PlayIntro()
+    {
+        StopCurrentMusic();
+        intro.Play();
+    }
     public void PlayUiMusic()
     {
         StopCurrentMusic();
