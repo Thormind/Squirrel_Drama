@@ -672,8 +672,23 @@ public class InfiniteGameController : MonoBehaviour
 
     public void SetRigidBodyExtrapolate(bool extrapolate)
     {
+        Rigidbody2D[] rbs = FindObjectsOfType<Rigidbody2D>();
+
+        foreach(Rigidbody2D rb in rbs)
+        {
+            if (extrapolate)
+            {
+                rb.interpolation = RigidbodyInterpolation2D.Extrapolate;
+            }
+            else
+            {
+                rb.interpolation = RigidbodyInterpolation2D.None;
+            }
+        }
+        /*
         if (extrapolate)
         {
+
             elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
             elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
             elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
@@ -686,7 +701,7 @@ public class InfiniteGameController : MonoBehaviour
             elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
             fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
         }
-
+        */
     }
 
 
