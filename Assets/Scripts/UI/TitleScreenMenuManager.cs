@@ -17,6 +17,7 @@ public class TitleScreenMenuManager : MonoBehaviour
 
     private void OnEnable()
     {
+        AudioManager.instance.PlayIntro();
         anyKeyText.GetComponent<flashingText>().StartFlashing();
 
         GlobalUIManager.instance.specificMenu = MENU.MENU_MAIN;
