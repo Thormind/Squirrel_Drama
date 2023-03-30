@@ -10,7 +10,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     private float derpSpeed;
 
-    public float outAnimationRotationOffset = 180f; // Rotation angle to rotate on the Z-axis during the out animation
+    private float outAnimationRotationOffset = 180f; // Rotation angle to rotate on the Z-axis during the out animation
 
     public void HandleWormAnimationFunction(float inTime, float derpTime, float animationSpeed)
     {
@@ -44,7 +44,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
         Quaternion _initialRotation = transform.localRotation;
 
         Vector3 outStartPosition = new Vector3(_initialPosition.x, _initialPosition.y, 0);
-        Quaternion outStartRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, outAnimationRotationOffset));
+        Quaternion outStartRotation = Quaternion.Euler(0f, outAnimationRotationOffset, Random.Range(0f, outAnimationRotationOffset));
 
         float t = 0;
 
