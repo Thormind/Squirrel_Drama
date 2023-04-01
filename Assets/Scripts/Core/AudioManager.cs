@@ -358,7 +358,7 @@ public class AudioManager : MonoBehaviour
         AdjustMusic();
         AdjustMaster();
         AdjustSfx();
-        Debug.Log(ScenesManager.previousGameState);
+        //Debug.Log(ScenesManager.previousGameState);
         if (ScenesManager.previousGameState != GAME_STATE.PREPARING && ScenesManager.previousGameState != GAME_STATE.GAME_OVER)
         {
             AudioSource[] sources = GameObject.FindObjectsOfType(typeof(AudioSource)) as AudioSource[];

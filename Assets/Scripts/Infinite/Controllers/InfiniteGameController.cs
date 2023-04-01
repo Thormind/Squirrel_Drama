@@ -22,6 +22,7 @@ public class InfiniteGameController : MonoBehaviour
     public InfiniteFruit fruitRef;
     public InfiniteScoreMultiplier scoreMultiplierRef;
 
+    public GameObject fruitParent;
     public GameObject obstaclesParent;
     public GameObject obstacleInstanciateVFX;
     public GameObject fruitInstanciateVFX;
@@ -121,6 +122,22 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+    public void ShowHUDBonusScoreIndicator(int bonusScore)
+    {
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        {
+            HUDMenuManager.instance.ShowInfiniteBonusScoreUpdateIndicator(bonusScore);
+        }
+    }
+
+    public void ShowHUDLifeIndicator(bool extraLife)
+    {
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled)
+        {
+            HUDMenuManager.instance.ShowInfiniteLifeUpdateIndicator(extraLife);
+        }
+    }
+
     // ========== TIME FUNCTIONS ========== //
 
     public void StartTimer()
@@ -175,6 +192,8 @@ public class InfiniteGameController : MonoBehaviour
     {
         int timerBonus = CalculateTimerBonusScore();
 
+        ShowHUDBonusScoreIndicator(timerBonus);
+
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null && timerBonus > 0)
         {
             AnimationManager.instance.PlayInGameAnimation( HUDMenuManager.instance.AnimateInfiniteBonusScore(bonusScore, bonusScore + timerBonus));
@@ -201,25 +220,31 @@ public class InfiniteGameController : MonoBehaviour
 
     private void PointsBonusScoreIncrement()
     {
-        bonusScore += scoreMultiplierRef.ApplyMultiplierToScore(pointsScoreIncrement * difficultyLevel);
+        int points = scoreMultiplierRef.ApplyMultiplierToScore(pointsScoreIncrement * difficultyLevel);
+        bonusScore += points;
+        ShowHUDBonusScoreIndicator(points);
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
     private void FruitBonusScoreIncrement()
     {
-        bonusScore += scoreMultiplierRef.ApplyMultiplierToScore(fruitScoreIncrement * difficultyLevel);
+        int points = scoreMultiplierRef.ApplyMultiplierToScore(fruitScoreIncrement * difficultyLevel);
+        bonusScore += points;
+        ShowHUDBonusScoreIndicator(points);
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
     private void FruitNumberIncrement()
     {
         currentFruitNumber++;
+        ShowHUDLifeIndicator(true);
         UpdateHUD(GAME_DATA.LIFE);
     }
 
     private void FruitNumberDecrement()
     {
         currentFruitNumber--;
+        ShowHUDLifeIndicator(false);
         UpdateHUD(GAME_DATA.LIFE);
 
         GameOverCheck();
@@ -570,18 +595,20 @@ public class InfiniteGameController : MonoBehaviour
 
     public void HandleFruitInPoints()
     {
-        scoreMultiplierRef.CollectInfinitePoint();
+        scoreMultiplierRef.CollectInfiniteFruitOrPoint();
 
         PointsBonusScoreIncrement();
     }
 
     public void HandleFruitInFruit()
     {
+        scoreMultiplierRef.CollectInfiniteFruitOrPoint();
+
         if (currentFruitNumber < 3)
         {
             FruitNumberIncrement();
         }
-        if (currentFruitNumber >= 3)
+        else if (currentFruitNumber >= 3)
         {
             FruitBonusScoreIncrement();
         }
@@ -689,23 +716,6 @@ public class InfiniteGameController : MonoBehaviour
                 rb.interpolation = RigidbodyInterpolation2D.None;
             }
         }
-        /*
-        if (extrapolate)
-        {
-
-            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.Extrapolate;
-            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
-        }
-        else
-        {
-            elevatorControllerRef.rightLifter.interpolation = RigidbodyInterpolation2D.None;
-            elevatorControllerRef.leftLifter.interpolation = RigidbodyInterpolation2D.None;
-            elevatorControllerRef.elevatorRigidBody.interpolation = RigidbodyInterpolation2D.None;
-            fruitRef.fruitRigidbody.interpolation = RigidbodyInterpolation2D.None;
-        }
-        */
     }
 
 
@@ -746,6 +756,16 @@ public class InfiniteGameController : MonoBehaviour
     public Vector3 GetFruitLocalPosition()
     {
         return fruitRef.gameObject.transform.localPosition;
+    }
+
+    public Vector3 GetFruitPositionForIndicator()
+    {
+        return fruitRef.gameObject.transform.position;
+    }
+
+    public GameObject GetFruitParent()
+    {
+        return fruitParent;
     }
 
     public float GetFruitHeightForMap()

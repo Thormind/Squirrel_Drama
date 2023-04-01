@@ -50,8 +50,16 @@ public class InfiniteScoreMultiplier : MonoBehaviour
     }
     private static float _currentTimeStreak = 0;
 
-    //[SerializeField] private InfiniteScoreMultiplierSO scoreMultiplierParameters;
-    private const float allowedTimeBetweenPoints = 3f;
+    [SerializeField] private InfiniteMultiplierParametersSO scoreMultiplierParameters;
+    public float AllowedTimeBetweenPoints
+    {
+        get { return scoreMultiplierParameters.GetAllowedTimeBetweenPoints(multiplier); }
+        set
+        {
+            scoreMultiplierParameters.SetAllowedTimeBetweenPoints(multiplier, value);
+        }
+    }
+    //private const float allowedTimeBetweenPoints = 3f;
 
     private float lastPointTime = 0f;
     private float timeSinceLastPoint = 0f;
@@ -98,7 +106,7 @@ public class InfiniteScoreMultiplier : MonoBehaviour
     }
 
 
-    public void CollectInfinitePoint()
+    public void CollectInfiniteFruitOrPoint()
     {
         currentStreak++;
 
@@ -117,7 +125,7 @@ public class InfiniteScoreMultiplier : MonoBehaviour
 
         currentTimeStreak = GetConvertedTimeLeftBeforeEndOfStreak();
 
-        if (timeSinceLastPoint > allowedTimeBetweenPoints)
+        if (timeSinceLastPoint > AllowedTimeBetweenPoints)
         {
             currentStreak = minMultiplierStreak;
 
@@ -132,7 +140,7 @@ public class InfiniteScoreMultiplier : MonoBehaviour
 
     public int ApplyMultiplierToScore(int score)
     {
-        print($"Multiplied Score: {score} x {multiplier} = {score * multiplier}");
+        //print($"Multiplied Score: {score} x {multiplier} = {score * multiplier}");
         return score * multiplier;
     }
 
@@ -153,25 +161,25 @@ public class InfiniteScoreMultiplier : MonoBehaviour
 
     public float GetAllowedTimeBetweenPoints()
     {
-        return allowedTimeBetweenPoints;
+        return AllowedTimeBetweenPoints;
     }
 
     public float GetTimeLeftBeforeEndOfStreak()
     {
-        return allowedTimeBetweenPoints - timeSinceLastPoint;
+        return AllowedTimeBetweenPoints - timeSinceLastPoint;
     }
 
     public float GetConvertedTimeLeftBeforeEndOfStreak()
     {
         float convertedStreakTimeLeft;
 
-        if (currentStreak == minMultiplierStreak && multiplier > minMultiplier)
+        if (currentStreak == minMultiplierStreak && multiplier > minMultiplier && timeSinceLastPoint > AllowedTimeBetweenPoints)
         {
-            convertedStreakTimeLeft = GetTimeLeftBeforeEndOfStreak() * maxMultiplierStreak / allowedTimeBetweenPoints;
+            convertedStreakTimeLeft = GetTimeLeftBeforeEndOfStreak() * maxMultiplierStreak / AllowedTimeBetweenPoints;
         }
         else
         {
-            convertedStreakTimeLeft = GetTimeLeftBeforeEndOfStreak() * currentStreak / allowedTimeBetweenPoints;
+            convertedStreakTimeLeft = GetTimeLeftBeforeEndOfStreak() * currentStreak / AllowedTimeBetweenPoints;
         }
 
         return Mathf.Max(convertedStreakTimeLeft, 0);

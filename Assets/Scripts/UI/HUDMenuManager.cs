@@ -43,6 +43,9 @@ public class HUDMenuManager : MonoBehaviour
     public Slider infiniteMultiplierSlider;
     public TMP_Text infiniteMultiplierText;
 
+    public GameObject bonusScoreIndicatorPrefab;
+    public GameObject lifeIndicatorPrefab;
+
     public void Awake()
     {
         if (instance == null)
@@ -171,6 +174,8 @@ public class HUDMenuManager : MonoBehaviour
                 StartCoroutine(AnimateText(infiniteFruitLifeText, InfiniteGameController.instance.currentFruitNumber.ToString()));
                 StartCoroutine(AnimateText(infiniteLevelText, InfiniteGameController.instance.currentLevel.ToString()));
                 StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
+                currentMultiplier = "x" + InfiniteGameController.instance.GetCurrentMultiplier().ToString();
+                StartCoroutine(AnimateText(infiniteMultiplierText, currentMultiplier));
                 break;
             case GAME_DATA.NONE:
                 infiniteScoreText.text = InfiniteGameController.instance.score.ToString();
@@ -178,6 +183,7 @@ public class HUDMenuManager : MonoBehaviour
                 infiniteBestScoreText.text = SaveManager.instance.GetBestScore(GAME_MODE.INFINITE_MODE).ToString();
                 infiniteFruitLifeText.text = InfiniteGameController.instance.currentFruitNumber.ToString();
                 infiniteLevelText.text = InfiniteGameController.instance.currentLevel.ToString();
+                infiniteMultiplierText.text = "x" + InfiniteGameController.instance.GetCurrentMultiplier().ToString();
                 break;
             default:
                 Debug.LogAssertion("Unknown Game Data Type!");
@@ -186,8 +192,38 @@ public class HUDMenuManager : MonoBehaviour
     }
 
 
+    public void ShowInfiniteBonusScoreUpdateIndicator(int points)
+    {
+        GameObject bonusIndicator = Instantiate(bonusScoreIndicatorPrefab, InfiniteGameController.instance.GetFruitPositionForIndicator(), Quaternion.identity);
+        IndicatorAnimation indicatorAnimator = bonusIndicator.GetComponent<IndicatorAnimation>();
 
+        indicatorAnimator.indicatorText.text = "+" + points.ToString();
 
+        GameObject fruitParent = InfiniteGameController.instance.GetFruitParent();
+        indicatorAnimator.parentToFollow = fruitParent;
+        indicatorAnimator.position = fruitParent.transform.position;
+
+        indicatorAnimator.Show();
+
+        //Destroy(bonusIndicator, 2f); // destroy the prefab after 2 seconds
+        //bonusIndicator.GetComponent<InfiniteIndicatorAnimation>().Play();
+    }
+
+    public void ShowInfiniteLifeUpdateIndicator(bool extraLife)
+    {
+        GameObject lifeIndicator = Instantiate(lifeIndicatorPrefab, InfiniteGameController.instance.GetFruitPositionForIndicator(), Quaternion.identity);
+        IndicatorAnimation indicatorAnimator = lifeIndicator.GetComponent<IndicatorAnimation>();
+
+        indicatorAnimator.indicatorText.text = extraLife ? "+" : "-";
+
+        GameObject fruitParent = InfiniteGameController.instance.GetFruitParent();
+        indicatorAnimator.parentToFollow = fruitParent;
+        indicatorAnimator.position = fruitParent.transform.position;
+
+        indicatorAnimator.Show();
+        //Destroy(lifeIndicator, 2f); // destroy the prefab after 2 seconds
+        //lifeIndicator.GetComponent<InfiniteIndicatorAnimation>().Play();
+    }
 
 
 

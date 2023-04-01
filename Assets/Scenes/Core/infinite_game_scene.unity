@@ -1656,6 +1656,7 @@ MonoBehaviour:
   elevatorControllerRef: {fileID: 706388252}
   fruitRef: {fileID: 506127052}
   scoreMultiplierRef: {fileID: 826696007}
+  fruitParent: {fileID: 506127045}
   obstaclesParent: {fileID: 1249040316}
   obstacleInstanciateVFX: {fileID: 141433446842962269, guid: 72b461dca7c3e3941bf47a5ac79d9d68, type: 3}
   fruitInstanciateVFX: {fileID: 8771972552311404799, guid: 7dbdbd4f361ffe044a5352e421785837, type: 3}
@@ -1684,6 +1685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f7178a1263c6747b65f1d44f287299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreMultiplierParameters: {fileID: 11400000, guid: 844199916288320469a27583a4d64bc5, type: 2}
 --- !u!1001 &845122399
 PrefabInstance:
   m_ObjectHideFlags: 0
