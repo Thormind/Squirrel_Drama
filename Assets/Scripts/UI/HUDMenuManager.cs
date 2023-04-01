@@ -13,6 +13,9 @@ public enum GAME_DATA
     LEVEL,
     TIMER,
     MAP,
+    CURRENT_MULTIPLIER,
+    MULTIPLIER_STREAK,
+    MULTIPLIER_TIME,
     ALL,
     NONE
 };
@@ -36,6 +39,9 @@ public class HUDMenuManager : MonoBehaviour
     public TMP_Text infiniteFruitLifeText;
     public TMP_Text infiniteTimerText;
     public Slider infiniteMapSlider;
+
+    public Slider infiniteMultiplierSlider;
+    public TMP_Text infiniteMultiplierText;
 
     public void Awake()
     {
@@ -145,7 +151,18 @@ public class HUDMenuManager : MonoBehaviour
                 StartCoroutine(AnimateText(infiniteTimerText, "00:00:00"));
                 break;
             case GAME_DATA.MAP:
-                StartCoroutine(AnimateSlider(infiniteMapSlider, InfiniteGameController.instance.GetFruitHeightForMap()));
+                StartCoroutine(AnimateMapSlider(infiniteMapSlider, InfiniteGameController.instance.GetFruitHeightForMap()));
+                break;
+            case GAME_DATA.CURRENT_MULTIPLIER:
+                string currentMultiplier = "x" + InfiniteGameController.instance.GetCurrentMultiplier().ToString();
+                StartCoroutine(AnimateText(infiniteMultiplierText, currentMultiplier));
+                break;
+            case GAME_DATA.MULTIPLIER_TIME:
+                StartCoroutine(AnimateMultiplierSlider(infiniteMultiplierSlider, InfiniteGameController.instance.GetMultiplierTimeLeft()));
+                break;
+            case GAME_DATA.MULTIPLIER_STREAK:
+                StartCoroutine(AnimateMultiplierSlider(infiniteMultiplierSlider, InfiniteGameController.instance.GetMultiplierTimeLeft()));
+                //infiniteMultiplierSlider.value = InfiniteGameController.instance.GetCurrentMultiplierStreak();
                 break;
             case GAME_DATA.ALL:
                 StartCoroutine(AnimateText(infiniteScoreText, InfiniteGameController.instance.score.ToString()));
@@ -223,7 +240,7 @@ public class HUDMenuManager : MonoBehaviour
     // ========== MAP SLIDER ANIMATIONS ========== //
     // =========================================== //
 
-    private IEnumerator AnimateSlider(Slider mapSlider, float fruitHeight)
+    private IEnumerator AnimateMapSlider(Slider mapSlider, float fruitHeight)
     {
         float sliderValue = fruitHeight / 40f; // assuming max height is 40
         sliderValue = Mathf.Clamp01(sliderValue); // clamp the value between 0 and 1
@@ -243,6 +260,24 @@ public class HUDMenuManager : MonoBehaviour
         mapSlider.value = sliderValue; // ensure that the slider ends up with the exact target value
     }
 
+    private IEnumerator AnimateMultiplierSlider(Slider multiplierSlider, float multiplierTimeStreak)
+    {
+        float startValue = multiplierSlider.value; // clamp the value between 0 and 1
+        float endValue = multiplierTimeStreak;
+
+        float elapsedTime = 0f;
+        float duration = 0.2f; // adjust as needed
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            multiplierSlider.value = Mathf.Lerp(startValue, endValue, t);
+            yield return null;
+        }
+
+        multiplierSlider.value = multiplierTimeStreak; // ensure that the slider ends up with the exact target value
+    }
 
     // ====================================== //
     // ========== TIMER ANIMATIONS ========== //
@@ -365,6 +400,8 @@ public class HUDMenuManager : MonoBehaviour
 
             string currentBonusScoreString = Mathf.FloorToInt(Mathf.Lerp(currentBonusScore, newBonusScore, timer / animationDuration)).ToString();
             StartCoroutine(AnimateText(infiniteBonusText, currentBonusScoreString));
+
+            UpdateInfiniteHUD(GAME_DATA.CURRENT_MULTIPLIER);
 
             // Wait for the next frame
             yield return null;

@@ -1617,6 +1617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 826696005}
   - component: {fileID: 826696006}
+  - component: {fileID: 826696007}
   m_Layer: 0
   m_Name: InfiniteGameController
   m_TagString: Untagged
@@ -1654,6 +1655,7 @@ MonoBehaviour:
   elevatorParameters: {fileID: 11400000, guid: f75775a57c8be4d4889702076c5dafff, type: 2}
   elevatorControllerRef: {fileID: 706388252}
   fruitRef: {fileID: 506127052}
+  scoreMultiplierRef: {fileID: 826696007}
   obstaclesParent: {fileID: 1249040316}
   obstacleInstanciateVFX: {fileID: 141433446842962269, guid: 72b461dca7c3e3941bf47a5ac79d9d68, type: 3}
   fruitInstanciateVFX: {fileID: 8771972552311404799, guid: 7dbdbd4f361ffe044a5352e421785837, type: 3}
@@ -1670,6 +1672,18 @@ MonoBehaviour:
   gameTime: 0
   timePerDecrement: 2
   maxTimeBeforeDecrement: 0
+--- !u!114 &826696007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826696004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f7178a1263c6747b65f1d44f287299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &845122399
 PrefabInstance:
   m_ObjectHideFlags: 0

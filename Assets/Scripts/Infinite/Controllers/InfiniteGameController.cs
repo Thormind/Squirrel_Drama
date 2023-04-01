@@ -20,6 +20,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public InfiniteElevatorController elevatorControllerRef;
     public InfiniteFruit fruitRef;
+    public InfiniteScoreMultiplier scoreMultiplierRef;
 
     public GameObject obstaclesParent;
     public GameObject obstacleInstanciateVFX;
@@ -161,6 +162,15 @@ public class InfiniteGameController : MonoBehaviour
 
     // ========== SCORE & LIFE FUNCTIONS ========== //
 
+    private void RecalculateBestScore()
+    {
+        if (SaveManager.instance != null)
+        {
+            SaveManager.instance.UpdateBestScore(GAME_MODE.INFINITE_MODE, score);
+        }
+    }
+
+
     private void RecalculateBonusScore()
     {
         int timerBonus = CalculateTimerBonusScore();
@@ -191,13 +201,13 @@ public class InfiniteGameController : MonoBehaviour
 
     private void PointsBonusScoreIncrement()
     {
-        bonusScore += pointsScoreIncrement * difficultyLevel;
+        bonusScore += scoreMultiplierRef.ApplyMultiplierToScore(pointsScoreIncrement * difficultyLevel);
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
     private void FruitBonusScoreIncrement()
     {
-        bonusScore += fruitScoreIncrement * difficultyLevel;
+        bonusScore += scoreMultiplierRef.ApplyMultiplierToScore(fruitScoreIncrement * difficultyLevel);
         UpdateHUD(GAME_DATA.BONUS_SCORE);
     }
 
@@ -215,14 +225,6 @@ public class InfiniteGameController : MonoBehaviour
         GameOverCheck();
     }
 
-    private void RecalculateBestScore()
-    {
-        if (SaveManager.instance != null)
-        {
-            SaveManager.instance.UpdateBestScore(GAME_MODE.INFINITE_MODE, score);
-        }
-    }
-
     // Call this method to calculate the bonus score
     public int CalculateTimerBonusScore()
     {
@@ -230,14 +232,14 @@ public class InfiniteGameController : MonoBehaviour
 
         if (totalTime <= maxTimeBeforeDecrement)
         {
-            return maxBonusScore * currentLevel;
+            return scoreMultiplierRef.ApplyMultiplierToScore(maxBonusScore * currentLevel);
         }
         else
         {
             float timeAboveMaxTimeBeforeDecrement = totalTime - maxTimeBeforeDecrement;
             int bonusScore = maxBonusScore - Mathf.FloorToInt(timeAboveMaxTimeBeforeDecrement / timePerDecrement) * bonusScoreDecrement;
             bonusScore = Mathf.Max(bonusScore, 0); // ensure the bonus score is not negative
-            return bonusScore * currentLevel;
+            return scoreMultiplierRef.ApplyMultiplierToScore(bonusScore * currentLevel);
         }
     }
 
@@ -477,6 +479,7 @@ public class InfiniteGameController : MonoBehaviour
                 ResetGame();
                 break;
             case GAME_STATE.PREPARING:
+                scoreMultiplierRef.ResetMultiplier();
                 break;
             case GAME_STATE.ACTIVE:
                 if (!elevatorControllerRef.HasNotReachedBottom())
@@ -491,6 +494,7 @@ public class InfiniteGameController : MonoBehaviour
                 break;
             case GAME_STATE.LEVEL_COMPLETED:
                 LevelCompleted();
+                scoreMultiplierRef.StopMultiplier();
                 break;
         }
     }
@@ -514,8 +518,6 @@ public class InfiniteGameController : MonoBehaviour
             ScenesManager.gameState = GAME_STATE.LEVEL_COMPLETED;
         }
     }
-
-
 
 
 
@@ -568,6 +570,8 @@ public class InfiniteGameController : MonoBehaviour
 
     public void HandleFruitInPoints()
     {
+        scoreMultiplierRef.CollectInfinitePoint();
+
         PointsBonusScoreIncrement();
     }
 
@@ -782,6 +786,21 @@ public class InfiniteGameController : MonoBehaviour
     public float ElevatorDistanceBetweenStartBottom()
     {
         return elevatorControllerRef.GetClampedDistanceBetweenBottomStart();
+    }
+
+    public float GetMultiplierTimeLeft()
+    {
+        return scoreMultiplierRef.GetConvertedTimeLeftBeforeEndOfStreak();
+    }
+
+    public float GetCurrentMultiplier()
+    {
+        return scoreMultiplierRef.GetCurrentMultiplier();
+    }
+
+    public float GetCurrentMultiplierStreak()
+    {
+        return scoreMultiplierRef.GetCurrentMultiplierStreak();
     }
 
 
