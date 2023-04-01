@@ -8,7 +8,7 @@ public class InfinitePointsAnimation : MonoBehaviour
 
     private float rotationSpeed = 25f;
 
-    private float reachTheFruitTime = 2f;
+    private float reachTheFruitTime = 5f;
 
     private Vector3 startPointPosition;
     private Vector3 startPointScale;

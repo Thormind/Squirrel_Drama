@@ -1,5 +1,42 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1606357387530274330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8269292390473620923}
+  m_Layer: 5
+  m_Name: GameObjectToFollow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8269292390473620923
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606357387530274330}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4318778436984852004}
+  m_Father: {fileID: 5994896399434431933}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3855093136185463005
 GameObject:
   m_ObjectHideFlags: 0
@@ -16,7 +53,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3855093136185463006
 Transform:
   m_ObjectHideFlags: 0
@@ -47,6 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   indicatorText: {fileID: 5994896400072238331}
   parentToFollow: {fileID: 0}
+  gameObjectToFollow: {fileID: 1606357387530274330}
   gameObjectToAnimate: {fileID: 7944861808055648161}
   position: {x: 0, y: 0, z: 0}
 --- !u!1 &5994896399434431874
@@ -61,7 +99,7 @@ GameObject:
   - component: {fileID: 5994896399434431934}
   - component: {fileID: 5994896399434431935}
   - component: {fileID: 5994896399434431932}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,20 +113,20 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5994896399434431874}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4318778436984852004}
+  - {fileID: 8269292390473620923}
   m_Father: {fileID: 3855093136185463006}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!223 &5994896399434431934
 Canvas:
   m_ObjectHideFlags: 0
@@ -98,16 +136,16 @@ Canvas:
   m_GameObject: {fileID: 5994896399434431874}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 2
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1036391451
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &5994896399434431935
@@ -132,7 +170,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5994896399434431932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +199,7 @@ GameObject:
   - component: {fileID: 5994896400072238328}
   - component: {fileID: 5994896400072238330}
   - component: {fileID: 5994896400072238331}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: IndicatorText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,9 +254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '+
-
-'
+  m_text: +
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
   m_sharedMaterial: {fileID: -757681918098489689, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
@@ -253,7 +289,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 4096
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -298,7 +334,7 @@ GameObject:
   - component: {fileID: 2552407350124190058}
   - component: {fileID: 1257953524358754740}
   - component: {fileID: 4542528257210218275}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: fruitImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4318778436984852004}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObjectToAnimate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,14 +422,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7944861808055648161}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5994896400072238328}
   - {fileID: 2552407350124190058}
-  m_Father: {fileID: 5994896399434431933}
+  m_Father: {fileID: 8269292390473620923}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

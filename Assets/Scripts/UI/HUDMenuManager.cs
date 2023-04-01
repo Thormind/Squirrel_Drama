@@ -194,7 +194,7 @@ public class HUDMenuManager : MonoBehaviour
 
     public void ShowInfiniteBonusScoreUpdateIndicator(int points)
     {
-        GameObject bonusIndicator = Instantiate(bonusScoreIndicatorPrefab, InfiniteGameController.instance.GetFruitPositionForIndicator(), Quaternion.identity);
+        GameObject bonusIndicator = Instantiate(bonusScoreIndicatorPrefab, Vector3.zero, Quaternion.identity);
         IndicatorAnimation indicatorAnimator = bonusIndicator.GetComponent<IndicatorAnimation>();
 
         indicatorAnimator.indicatorText.text = "+" + points.ToString();
@@ -204,14 +204,11 @@ public class HUDMenuManager : MonoBehaviour
         indicatorAnimator.position = fruitParent.transform.position;
 
         indicatorAnimator.Show();
-
-        //Destroy(bonusIndicator, 2f); // destroy the prefab after 2 seconds
-        //bonusIndicator.GetComponent<InfiniteIndicatorAnimation>().Play();
     }
 
     public void ShowInfiniteLifeUpdateIndicator(bool extraLife)
     {
-        GameObject lifeIndicator = Instantiate(lifeIndicatorPrefab, InfiniteGameController.instance.GetFruitPositionForIndicator(), Quaternion.identity);
+        GameObject lifeIndicator = Instantiate(lifeIndicatorPrefab, Vector3.zero, Quaternion.identity);
         IndicatorAnimation indicatorAnimator = lifeIndicator.GetComponent<IndicatorAnimation>();
 
         indicatorAnimator.indicatorText.text = extraLife ? "+" : "-";
@@ -221,8 +218,6 @@ public class HUDMenuManager : MonoBehaviour
         indicatorAnimator.position = fruitParent.transform.position;
 
         indicatorAnimator.Show();
-        //Destroy(lifeIndicator, 2f); // destroy the prefab after 2 seconds
-        //lifeIndicator.GetComponent<InfiniteIndicatorAnimation>().Play();
     }
 
 
