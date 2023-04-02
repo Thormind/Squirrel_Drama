@@ -51,6 +51,9 @@ public class GlobalUIManager : MonoBehaviour
     private Stack<MENU> menuStack = new Stack<MENU>();
     private ushort menuStackSize = 0;
 
+    private List<GameObject> indicatorsListRef = new List<GameObject>();
+    public GameObject indicatorsParent;
+
     public DefaultInputActions UIControls;
     private InputAction back;
     private InputAction pause;
@@ -349,6 +352,12 @@ public class GlobalUIManager : MonoBehaviour
         SetMenu(MENU.MENU_PREGAME);
     }
 
+    public void SetHUDIndicator(GameObject indicator)
+    {
+        indicator.transform.parent = indicatorsParent.transform;
+        indicatorsListRef.Add(indicator);
+    }
+
     public void ResumeGame()
     {
         AnimationManager.instance.ResumeInGameAnimations();
@@ -378,6 +387,7 @@ public class GlobalUIManager : MonoBehaviour
         ScenesManager.gameState = GAME_STATE.PRE_GAME;
 
         Time.timeScale = 1f;
+        ClearIndicators();
         AnimationManager.instance.ClearInGameQueue();
 
         SetMenu(MENU.MENU_PREGAME);
@@ -413,6 +423,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        ClearIndicators();
         AnimationManager.instance.ClearInGameQueue();
         AnimationManager.instance.ClearObstaclesQueue();
 
@@ -497,6 +508,18 @@ public class GlobalUIManager : MonoBehaviour
         {
             runtimeMenuRefs.Remove(key);
         }
+    }
+
+    public void ClearIndicators()
+    {
+        for (int i = 0; i < indicatorsParent.transform.childCount; i++)
+        {
+            GameObject child = indicatorsParent.transform.GetChild(i).gameObject;
+            Destroy(child);
+        }
+
+        indicatorsListRef.Clear();
+        indicatorsListRef = new List<GameObject>();
     }
 
 

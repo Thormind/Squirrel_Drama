@@ -194,17 +194,21 @@ public class InfiniteBearAnimation : MonoBehaviour
 
     private void SetSlowMotion(bool isSlowMotion)
     {
+        float defaultFixedDeltaTime = 0.02f;
+
         if (isSlowMotion)
         {
             InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
             float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.10f;
+            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.085f;
             Time.timeScale = slowMotion;
+            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
         }
         else
         {
             InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
             Time.timeScale = 1f;
+            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
         }
 
     }

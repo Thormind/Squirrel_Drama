@@ -138,6 +138,18 @@ public class InfiniteGameController : MonoBehaviour
         }
     }
 
+    public IEnumerator ShowLevelIndicator()
+    {
+        while (HUDMenuManager.instance == null || !HUDMenuManager.instance.isActiveAndEnabled)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        HUDMenuManager.instance.ShowInfiniteLevelIndicator();
+    }
+
     // ========== TIME FUNCTIONS ========== //
 
     public void StartTimer()
@@ -246,8 +258,6 @@ public class InfiniteGameController : MonoBehaviour
         currentFruitNumber--;
         ShowHUDLifeIndicator(false);
         UpdateHUD(GAME_DATA.LIFE);
-
-        GameOverCheck();
     }
 
     // Call this method to calculate the bonus score
@@ -325,7 +335,9 @@ public class InfiniteGameController : MonoBehaviour
 
         fruitRef.ResetFruitPosition();
 
-        PrepareForLevel(PREPERATION_STATE.AFTER_LEVEL_COMPLETED);
+        StartCoroutine(ShowLevelIndicator());
+
+        StartCoroutine(PrepareForLevel(PREPERATION_STATE.AFTER_LEVEL_COMPLETED));
     }
 
     public void ResetGame()
@@ -352,7 +364,7 @@ public class InfiniteGameController : MonoBehaviour
         UpdateHUD(GAME_DATA.TIMER);
 
 
-        Time.timeScale = 1f;
+        SetSlowMotion(false);
         EnableFruitCollision(false);
         SetRigidBodyExtrapolate(false);
 
@@ -380,6 +392,7 @@ public class InfiniteGameController : MonoBehaviour
 
         SpawnObstacles();
 
+        StartCoroutine(ShowLevelIndicator());
 
         if (currentPreparingCoroutine != null)
         {
@@ -409,6 +422,7 @@ public class InfiniteGameController : MonoBehaviour
 
     public IEnumerator PreparingAfterLevelCompletedCallback()
     {
+
         while (elevatorControllerRef.HasNotReachedBottom())
         {
             yield return new WaitForEndOfFrame();
@@ -450,15 +464,18 @@ public class InfiniteGameController : MonoBehaviour
         StartTimer();
     }
 
-    public void PrepareForLevel(PREPERATION_STATE prepState)
+    private IEnumerator PrepareForLevel(PREPERATION_STATE prepState)
     {
-        ScenesManager.gameState = GAME_STATE.PREPARING;
-
         PauseTimer();
 
-        Time.timeScale = 1f;
+        if (ScenesManager.gameState != GAME_STATE.GAME_OVER)
+        {
+            ScenesManager.gameState = GAME_STATE.PREPARING;
+        }
+
         EnableFruitCollision(false);
         SetRigidBodyExtrapolate(false);
+        SetSlowMotion(false);
 
         if (CameraManager.instance != null)
         {
@@ -482,6 +499,35 @@ public class InfiniteGameController : MonoBehaviour
         }
         
         elevatorControllerRef.MoveBarToBottomPositionFunction();
+
+        yield return null;
+    }
+
+    private IEnumerator Death()
+    {
+        PauseTimer();
+
+        ScenesManager.gameState = GAME_STATE.DIED;
+
+        EnableFruitCollision(false);
+        SetRigidBodyExtrapolate(true);
+        SetSlowMotion(true);
+
+        float t = 0;
+
+        while (t <= 1)
+        {
+
+            t += Time.deltaTime / 0.5f;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return null;
+
+        StartCoroutine(PrepareForLevel(PREPERATION_STATE.AFTER_DEATH));
+
+        GameOverCheck();
     }
 
 
@@ -560,35 +606,35 @@ public class InfiniteGameController : MonoBehaviour
 
     public void HandleFruitInHole()
     {
-        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+        StartCoroutine(Death());
 
         FruitNumberDecrement();
     }
 
     public void HandleFruitInBee()
     {
-        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+        StartCoroutine(Death());
 
         FruitNumberDecrement();
     }
 
     public void HandleFruitInWorm()
     {
-        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+        StartCoroutine(Death());
 
         FruitNumberDecrement();
     }
 
     public void HandleFruitInBear()
     {
-        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+        StartCoroutine(Death());
 
         FruitNumberDecrement();
     }
 
     public void HandleFruitFalling()
     {
-        PrepareForLevel(PREPERATION_STATE.AFTER_DEATH);
+        StartCoroutine(Death());
 
         FruitNumberDecrement();
     }
@@ -715,6 +761,22 @@ public class InfiniteGameController : MonoBehaviour
             {
                 rb.interpolation = RigidbodyInterpolation2D.None;
             }
+        }
+    }
+
+    private void SetSlowMotion(bool slowMo)
+    {
+        float defaultFixedDeltaTime = 0.02f;
+
+        if (slowMo)
+        {
+            Time.timeScale = 0.2f;
+            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
         }
     }
 

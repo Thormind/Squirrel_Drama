@@ -208,6 +208,9 @@ public class InfiniteElevatorController : MonoBehaviour
                 break;
             case GAME_STATE.LOADING:
                 break;
+            case GAME_STATE.DIED:
+                inputEnabled = false;
+                break;
             case GAME_STATE.GAME_OVER:
                 if (elevatorSFX.isPlaying)
                 {

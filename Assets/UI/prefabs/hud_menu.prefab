@@ -966,6 +966,7 @@ RectTransform:
   - {fileID: 1616818342033159219}
   - {fileID: 7958947338807609958}
   - {fileID: 5604687424246735448}
+  - {fileID: 4676414569819891385}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1062,8 +1063,10 @@ MonoBehaviour:
   infiniteMapSlider: {fileID: 7798594303228394674}
   infiniteMultiplierSlider: {fileID: 8458203835320953978}
   infiniteMultiplierText: {fileID: 5481302821528597336}
+  indicatorsParent: {fileID: 1857062818150775755}
   bonusScoreIndicatorPrefab: {fileID: 3855093136185463005, guid: d7634efd86846794e9c2935356bb1ee0, type: 3}
   lifeIndicatorPrefab: {fileID: 3855093136185463005, guid: ee5e9d1cee8901847b0ed33535a086d3, type: 3}
+  levelIndicatorPrefab: {fileID: 3855093136185463005, guid: 88ce95e29cf949940bc0a020d791f8e5, type: 3}
 --- !u!114 &8988028778398786476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2571,6 +2574,42 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1857062818150775755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4676414569819891385}
+  m_Layer: 5
+  m_Name: IndicatorsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4676414569819891385
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857062818150775755}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1536668784578062083}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1918735150130726303
 GameObject:
   m_ObjectHideFlags: 0

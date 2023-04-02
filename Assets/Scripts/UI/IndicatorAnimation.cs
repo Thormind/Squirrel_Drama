@@ -32,10 +32,7 @@ public class IndicatorAnimation : MonoBehaviour
     {
         hue += hueSpeed * Time.deltaTime;
         if (hue >= 1f) hue -= 1f;
-        //if (saturation >= 1f) saturation -= 1f;
-        //if (value >= 1f) value -= 1f;
 
-        //saturation = Mathf.PingPong(Time.time * saturationSpeed, 1f);
         value = Mathf.Max(minValue, Mathf.PingPong(Time.time * valueSpeed, 1f));
 
         Color color = Color.HSVToRGB(hue, 1f, value);
@@ -49,26 +46,35 @@ public class IndicatorAnimation : MonoBehaviour
 
     public void CalculateWorldToCanvasPoint()
     {
-        position.x = parentToFollow.transform.position.x;
-        position.y = parentToFollow.transform.position.y;
+        if (parentToFollow != null)
+        {
+            position.x = parentToFollow.transform.position.x;
+            position.y = parentToFollow.transform.position.y;
+        }
 
-        Camera cameraRef = Camera.main;
-        gameObjectToFollow.transform.position = cameraRef.WorldToScreenPoint(position);
+        if (Camera.main != null)
+        {
+            Camera cameraRef = Camera.main;
+            gameObjectToFollow.transform.position = cameraRef.WorldToScreenPoint(position);
+        }
+   
     }
 
     public void Show()
     {
         gameObject.SetActive(true);
 
-        Camera cameraRef = Camera.main;
-        gameObjectToFollow.transform.position = cameraRef.WorldToScreenPoint(position);
+        if (Camera.main != null) 
+        {
+            Camera cameraRef = Camera.main;
+            gameObjectToFollow.transform.position = cameraRef.WorldToScreenPoint(position);
+        }
 
         StartCoroutine(ShowAnimation());
     }
 
     IEnumerator ShowAnimation()
     {
-
         Vector3 startPosition = Vector3.zero;
         Vector3 endPosition = Vector3.up * 100f;
 

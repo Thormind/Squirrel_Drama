@@ -45,6 +45,7 @@ public class HUDMenuManager : MonoBehaviour
 
     public GameObject bonusScoreIndicatorPrefab;
     public GameObject lifeIndicatorPrefab;
+    public GameObject levelIndicatorPrefab;
 
     public void Awake()
     {
@@ -77,7 +78,6 @@ public class HUDMenuManager : MonoBehaviour
         legacyPanel.SetActive(false);
         infinitePanel.SetActive(true);
         infiniteMapSlider.transform.parent.gameObject.SetActive(true);
-        //InfiniteGameController.instance.UpdateHUD();
         UpdateInfiniteHUD(GAME_DATA.ALL);
     }
 
@@ -86,7 +86,6 @@ public class HUDMenuManager : MonoBehaviour
         infinitePanel.SetActive(false);
         legacyPanel.SetActive(true);
         infiniteMapSlider.transform.parent.gameObject.SetActive(false);
-        //LegacyGameController.instance.UpdateHUD();
         UpdateLegacyHUD(GAME_DATA.ALL);
     }
 
@@ -165,7 +164,6 @@ public class HUDMenuManager : MonoBehaviour
                 break;
             case GAME_DATA.MULTIPLIER_STREAK:
                 StartCoroutine(AnimateMultiplierSlider(infiniteMultiplierSlider, InfiniteGameController.instance.GetMultiplierTimeLeft()));
-                //infiniteMultiplierSlider.value = InfiniteGameController.instance.GetCurrentMultiplierStreak();
                 break;
             case GAME_DATA.ALL:
                 StartCoroutine(AnimateText(infiniteScoreText, InfiniteGameController.instance.score.ToString()));
@@ -195,6 +193,8 @@ public class HUDMenuManager : MonoBehaviour
     public void ShowInfiniteBonusScoreUpdateIndicator(int points)
     {
         GameObject bonusIndicator = Instantiate(bonusScoreIndicatorPrefab, Vector3.zero, Quaternion.identity);
+        GlobalUIManager.instance.SetHUDIndicator(bonusIndicator);
+
         IndicatorAnimation indicatorAnimator = bonusIndicator.GetComponent<IndicatorAnimation>();
 
         indicatorAnimator.indicatorText.text = "+" + points.ToString();
@@ -209,6 +209,8 @@ public class HUDMenuManager : MonoBehaviour
     public void ShowInfiniteLifeUpdateIndicator(bool extraLife)
     {
         GameObject lifeIndicator = Instantiate(lifeIndicatorPrefab, Vector3.zero, Quaternion.identity);
+        GlobalUIManager.instance.SetHUDIndicator(lifeIndicator);
+
         IndicatorAnimation indicatorAnimator = lifeIndicator.GetComponent<IndicatorAnimation>();
 
         indicatorAnimator.indicatorText.text = extraLife ? "+" : "-";
@@ -216,6 +218,18 @@ public class HUDMenuManager : MonoBehaviour
         GameObject fruitParent = InfiniteGameController.instance.GetFruitParent();
         indicatorAnimator.parentToFollow = fruitParent;
         indicatorAnimator.position = fruitParent.transform.position;
+
+        indicatorAnimator.Show();
+    }
+
+    public void ShowInfiniteLevelIndicator()
+    {
+        GameObject levelIndicator = Instantiate(levelIndicatorPrefab, Vector3.zero, Quaternion.identity);
+        GlobalUIManager.instance.SetHUDIndicator(levelIndicator);
+
+        LevelIndicatorAnimation indicatorAnimator = levelIndicator.GetComponent<LevelIndicatorAnimation>();
+
+        indicatorAnimator.indicatorText.text = "Level " + InfiniteGameController.instance.currentLevel.ToString();
 
         indicatorAnimator.Show();
     }

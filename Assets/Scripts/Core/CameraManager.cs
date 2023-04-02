@@ -77,6 +77,7 @@ public class CameraManager : MonoBehaviour
 
     // INFINITE
 
+    private float infiniteDiedSize = 18.25f;
     private float infiniteFocusedSize = 23.75f;
     private Vector3 infiniteFocusedPosition = new Vector3(0f, 175f, -500f);
     private Quaternion infiniteFocusedRotation = Quaternion.Euler(0, 0, 0);
@@ -122,9 +123,19 @@ public class CameraManager : MonoBehaviour
         {
             if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE && InfiniteGameController.instance != null)
             {
-                Vector3 targetPosition = InfiniteGameController.instance.GetElevatorPosition() + Vector3.up * infiniteVerticalOffset;
-                Vector3 targetDirection = targetPosition - transform.position;
-                targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                if (ScenesManager.gameState == GAME_STATE.DIED)
+                {
+                    Vector3 targetPosition = InfiniteGameController.instance.GetFruitPosition() + Vector3.up * infiniteVerticalOffset;
+                    Vector3 targetDirection = targetPosition - transform.position;
+                    targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                    targetSize = infiniteDiedSize;
+                }
+                else
+                {
+                    Vector3 targetPosition = InfiniteGameController.instance.GetElevatorPosition() + Vector3.up * infiniteVerticalOffset;
+                    Vector3 targetDirection = targetPosition - transform.position;
+                    targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                }
             }
             if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE && LegacyGameController.instance != null)
             {
