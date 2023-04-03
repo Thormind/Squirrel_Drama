@@ -10,12 +10,11 @@ Material:
   m_Name: glassMat
   m_Shader: {fileID: 4800000, guid: ee7e4c9a5f6364b688a332c67fc32cca, type: 3}
   m_ValidKeywords:
-  - _ENVIRONMENTREFLECTIONS_OFF
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
-  m_LightmapFlags: 6
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
   stringTagMap:
     RenderType: Transparent
@@ -92,19 +91,19 @@ Material:
     - _BlendOp: 0
     - _BumpScale: 1
     - _ClearCoat: 0
-    - _ClearCoatMask: 0.68
-    - _ClearCoatSmoothness: 0.526
-    - _Cull: 0
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0.453
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
-    - _EnvironmentReflections: 0
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
-    - _Metallic: 0
+    - _Metallic: 0.7
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
@@ -121,8 +120,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.16981128, g: 0.16981128, b: 0.16981128, a: 0.050980393}
-    - _Color: {r: 1, g: 1, b: 1, a: 0.050980393}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 0.39607844}
+    - _Color: {r: 0.16981116, g: 0.16981116, b: 0.16981116, a: 0.050980393}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

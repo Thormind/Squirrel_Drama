@@ -1798,8 +1798,8 @@ MonoBehaviour:
   controlsToggle: {fileID: 5909502085196757787}
   artsToggle: {fileID: 2378321956194506253}
   creditsToggle: {fileID: 6681504507027616223}
-  storyToggle: {fileID: 0}
-  trophiesToggle: {fileID: 0}
+  storyToggle: {fileID: 1562084213801148261}
+  trophiesToggle: {fileID: 1738261361918516634}
   keyboardControlsPanel: {fileID: 3247546207450355059}
   gamepadControlsPanel: {fileID: 2884497486825142934}
   artsPanel: {fileID: 4412724155961077787}
