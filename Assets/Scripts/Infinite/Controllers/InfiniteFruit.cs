@@ -38,6 +38,7 @@ public class InfiniteFruit : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
+
         if (collision.transform.gameObject.tag == "Hole"
             && Vector2.Distance(collision.transform.localPosition, fruitRigidbody.transform.localPosition) <= MinCollisionDistance
             && collisionEnabled)

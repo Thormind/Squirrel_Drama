@@ -31,7 +31,7 @@ public class InfiniteFruitAudio : MonoBehaviour
         else
         {
             movement.pitch = Mathf.Abs(velocity/4);
-            if(!movement.isPlaying)
+            if(!movement.isPlaying && ScenesManager.gameState == GAME_STATE.ACTIVE)
             {
                 movement.Play();
             }
