@@ -313,7 +313,7 @@ public class GlobalUIManager : MonoBehaviour
 
     public void SetMainMenu()
     {
-        AudioManager.instance.PlayUiMusic();
+        AudioManager.instance.PlayMenuMusic();
         SetMenu(MENU.MENU_MAIN);
     }
 

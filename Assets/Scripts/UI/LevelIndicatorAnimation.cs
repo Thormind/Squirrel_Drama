@@ -9,6 +9,8 @@ public class LevelIndicatorAnimation : MonoBehaviour
 
     public GameObject gameObjectToAnimate;
 
+    private float textMinSpacing = 0f;
+    private float textMaxSpacing = 500f;
     private float textMinAlpha = 0f;
     private float textMaxAlpha = 255f;
     private float textScaleMultiplier = 1.25f;
@@ -16,9 +18,8 @@ public class LevelIndicatorAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Color textColor = indicatorText.color;
-        textColor.a = textMinAlpha / 255f;
-        indicatorText.color = textColor;
+        SetTextColor(textMinAlpha);
+        SetTextWordSpacing(textMaxSpacing);
     }
 
     public void Show()
@@ -41,6 +42,9 @@ public class LevelIndicatorAnimation : MonoBehaviour
             float textAlpha = Mathf.Lerp(textMinAlpha, textMaxAlpha, easedProgress);
             SetTextColor(textAlpha);
 
+            float textSpacing = Mathf.Lerp(textMaxSpacing, textMinSpacing, easedProgress);
+            SetTextWordSpacing(textSpacing);
+
             gameObjectToAnimate.transform.localScale = Vector3.Lerp(startScale, endScale, easedProgress);
 
             t += Time.deltaTime / duration;
@@ -48,6 +52,7 @@ public class LevelIndicatorAnimation : MonoBehaviour
         }
 
         SetTextColor(textMaxAlpha);
+        SetTextWordSpacing(textMinSpacing);
 
         duration = 1f;
         t = 0f;
@@ -71,6 +76,11 @@ public class LevelIndicatorAnimation : MonoBehaviour
         Color textColor = indicatorText.color;
         textColor.a = alpha / 255f;
         indicatorText.color = textColor;
+    }
+
+    private void SetTextWordSpacing(float spacing)
+    {
+        indicatorText.wordSpacing = spacing;
     }
 
 

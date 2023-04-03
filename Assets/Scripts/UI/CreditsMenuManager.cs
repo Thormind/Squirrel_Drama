@@ -11,6 +11,8 @@ public class CreditsMenuManager : MonoBehaviour
     [SerializeField] private Toggle controlsToggle;
     [SerializeField] private Toggle artsToggle;
     [SerializeField] private Toggle creditsToggle;
+    [SerializeField] private Toggle storyToggle;
+    [SerializeField] private Toggle trophiesToggle;
 
     [SerializeField] private GameObject keyboardControlsPanel;
     [SerializeField] private GameObject gamepadControlsPanel;
@@ -29,6 +31,8 @@ public class CreditsMenuManager : MonoBehaviour
         controlsToggle.onValueChanged.AddListener(delegate { OnControlsToggleValueChanged(controlsToggle.isOn); });
         creditsToggle.onValueChanged.AddListener(delegate { OnCreditsToggleValueChanged(creditsToggle.isOn); });
         artsToggle.onValueChanged.AddListener(delegate { OnArtsToggleValueChanged(artsToggle.isOn); });
+        storyToggle.onValueChanged.AddListener(delegate { OnStoryToggleValueChanged(storyToggle.isOn); });
+        trophiesToggle.onValueChanged.AddListener(delegate { OnTrophiesToggleValueChanged(trophiesToggle.isOn); });
     }
 
     private void OnDestroy()
@@ -47,6 +51,8 @@ public class CreditsMenuManager : MonoBehaviour
         controlsToggle.isOn = false;
         creditsToggle.isOn = false;
         artsToggle.isOn = false;
+        storyToggle.isOn = false;
+        trophiesToggle.isOn = false;
     }
 
     public void HandleAnyKey()
@@ -70,6 +76,16 @@ public class CreditsMenuManager : MonoBehaviour
     public void OnArtsToggleValueChanged(bool value)
     {
         artsPanel.GetComponent<UIPanelAnimation>().AnimateFunction(value);
+    }
+
+    public void OnStoryToggleValueChanged(bool value)
+    {
+        
+    }
+
+    public void OnTrophiesToggleValueChanged(bool value)
+    {
+        
     }
 
     public void PlayAnimationCoroutine(IEnumerator coroutine)

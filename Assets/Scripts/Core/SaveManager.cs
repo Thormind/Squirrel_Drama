@@ -9,6 +9,7 @@ public class SaveManager : MonoBehaviour
 
     private Dictionary<string, int> bestScores = new Dictionary<string, int>();
     private Dictionary<string, float> audioSettings = new Dictionary<string, float>();
+    private static Dictionary<GAME_MODE, MUSIC> musicSettings = new Dictionary<GAME_MODE, MUSIC>();
     private TIME_OF_DAY timeOfDay;
 
     private void Awake()
@@ -25,6 +26,7 @@ public class SaveManager : MonoBehaviour
         LoadBestScores();
         LoadAudioSettings();
         LoadTimeOfDay();
+        LoadMusicSettings();
     }
 
     // Best Scores Data
@@ -102,6 +104,76 @@ public class SaveManager : MonoBehaviour
     {
         string audioChannelName = audioChannel.ToString();
         return audioSettings[audioChannelName];
+    }
+
+    //MUSIC SETTINGS
+    public static void SaveMusicSettings()
+    {
+        foreach (KeyValuePair<GAME_MODE, MUSIC> entry in musicSettings)
+        {
+            string key = GetMusicKey(entry.Key);
+            PlayerPrefs.SetInt(key, (int)entry.Value);
+        }
+        PlayerPrefs.Save();
+    }
+
+    public static void LoadMusicSettings()
+    {
+        foreach (GAME_MODE mode in Enum.GetValues(typeof(GAME_MODE)))
+        {
+            string key = GetMusicKey(mode);
+
+            int musicValue = PlayerPrefs.GetInt(key, -1);
+            if (musicValue == -1)
+            {
+                musicValue =  (int) GetDefaultMusic(mode);
+            }
+
+            musicSettings[mode] = (MUSIC)musicValue;
+        }
+    }
+
+    public static void UpdateMusicSettings(GAME_MODE gameMode, MUSIC music)
+    {
+        musicSettings[gameMode] = music;
+        SaveMusicSettings();
+    }
+
+    public static MUSIC GetMusicSettings(GAME_MODE mode)
+    {
+        return musicSettings[mode];
+    }
+
+    private static MUSIC GetDefaultMusic(GAME_MODE mode)
+    {
+        switch (mode)
+        {
+            case GAME_MODE.NONE:
+                return MUSIC.MENU_2;
+            case GAME_MODE.INFINITE_MODE:
+                return MUSIC.INFINITE_1;
+            case GAME_MODE.LEGACY_MODE:
+                return MUSIC.LEGACY_1;
+            default:
+                return MUSIC.RANDOM;
+        }
+    }
+
+    private static string GetMusicKey(GAME_MODE mode)
+    {
+        return string.Format("Music_{0}", mode.ToString());
+    }
+
+    public static void SetDefaultMusicSettings()
+    {
+        string key = GetMusicKey(GAME_MODE.NONE);
+        PlayerPrefs.SetInt(key, (int)MUSIC.MENU_2);
+
+        key = GetMusicKey(GAME_MODE.INFINITE_MODE);
+        PlayerPrefs.SetInt(key, (int)MUSIC.INFINITE_1);
+
+        key = GetMusicKey(GAME_MODE.LEGACY_MODE);
+        PlayerPrefs.SetInt(key, (int)MUSIC.LEGACY_1);
     }
 
     //TIME OF DAY SETTINGS

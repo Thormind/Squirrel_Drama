@@ -94,6 +94,7 @@ public class SettingsMenuManager : MonoBehaviour
     {
         GlobalUIManager.instance.SetFirstSelected(exitButton.gameObject, true);
         SaveManager.instance.ResetBestScores();
+        SaveManager.SetDefaultMusicSettings();
         resetPanel.SetActive(false);
         mainPanel.SetActive(true);
     }

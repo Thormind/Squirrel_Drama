@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,18 @@ public enum AUDIO_CHANNEL
     MUSIC,
     SFX
 };
+
+public enum MUSIC
+{
+    MENU_1,
+    MENU_2,
+    INFINITE_1,
+    INFINITE_2,
+    LEGACY_1,
+    LEGACY_2,
+    RANDOM
+};
+
 
 public enum SOUND
 {
@@ -53,10 +66,10 @@ public class AudioManager : MonoBehaviour
 
     // ===== VARIABLES DECLARATIONS ===== //
 
-    public AudioSource uiMusic;
     public AudioSource intro;
-    public AudioSource infiniteMusic;
-    public AudioSource legacyMusic;
+    public AudioSource menuAudioSource;
+    public AudioSource infiniteAudioSource;
+    public AudioSource legacyMusicAudioSource;
     public AudioSource gameOverMusic;
     public AudioSource wind;
 
@@ -66,6 +79,9 @@ public class AudioManager : MonoBehaviour
     public GameObject soundplayer;
     public AudioItem[] AudioItemArray;
     public Dictionary<SOUND, SoundAudioClip> soundDictionary = new Dictionary<SOUND, SoundAudioClip>();
+    public MusicItem[] MusicItemArray;
+    public Dictionary<MUSIC, AudioClip> musicDictionary = new Dictionary<MUSIC, AudioClip>();
+
 
     public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
 
@@ -74,6 +90,13 @@ public class AudioManager : MonoBehaviour
     {
         public SOUND sound;
         public SoundAudioClip sound_audio_clip;
+    }
+
+    [System.Serializable]
+    public class MusicItem
+    {
+        public MUSIC music;
+        public AudioClip music_audio_clip;
     }
 
     [System.Serializable]
@@ -111,6 +134,7 @@ public class AudioManager : MonoBehaviour
         AdjustMusic();
         AdjustSfx();
         FillSoundDictionary();
+        FillMusicDictionary();
         intro.Play();
     }
 
@@ -139,29 +163,29 @@ public class AudioManager : MonoBehaviour
                 AdjustMusic();
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
-                    PlayInfinite();
+                    PlayInfiniteMusic();
                 }
                 if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
                 {
-                    PlayLegacy();
+                    PlayLegacyMusic();
                 }
                 break;
             case GAME_STATE.ACTIVE:
                 Resume();
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
-                    PlayInfinite();
+                    PlayInfiniteMusic();
                 }
                 if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
                 {
-                    PlayLegacy();
+                    PlayLegacyMusic();
                 }
                 break;
             case GAME_STATE.INACTIVE:
                 AdjustMusic();
                 StopWind();
                 if (!intro.isPlaying)
-                    PlayUiMusic();
+                    PlayMenuMusic();
                 break;
             case GAME_STATE.LOADING:
                 PlaySound(SOUND.SWEEP);
@@ -169,7 +193,7 @@ public class AudioManager : MonoBehaviour
             case GAME_STATE.GAME_OVER:
                 if(ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
-                    PlayGameOver();
+                    PlayGameOverMusic();
                     AudioManager.instance.PlaySound(SOUND.FAIL);
                     PlayWind();
                 } 
@@ -183,6 +207,34 @@ public class AudioManager : MonoBehaviour
 
 
     // ===== METHODS ===== //
+    public string GetMusicName(GAME_MODE gameMode)
+    {
+        MUSIC music = SaveManager.GetMusicSettings(gameMode);
+        int musicIndex = (int)music;
+
+        string musicName = $"{Enum.GetName(typeof(MUSIC), musicIndex)}".Replace('_', ' ');
+        return musicName;
+    }
+
+    public string SwitchMusic(GAME_MODE gameMode)
+    {
+        MUSIC music = SaveManager.GetMusicSettings(gameMode);
+        int musicIndex = (int)music;
+        musicIndex++;
+
+        if (musicIndex >= Enum.GetValues(typeof(MUSIC)).Length)
+        {
+            musicIndex = 0;
+        }
+
+        //print($"Game Mode: {gameMode}");
+        //print($"Music: {(MUSIC)musicIndex}");
+        SaveManager.UpdateMusicSettings(gameMode, (MUSIC)musicIndex);
+
+        string musicName = $"{Enum.GetName(typeof(MUSIC), musicIndex)}".Replace('_', ' ');
+        return musicName;
+    }
+
     public void SwitchAudioListener(GAME_MODE gameMode)
     {
         switch (gameMode)
@@ -225,6 +277,14 @@ public class AudioManager : MonoBehaviour
         foreach (AudioItem item in AudioItemArray)
         {
             soundDictionary.Add(item.sound, item.sound_audio_clip);
+        }
+    }
+
+    private void FillMusicDictionary()
+    {
+        foreach (MusicItem item in MusicItemArray)
+        {
+            musicDictionary.Add(item.music, item.music_audio_clip);
         }
     }
 
@@ -397,9 +457,9 @@ public class AudioManager : MonoBehaviour
     public void StopCurrentMusic()
     {
         intro.Stop();
-        uiMusic.Stop();
-        legacyMusic.Stop();
-        infiniteMusic.Stop();
+        menuAudioSource.Stop();
+        legacyMusicAudioSource.Stop();
+        infiniteAudioSource.Stop();
         gameOverMusic.Stop();
     }
 
@@ -408,31 +468,41 @@ public class AudioManager : MonoBehaviour
         StopCurrentMusic();
         intro.Play();
     }
-    public void PlayUiMusic()
-    {
-        StopCurrentMusic();
-        uiMusic.Play();
-    }
 
-    public void PlayLegacy()
+    public void PlayMenuMusic()
     {
-        if (!legacyMusic.isPlaying)
+        if (!menuAudioSource.isPlaying)
         {
             StopCurrentMusic();
-            legacyMusic.Play();
+            MUSIC menuMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.NONE);
+            menuAudioSource.clip = musicDictionary[menuMusicChoice];
+            menuAudioSource.Play();
         }
     }
 
-    public void PlayInfinite()
+    public void PlayLegacyMusic()
     {
-        if (!infiniteMusic.isPlaying)
+        if (!legacyMusicAudioSource.isPlaying)
         {
             StopCurrentMusic();
-            infiniteMusic.Play();
+            MUSIC legacyMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.LEGACY_MODE);
+            legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice];
+            legacyMusicAudioSource.Play();
         }
     }
 
-    public void PlayGameOver()
+    public void PlayInfiniteMusic()
+    {
+        if (!infiniteAudioSource.isPlaying)
+        {
+            StopCurrentMusic();
+            MUSIC infiniteMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.INFINITE_MODE);
+            infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice];
+            infiniteAudioSource.Play();
+        }
+    }
+
+    public void PlayGameOverMusic()
     {
         if (!gameOverMusic.isPlaying)
         {

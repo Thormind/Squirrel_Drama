@@ -1063,7 +1063,6 @@ MonoBehaviour:
   infiniteMapSlider: {fileID: 7798594303228394674}
   infiniteMultiplierSlider: {fileID: 8458203835320953978}
   infiniteMultiplierText: {fileID: 5481302821528597336}
-  indicatorsParent: {fileID: 1857062818150775755}
   bonusScoreIndicatorPrefab: {fileID: 3855093136185463005, guid: d7634efd86846794e9c2935356bb1ee0, type: 3}
   lifeIndicatorPrefab: {fileID: 3855093136185463005, guid: ee5e9d1cee8901847b0ed33535a086d3, type: 3}
   levelIndicatorPrefab: {fileID: 3855093136185463005, guid: 88ce95e29cf949940bc0a020d791f8e5, type: 3}
@@ -1291,7 +1290,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LIFE
+  m_text: FRUITS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
   m_sharedMaterial: {fileID: -757681918098489689, guid: 0f0b0c10f32e5714cbdf81633f774919, type: 2}
