@@ -475,7 +475,16 @@ public class AudioManager : MonoBehaviour
         {
             StopCurrentMusic();
             MUSIC menuMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.NONE);
-            menuAudioSource.clip = musicDictionary[menuMusicChoice];
+
+            if (menuMusicChoice == MUSIC.RANDOM)
+            {
+                menuAudioSource.clip = GetRandomMusicClip();
+            }
+            else
+            {
+                menuAudioSource.clip = musicDictionary[menuMusicChoice];
+            }
+
             menuAudioSource.Play();
         }
     }
@@ -486,7 +495,16 @@ public class AudioManager : MonoBehaviour
         {
             StopCurrentMusic();
             MUSIC legacyMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.LEGACY_MODE);
-            legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice];
+
+            if (legacyMusicChoice == MUSIC.RANDOM)
+            {
+                legacyMusicAudioSource.clip = GetRandomMusicClip();
+            }
+            else
+            {
+                legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice];
+            }
+
             legacyMusicAudioSource.Play();
         }
     }
@@ -497,7 +515,16 @@ public class AudioManager : MonoBehaviour
         {
             StopCurrentMusic();
             MUSIC infiniteMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.INFINITE_MODE);
-            infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice];
+
+            if (infiniteMusicChoice == MUSIC.RANDOM)
+            {
+                infiniteAudioSource.clip = GetRandomMusicClip();
+            }
+            else
+            {
+                infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice];
+            }
+
             infiniteAudioSource.Play();
         }
     }
@@ -539,5 +566,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-
+    public AudioClip GetRandomMusicClip()
+    {
+        MusicItem randomMusicItem = MusicItemArray[UnityEngine.Random.Range(0, MusicItemArray.Length)];
+        return randomMusicItem.music_audio_clip;
+    }
 }
