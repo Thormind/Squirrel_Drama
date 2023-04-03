@@ -17,16 +17,14 @@ public class CameraManager : MonoBehaviour
     public Material skyboxNightMaterial;
 
     public GameObject dayLightObj;
-    //public Light dayLight;
-    public Light dayLight;
 
+    public Light dayLight;
     public Light loungeLight;
-    public Light arcadeLight;
 
 
     // LIGHT
     private Quaternion targetLightRotation;
-    private Quaternion noonLightRotation = Quaternion.Euler(20, 15, 0);
+    private Quaternion noonLightRotation = Quaternion.Euler(45, 15, 0);
     private Quaternion nightLightRotation = Quaternion.Euler(15, 5, 0);
     private Color targetLightColor;
     private Color noonLightColor = new Color(1f, 0.98f, 0.68f);//HexToColor("FFFAAE");
@@ -35,7 +33,6 @@ public class CameraManager : MonoBehaviour
     private float noonLightIntensity = 4f;
     private float nightLightIntensity = 8f;
     private float loungeLightIntensity = 2000f;
-    private float arcadeLightIntensity = 175f;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
@@ -152,7 +149,6 @@ public class CameraManager : MonoBehaviour
         dayLight.color = Color.Lerp(dayLight.color, targetLightColor, Time.fixedDeltaTime * smoothSpeed);
         dayLight.intensity = Mathf.Lerp(dayLight.intensity, dayLightIntensity, Time.fixedDeltaTime * smoothSpeed);
         loungeLight.intensity = Mathf.Lerp(loungeLight.intensity, loungeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
-        arcadeLight.intensity = Mathf.Lerp(arcadeLight.intensity, arcadeLightIntensity, Time.fixedDeltaTime * smoothSpeed);
 
     }
 
@@ -168,7 +164,6 @@ public class CameraManager : MonoBehaviour
         {
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
-            arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
             if (SaveManager.instance.TimeOfDay == TIME_OF_DAY.NOON)
@@ -191,7 +186,6 @@ public class CameraManager : MonoBehaviour
              
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
-            arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
             if (isFocused)
@@ -216,8 +210,6 @@ public class CameraManager : MonoBehaviour
         if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
         {
             CheckTimeOfDay();
-            loungeLightIntensity = 0;
-            arcadeLightIntensity = 175f;
             legacyMachine.SetActive(false);
 
             if (isFocused)
@@ -247,7 +239,6 @@ public class CameraManager : MonoBehaviour
         {
             CheckTimeOfDay();
             loungeLightIntensity = 2000f;
-            arcadeLightIntensity = 0;
             legacyMachine.SetActive(true);
 
             targetPosition = menuCreditsPosition;
