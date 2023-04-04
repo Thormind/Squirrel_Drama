@@ -140,7 +140,6 @@ public class InfiniteScoreMultiplier : MonoBehaviour
 
     public int ApplyMultiplierToScore(int score)
     {
-        //print($"Multiplied Score: {score} x {multiplier} = {score * multiplier}");
         return score * multiplier;
     }
 

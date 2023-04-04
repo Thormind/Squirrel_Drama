@@ -233,9 +233,6 @@ public class InfiniteElevatorController : MonoBehaviour
         }
     }
 
-
-
-
     public void SetElevatorMovementSpeed(float mSpeed)
     {
         movementSpeed = mSpeed;

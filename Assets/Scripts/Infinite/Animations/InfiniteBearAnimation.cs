@@ -15,16 +15,29 @@ public class InfiniteBearAnimation : MonoBehaviour
     public GameObject warnIndicatorVFX;
     public float flashInterval = 0.5f;
 
+    private float slowMotionMultiplier = 0.085f;
+    private float impactMinDistanceFromFruit = 2f;
+    private float impactMaxDistanceFromFruit = 7f;
+
     private float warnCooldown;
+    private float defaultFixedDeltaTime = 0.02f;
 
     public float translationSpeed = 10f;
     public float delayBeforeDestroy = 0.05f;
+    private float delayStayMobile = 1f;
+    private float delayInterval = 0.1f;
 
     private float shadowMinAlpha = 75f;
     private float shadowMaxAlpha = 200f;
 
     public float bearMinAlpha = 170f;
     public float bearMaxAlpha = 255f;
+
+    private Vector3 impactPosition = Vector3.zero;
+    private Quaternion impactRotation = Quaternion.Euler(0f, 0f, 0f);
+
+    private Vector3 postImpactPosition = new Vector3(0f, 0f, -0.5f);
+    private Quaternion postImpactRotation = Quaternion.Euler(15f, 0f, 0f);
 
     private bool isCoroutineRunning = false;
     private PolygonCollider2D bearCollider;
@@ -60,7 +73,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         // ============== WARN ANIMATION ============== //
         float remainingCooldown = warnCooldown;
-        AudioManager.instance.PlaySound(SOUND.BEAR_ROAR);
+        PlayRoarSFX();
         PlayWarnIndicatorVFX();
 
         while (remainingCooldown > 0f)
@@ -76,8 +89,8 @@ public class InfiniteBearAnimation : MonoBehaviour
             float shadowAlpha = Mathf.Lerp(shadowMinAlpha, shadowMaxAlpha, (warnCooldown - remainingCooldown) / warnCooldown);
             SetShadowAlpha(shadowAlpha);
 
-            yield return new WaitForSeconds(0.1f);
-            remainingCooldown -= 0.1f;
+            yield return new WaitForSeconds(delayInterval);
+            remainingCooldown -= delayInterval;
         }
 
         countdownText.text = "";
@@ -93,10 +106,10 @@ public class InfiniteBearAnimation : MonoBehaviour
 
 
         Vector3 startPosition = bearPaw.transform.localPosition;
-        Vector3 endPosition = new Vector3(0f, 0f, 0f);
+        Vector3 endPosition = impactPosition;
 
         Quaternion startRotation = bearPaw.transform.localRotation;
-        Quaternion endRotation = Quaternion.Euler(0, 0, 0);
+        Quaternion endRotation = impactRotation;
 
         float distance = Vector3.Distance(startPosition, endPosition);
         float duration = distance / translationSpeed;
@@ -132,7 +145,7 @@ public class InfiniteBearAnimation : MonoBehaviour
         PlayImpactVFX();
         PlayImpactCameraShake();
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(delayInterval);
 
         bearCollider.isTrigger = false;
 
@@ -140,7 +153,7 @@ public class InfiniteBearAnimation : MonoBehaviour
 
         while (t < 1f)
         {
-            t += Time.deltaTime / 1f;
+            t += Time.deltaTime / delayStayMobile;
             yield return null;
         }
 
@@ -150,9 +163,9 @@ public class InfiniteBearAnimation : MonoBehaviour
         // ============== POST IMPACT ANIMATION ============== //
 
         startPosition = bearPaw.transform.localPosition;
-        endPosition = new Vector3(0f, 0f, -0.5f);
+        endPosition = postImpactPosition;
         startRotation = bearPaw.transform.localRotation;
-        endRotation = Quaternion.Euler(15, 0, 0);
+        endRotation = postImpactRotation;
 
         t = 0f;
 
@@ -176,6 +189,7 @@ public class InfiniteBearAnimation : MonoBehaviour
     }
 
     // ====================================== //
+    // =============== METHODS ============== //
     // ====================================== //
 
     private void SetShadowAlpha(float shadowAlpha)
@@ -194,28 +208,30 @@ public class InfiniteBearAnimation : MonoBehaviour
 
     private void SetSlowMotion(bool isSlowMotion)
     {
-        float defaultFixedDeltaTime = 0.02f;
+        InfiniteGameController.instance.SetRigidBodyExtrapolate(isSlowMotion);
 
         if (isSlowMotion)
         {
-            InfiniteGameController.instance.SetRigidBodyExtrapolate(true);
             float distanceFromFruit = Vector2.Distance(InfiniteGameController.instance.GetFruitLocalPosition(), transform.localPosition);
-            float slowMotion = Mathf.Clamp(distanceFromFruit, 2f, 7f) * 0.085f;
+            float slowMotion = Mathf.Clamp(distanceFromFruit, impactMinDistanceFromFruit, impactMaxDistanceFromFruit) * slowMotionMultiplier;
             Time.timeScale = slowMotion;
-            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
         }
         else
         {
-            InfiniteGameController.instance.SetRigidBodyExtrapolate(false);
             Time.timeScale = 1f;
-            Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
         }
 
+        Time.fixedDeltaTime = defaultFixedDeltaTime * Time.timeScale;
+    }
+
+    private void PlayRoarSFX()
+    {
+        AudioManager.instance.PlaySound(SOUND.BEAR_ROAR);
     }
 
     private void PlayImpactSFX()
     {
-            gameObject.GetComponent<AudioSource>().Play();
+        gameObject.GetComponent<AudioSource>().Play();
     }
 
     private void PlayImpactVFX()

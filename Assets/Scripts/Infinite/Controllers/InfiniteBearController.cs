@@ -24,6 +24,7 @@ public class InfiniteBearController : MonoBehaviour
     private Vector3 spawnPosition;
     private bool isSpawning;
     private float _nextSpawnTime;
+    private float delayBetweenSpawns = 0.05f;
     private int maxTries = 500;
     public bool isAllSpawned;
 
@@ -128,11 +129,10 @@ public class InfiniteBearController : MonoBehaviour
         {
             Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, bearParent.transform);
             Destroy(obj);
-            //play sound 
             AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
         }
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(delayBetweenSpawns);
     }
 
     private Vector3 GetRandomPositionNearFruit()

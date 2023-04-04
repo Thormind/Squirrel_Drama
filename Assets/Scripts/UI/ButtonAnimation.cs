@@ -77,6 +77,16 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     }
 
+    public void OnManualSubmit()
+    {
+        AudioManager.instance.PlaySound(SOUND.CLICK);
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(AnimateSubmitButton(transform.localScale, confirmTargetScale));
+        }
+
+    }
+
 
     // ===== ANIMATION ===== //
 

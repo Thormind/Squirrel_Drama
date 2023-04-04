@@ -39,8 +39,6 @@ public class AnimationManager : MonoBehaviour
     private bool isPausedObstaclesAnimation = false;
 
 
-    //[SerializeField] private Dictionary<ANIMATION_TYPE, AnimationQueue> runtimeAnimationRefs = new Dictionary<ANIMATION_TYPE, AnimationQueue>();
-
     private void Awake()
     {
         if (instance == null)

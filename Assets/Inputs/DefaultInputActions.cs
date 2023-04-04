@@ -400,6 +400,24 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""11c80ed8-4b47-4d31-8706-cd42446c714e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Previous"",
+                    ""type"": ""Button"",
+                    ""id"": ""fad95145-6594-41af-8d0d-ba6d3a4f1854"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -963,6 +981,94 @@ namespace UnityEngine.InputSystem
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""496b2c50-78f8-44fe-8ecd-2f9e6f24ba52"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8ecba61-cf69-4915-be55-27d1837c0d11"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""945a6277-1e57-4ac3-8702-7c91f968eb59"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfd6b2c9-567d-49b0-bfb3-082ce26cba12"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d8497cf-adb1-440a-871a-295ee145273b"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c01c2cd7-f8a8-408d-98da-13948a0ab0b3"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Gamepad"",
+                    ""action"": ""Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""baa40754-5e1a-4685-8910-15b31712a43f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54dcdba0-90b3-4610-9af3-34438a9583ec"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1050,6 +1156,8 @@ namespace UnityEngine.InputSystem
             m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
             m_UI_Back = m_UI.FindAction("Back", throwIfNotFound: true);
+            m_UI_Next = m_UI.FindAction("Next", throwIfNotFound: true);
+            m_UI_Previous = m_UI.FindAction("Previous", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1171,6 +1279,8 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_UI_Confirm;
         private readonly InputAction m_UI_Pause;
         private readonly InputAction m_UI_Back;
+        private readonly InputAction m_UI_Next;
+        private readonly InputAction m_UI_Previous;
         public struct UIActions
         {
             private @DefaultInputActions m_Wrapper;
@@ -1188,6 +1298,8 @@ namespace UnityEngine.InputSystem
             public InputAction @Confirm => m_Wrapper.m_UI_Confirm;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
             public InputAction @Back => m_Wrapper.m_UI_Back;
+            public InputAction @Next => m_Wrapper.m_UI_Next;
+            public InputAction @Previous => m_Wrapper.m_UI_Previous;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1236,6 +1348,12 @@ namespace UnityEngine.InputSystem
                     @Back.started -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
                     @Back.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
                     @Back.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
+                    @Next.started -= m_Wrapper.m_UIActionsCallbackInterface.OnNext;
+                    @Next.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnNext;
+                    @Next.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnNext;
+                    @Previous.started -= m_Wrapper.m_UIActionsCallbackInterface.OnPrevious;
+                    @Previous.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnPrevious;
+                    @Previous.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnPrevious;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1279,6 +1397,12 @@ namespace UnityEngine.InputSystem
                     @Back.started += instance.OnBack;
                     @Back.performed += instance.OnBack;
                     @Back.canceled += instance.OnBack;
+                    @Next.started += instance.OnNext;
+                    @Next.performed += instance.OnNext;
+                    @Next.canceled += instance.OnNext;
+                    @Previous.started += instance.OnPrevious;
+                    @Previous.performed += instance.OnPrevious;
+                    @Previous.canceled += instance.OnPrevious;
                 }
             }
         }
@@ -1349,6 +1473,8 @@ namespace UnityEngine.InputSystem
             void OnConfirm(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
+            void OnNext(InputAction.CallbackContext context);
+            void OnPrevious(InputAction.CallbackContext context);
         }
     }
 }

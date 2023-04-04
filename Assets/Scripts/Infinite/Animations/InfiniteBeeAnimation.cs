@@ -146,7 +146,6 @@ public class InfiniteBeeAnimation : MonoBehaviour
     {
         if (collision.transform.gameObject.tag == "Border")
         {
-            Debug.Log("COLLIDE");
             xDirection *= -1;
         }
     }

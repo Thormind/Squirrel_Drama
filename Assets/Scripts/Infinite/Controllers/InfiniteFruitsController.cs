@@ -23,6 +23,7 @@ public class InfiniteFruitsController : MonoBehaviour
     private float yMin = 10f;
     private float yMax = 30f;
 
+    private float delayBetweenSpawns = 0.25f;
     private int maxTries = 500;
     public bool isAllSpawned;
 
@@ -119,7 +120,7 @@ public class InfiniteFruitsController : MonoBehaviour
         }
 
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(delayBetweenSpawns);
     }
 
     private Vector3 GetRandomSpawnPosition()

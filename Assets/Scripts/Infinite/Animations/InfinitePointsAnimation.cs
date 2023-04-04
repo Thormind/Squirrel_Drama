@@ -7,8 +7,9 @@ public class InfinitePointsAnimation : MonoBehaviour
     public GameObject pointModel;
 
     private float rotationSpeed = 25f;
-
-    private float reachTheFruitTime = 5f;
+    private float reachTheFruitTime = 3f;
+    private float startPointScaleMultiplier = 1f;
+    private float endPointScaleMultiplier = 0.25f;
 
     private Vector3 startPointPosition;
     private Vector3 startPointScale;
@@ -49,11 +50,12 @@ public class InfinitePointsAnimation : MonoBehaviour
             fruitPosition = InfiniteGameController.instance.GetFruitLocalPosition();
 
             transform.localPosition = Vector3.Lerp(transform.localPosition, fruitPosition, t);
-            transform.localScale = startPointScale * Mathf.Lerp(1, 0.25f, t);
+            transform.localScale = startPointScale * Mathf.Lerp(startPointScaleMultiplier, endPointScaleMultiplier, t);
             t += Time.fixedDeltaTime / reachTheFruitTime;
 
             yield return new WaitForEndOfFrame();
         }
+
         Destroy(gameObject);
     }
 }

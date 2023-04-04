@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class InfiniteFruitAnimation : MonoBehaviour
 {
-
     private float rotationSpeed = 25f;
-
+    private float endOfLifeRotationSpeed = 600f;
     private float movementSpeed = 0.75f;
 
     private float maxY = 1.5f;
     private Vector3 endOfLifePosition;
+
+    private float delayBeforeDetroy = 0.2f;
 
     public GameObject ShinyVFX;
     public GameObject endOfLifeVFX;
@@ -35,7 +36,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
 
     IEnumerator HandleFruitInFruit()
     {
-        rotationSpeed = 600f;
+        rotationSpeed = endOfLifeRotationSpeed;
 
         ShinyVFX.SetActive(false);
 
@@ -48,6 +49,7 @@ public class InfiniteFruitAnimation : MonoBehaviour
                 AudioManager.instance.PlaySound(SOUND.LIFE_SPIN);
                 soundPlayed = true;
             }
+
             transform.localPosition = Vector3.Lerp(transform.localPosition, endOfLifePosition, Time.fixedDeltaTime * movementSpeed);
 
             yield return new WaitForEndOfFrame();
@@ -55,13 +57,17 @@ public class InfiniteFruitAnimation : MonoBehaviour
 
         AudioManager.instance.PlaySound(SOUND.LIFE_POP);
 
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(delayBeforeDetroy);
 
+        PlayEndOfLifeVFX();
+        Destroy(gameObject);
+    }
+
+    private void PlayEndOfLifeVFX()
+    {
         GameObject vfx = Instantiate(endOfLifeVFX, transform.localPosition, Quaternion.identity);
         vfx.transform.parent = transform.parent;
         vfx.transform.localPosition = transform.localPosition;
         vfx.GetComponent<ParticleSystem>().Play();
-
-        Destroy(gameObject);
     }
-}
+ }

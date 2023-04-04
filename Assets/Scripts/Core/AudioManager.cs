@@ -23,7 +23,8 @@ public enum MUSIC
     INFINITE_2,
     LEGACY_1,
     LEGACY_2,
-    RANDOM
+    RANDOM,
+    NONE
 };
 
 
@@ -216,19 +217,28 @@ public class AudioManager : MonoBehaviour
         return musicName;
     }
 
-    public string SwitchMusic(GAME_MODE gameMode)
+    public string SwitchMusic(GAME_MODE gameMode, bool selectNext)
     {
         MUSIC music = SaveManager.GetMusicSettings(gameMode);
         int musicIndex = (int)music;
-        musicIndex++;
 
-        if (musicIndex >= Enum.GetValues(typeof(MUSIC)).Length)
+        if (selectNext)
         {
-            musicIndex = 0;
+            musicIndex++;
+            if (musicIndex >= Enum.GetValues(typeof(MUSIC)).Length)
+            {
+                musicIndex = 0;
+            }
+        }
+        else
+        {
+            musicIndex--;
+            if (musicIndex < 0)
+            {
+                musicIndex = Enum.GetValues(typeof(MUSIC)).Length - 1;
+            }
         }
 
-        //print($"Game Mode: {gameMode}");
-        //print($"Music: {(MUSIC)musicIndex}");
         SaveManager.UpdateMusicSettings(gameMode, (MUSIC)musicIndex);
 
         string musicName = $"{Enum.GetName(typeof(MUSIC), musicIndex)}".Replace('_', ' ');
@@ -480,6 +490,10 @@ public class AudioManager : MonoBehaviour
             {
                 menuAudioSource.clip = GetRandomMusicClip();
             }
+            if (menuMusicChoice == MUSIC.NONE)
+            {
+                menuAudioSource.clip = null;
+            }
             else
             {
                 menuAudioSource.clip = musicDictionary[menuMusicChoice];
@@ -500,6 +514,10 @@ public class AudioManager : MonoBehaviour
             {
                 legacyMusicAudioSource.clip = GetRandomMusicClip();
             }
+            if (legacyMusicChoice == MUSIC.NONE)
+            {
+                legacyMusicAudioSource.clip = null;
+            }
             else
             {
                 legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice];
@@ -519,6 +537,10 @@ public class AudioManager : MonoBehaviour
             if (infiniteMusicChoice == MUSIC.RANDOM)
             {
                 infiniteAudioSource.clip = GetRandomMusicClip();
+            }
+            if (infiniteMusicChoice == MUSIC.NONE)
+            {
+                infiniteAudioSource.clip = null;
             }
             else
             {

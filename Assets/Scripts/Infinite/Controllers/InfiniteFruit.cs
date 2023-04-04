@@ -10,6 +10,7 @@ public class InfiniteFruit : MonoBehaviour
 
     private float enterTheHoleTime = 1f;
     private float fallingFromTreeTime = 0.1f;
+    private float crushedTime = 1f;
 
     public bool collisionEnabled;
 
@@ -102,6 +103,7 @@ public class InfiniteFruit : MonoBehaviour
     {
         fruitRigidbody.simulated = false;
         AudioManager.instance.PlaySound(SOUND.FRUIT_HOLE);
+
         float t = 0;
         Vector3 fruitPosition = transform.localPosition;
         Vector3 holePosition = new Vector3(holeTransform.transform.localPosition.x, holeTransform.transform.localPosition.y, holeTransform.transform.localPosition.z + 2f);
@@ -173,7 +175,7 @@ public class InfiniteFruit : MonoBehaviour
         {
             transform.localPosition = Vector3.Lerp(fruitPosition, fruitTargetPosition, t);
 
-            t += Time.deltaTime / fallingFromTreeTime;
+            t += Time.deltaTime / crushedTime;
 
             yield return new WaitForEndOfFrame();
         }

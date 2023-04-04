@@ -14,7 +14,6 @@ public class InfiniteWormsController : MonoBehaviour
     //Difficulty Parameters
     [SerializeField] private WormsParametersSO _wormsParameters;
 
-
     private Vector3 spawnPosition;
     private bool isSpawning;
     private float _nextSpawnTime;
@@ -135,7 +134,6 @@ public class InfiniteWormsController : MonoBehaviour
         {
             Instantiate(InfiniteGameController.instance.obstacleInstanciateVFX, position, Quaternion.identity, wormsParent.transform);
             Destroy(obj);
-            //play sound 
             AudioManager.instance.PlaySound(SOUND.OBSTACLE_SPAWN);
         }
 

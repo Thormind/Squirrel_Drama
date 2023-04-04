@@ -23,6 +23,8 @@ public class InfiniteBeesController : MonoBehaviour
     private float beesYMax = 38f;
 
     private float currentY;
+
+    private float delayBetweenSpawns = 0.05f;
     private int maxTries = 500;
     public bool isAllSpawned;
 
@@ -122,7 +124,7 @@ public class InfiniteBeesController : MonoBehaviour
             Destroy(obj);
         }
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(delayBetweenSpawns);
     }
 
     private Vector3 GetRandomSpawnPosition()

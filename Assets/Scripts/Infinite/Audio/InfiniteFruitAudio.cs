@@ -19,8 +19,7 @@ public class InfiniteFruitAudio : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    { 
-        
+    {
         velocity = GetComponent<Rigidbody2D>().velocity.x;
         
         if(velocity == 0.0f)
@@ -35,9 +34,7 @@ public class InfiniteFruitAudio : MonoBehaviour
             {
                 movement.Play();
             }
-        }
-        
-        
+        } 
     }
 
     private void OnCollisionEnter2D (Collision2D collision)
