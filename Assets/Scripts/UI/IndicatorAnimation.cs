@@ -14,12 +14,9 @@ public class IndicatorAnimation : MonoBehaviour
     public Vector3 position;
 
     private float hueSpeed = 1f;
-    private float saturationSpeed = 2f;
     private float valueSpeed = 5f;
-    private float minSaturation = 0.5f;
     private float minValue = 0.75f;
     private float hue;
-    private float saturation;
     private float value;
 
     void Start()

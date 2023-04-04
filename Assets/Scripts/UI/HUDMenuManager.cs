@@ -435,7 +435,6 @@ public class HUDMenuManager : MonoBehaviour
         AudioManager.instance.PauseMusic();
         AudioManager.instance.PlaySound(SOUND.SCORE_BONUS_1);
 
-        int i = 0;
         // Loop until the timer reaches the animation duration
         while (timer < animationDuration && gameObject.activeInHierarchy)
         {
