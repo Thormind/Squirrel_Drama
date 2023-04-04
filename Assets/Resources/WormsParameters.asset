@@ -33,7 +33,7 @@ MonoBehaviour:
   - 4
   - 4
   _wormsMinSpawningInterval:
-  - 6
+  - 1
   - 6
   - 6
   - 5
@@ -43,7 +43,7 @@ MonoBehaviour:
   - 4
   - 4
   _wormsMaxSpawningInterval:
-  - 9
+  - 1
   - 9
   - 9
   - 8

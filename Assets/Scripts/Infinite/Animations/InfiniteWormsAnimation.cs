@@ -10,13 +10,16 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     private float derpSpeed;
 
+    private Vector3 initialPosition;
+
     private float outAnimationRotationOffset = 180f; // Rotation angle to rotate on the Z-axis during the out animation
 
-    public void HandleWormAnimationFunction(float inTime, float derpTime, float animationSpeed)
+    public void HandleWormAnimationFunction(float inTime, float derpTime, float animationSpeed, Vector3 initialPos)
     {
         inAnimationTime = inTime;
         derpAnimationTime = derpTime;
         derpSpeed = animationSpeed;
+        initialPosition = initialPos;
 
         StartCoroutine(HandleWormInAnimation());
 
@@ -103,6 +106,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        InfiniteWormsController.instance.RemoveSpawnedPosition(initialPosition);
         Destroy(gameObject);
 
         yield return null;
