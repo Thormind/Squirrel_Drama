@@ -12,7 +12,42 @@ ModelImporter:
   - first:
       74: 754348764379136500
     second: seRevient
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: antenneBoule
+    second: {fileID: 2100000, guid: 6938aa611e1a469459e365f807f8b20a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: antenneTige
+    second: {fileID: 2100000, guid: c36cd7ce12c420447a542d46ee3e0ff6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: part1
+    second: {fileID: 2100000, guid: 73854fd1fcc7dce4eae6cea8d74d7f37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: part2
+    second: {fileID: 2100000, guid: 08c0700bbb3ddfa438f2c38bc96fc9cb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: part3
+    second: {fileID: 2100000, guid: 96048f8d7627f2047a123f8824e1de00, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pupilles
+    second: {fileID: 2100000, guid: 01d39864cff913f4cb5f2766eafcf13e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yeux
+    second: {fileID: 2100000, guid: f9fc1e11d2c4a4340b27d7baf19f363e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -7,7 +7,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
     public AudioSource wormSound;
     private float inAnimationTime;
     private float derpAnimationTime;
-
+    private float numberOfDerps;
     private float derpSpeed;
 
     private Vector3 initialPosition;
@@ -116,10 +116,10 @@ public class InfiniteWormsAnimation : MonoBehaviour
     // ===== NEW ANIMATION ===== //
 
     [ContextMenu("Test Animation")]
-    public void HandleNewWormAnimationFunction(float inTime, float derpTime, float animationSpeed)
+    public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
     {
         inAnimationTime = inTime;
-        derpAnimationTime = derpTime;
+        numberOfDerps = derpTurns;
         derpSpeed = animationSpeed;
 
         StartCoroutine(HandleNewWormInAnimation());
@@ -143,40 +143,36 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormOutAnimation()
     {
-        Vector3 _initialPosition = transform.localPosition;
-        Quaternion _initialRotation = transform.localRotation;
-
-        Vector3 outStartPosition = new Vector3(_initialPosition.x, _initialPosition.y, 0);
-        Quaternion outStartRotation = Quaternion.Euler(0f, 0f, Random.Range(0f, outAnimationRotationOffset));
-
-        float t = 0;
+        /*
+        wormAnimator.Play("seCrinque");
 
         wormSound.Play();
 
-        while (t <= 1)
+        while (seCrinque.isPlaying)
         {
-            t += Time.fixedDeltaTime / 0.5f;
-
-            transform.localPosition = Vector3.Lerp(_initialPosition, outStartPosition, t);
-            transform.localRotation = Quaternion.Lerp(_initialRotation, outStartRotation, t);
-
             yield return new WaitForFixedUpdate();
         }
 
         StartCoroutine(HandleNewWormDerpAnimation());
-
+        */
         yield return null;
     }
 
     IEnumerator HandleNewWormDerpAnimation()
     {
-        float t = 0;
+        float remainingTurns = numberOfDerps;
 
-        while (t <= 1)
+        while (remainingTurns > 0)
         {
-            transform.Rotate(Vector3.forward * Time.fixedDeltaTime * derpSpeed, Space.World);
+            /*
+            wormAnimator.Play("seTourne");
 
-            t += Time.fixedDeltaTime / derpAnimationTime;
+            while (seTourne.isPlaying)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            */
+            remainingTurns--;
 
             yield return new WaitForFixedUpdate();
         }
@@ -188,26 +184,17 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormBackInAnimation()
     {
-        Vector3 _initialPosition = transform.localPosition;
-        Quaternion _initialRotation = transform.localRotation;
+        /*
+        wormAnimator.Play("seRevient"); 
 
-        Vector3 inStartPosition = new Vector3(_initialPosition.x, _initialPosition.y, 1f);
-        Quaternion inStartRotation = Quaternion.Euler(-90f, 0f, 0f);
-
-        float t = 0;
-
-        while (t <= 1)
+        while (seRevient.isPlaying)
         {
-            t += Time.fixedDeltaTime / 0.5f;
-
-            transform.localPosition = Vector3.Lerp(_initialPosition, inStartPosition, t);
-            transform.localRotation = Quaternion.Lerp(_initialRotation, inStartRotation, t);
-
             yield return new WaitForFixedUpdate();
         }
 
         Destroy(gameObject);
-
+        */
         yield return null;
+
     }
 }
