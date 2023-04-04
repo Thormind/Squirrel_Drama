@@ -44,6 +44,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnEnable()
     {
+        AudioManager.instance.PlayMenuMusic();
+
         quitPanel.SetActive(false);
         mainPanel.SetActive(true);
 
