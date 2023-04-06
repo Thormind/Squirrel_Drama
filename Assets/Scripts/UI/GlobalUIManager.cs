@@ -7,6 +7,24 @@ using UnityEngine.UI;
 
 
 [System.Serializable]
+public enum BUTTON
+{
+    INFINITE_MODE,
+    LEGACY_MODE,
+    SETTINGS,
+    ANIMATION,
+    MISC,
+    QUIT,
+    CONFIRM_QUIT,
+    TIME_OF_DAY,
+    RESET_DATA,
+    CONFIRM_RESET_DATA,
+    ANY_KEY,
+    NONE,
+    MUSIC
+};
+
+[System.Serializable]
 public enum MENU
 {
     MENU_TITLE_SCREEN,
@@ -63,6 +81,28 @@ public class GlobalUIManager : MonoBehaviour
     public static bool isControllerConnected = false;
 
     public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
+
+    public delegate void SelectedButtonChangedEventHandler(BUTTON newSelectedButton);
+    public static event SelectedButtonChangedEventHandler OnSelectedButtonChanged;
+
+    public static BUTTON selectedButton
+    {
+        get { return _selectedButton; }
+        set
+        {
+            print($"SelectedButton changed to {value}!");
+            _previousSelectedButton = _selectedButton;
+            _selectedButton = value;
+
+            if (_previousSelectedButton != value)
+            {
+                OnSelectedButtonChanged?.Invoke(_selectedButton);
+            }
+
+        }
+    }
+    private static BUTTON _selectedButton;
+    private static BUTTON _previousSelectedButton;
 
     public void Awake()
     {
@@ -571,6 +611,12 @@ public class GlobalUIManager : MonoBehaviour
     public void EnableInputs(bool isEnabled)
     {
         es.enabled = isEnabled;
+    }
+
+    public void SetSelected(GameObject selected, BUTTON button, bool alt = false)
+    {
+        selectedButton = button;
+        es.SetSelectedGameObject(selected);
     }
 
     public void SetFirstSelected (GameObject firstSelected, bool alt = false)

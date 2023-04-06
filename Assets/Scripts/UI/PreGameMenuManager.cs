@@ -38,7 +38,8 @@ public class PreGameMenuManager : MonoBehaviour
         musicText.text = AudioManager.instance.GetMusicName(ScenesManager.gameMode);
 
         GlobalUIManager.instance.specificMenu = MENU.NONE;
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+        GlobalUIManager.instance.SetSelected(anyKeyButton.gameObject, BUTTON.ANY_KEY);
+        GlobalUIManager.selectedButton = BUTTON.ANY_KEY;
 
         previous = GlobalUIManager.instance.UIControls.UI.Previous;
         next = GlobalUIManager.instance.UIControls.UI.Next;
@@ -94,7 +95,7 @@ public class PreGameMenuManager : MonoBehaviour
     {
         string musicName = AudioManager.instance.SwitchMusic(ScenesManager.gameMode, selectNext);
         musicText.text = musicName;
-        GlobalUIManager.instance.es.SetSelectedGameObject(anyKeyButton.gameObject);
+        GlobalUIManager.instance.SetSelected(anyKeyButton.gameObject, BUTTON.ANY_KEY);
         selectNext = true;
     }
 

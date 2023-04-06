@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 6
 --- !u!114 &7439006221122421061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,6 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &2996955315830367929
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,6 +723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 2
 --- !u!1 &3072200380661677162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,6 +1312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 5
 --- !u!1 &3072200381200519448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,6 +1480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 3
 --- !u!1 &3072200381213216195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 0
 --- !u!1 &3072200381541529426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1966,6 +1972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 1
 --- !u!1 &3072200381819273109
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,6 +2351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 4
 --- !u!1 &3072200382226189020
 GameObject:
   m_ObjectHideFlags: 0
@@ -3384,6 +3392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 6
 --- !u!114 &6389392908642897884
 MonoBehaviour:
   m_ObjectHideFlags: 0

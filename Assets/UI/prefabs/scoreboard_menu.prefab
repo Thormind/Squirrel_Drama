@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 6698961009771761576}
   - component: {fileID: 4648024615743316944}
   - component: {fileID: 7483537181565845558}
+  - component: {fileID: 3271520186978772447}
   m_Layer: 5
   m_Name: yes_button
   m_TagString: Untagged
@@ -328,6 +329,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.40784314}
   m_EffectDistance: {x: 1, y: -1.5}
   m_UseGraphicAlpha: 1
+--- !u!114 &3271520186978772447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421588917803154247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &1193135807920582268
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,6 +356,7 @@ GameObject:
   - component: {fileID: 7653861342970642849}
   - component: {fileID: 871327185436083203}
   - component: {fileID: 4521515611895200001}
+  - component: {fileID: 8779849085623793481}
   m_Layer: 5
   m_Name: no_button
   m_TagString: Untagged
@@ -482,6 +497,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.40784314}
   m_EffectDistance: {x: 1, y: -1.5}
   m_UseGraphicAlpha: 1
+--- !u!114 &8779849085623793481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193135807920582268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &1538801488653073805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1591,6 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &5564049774970781704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,6 +1787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &5667525886833107401
 GameObject:
   m_ObjectHideFlags: 0
@@ -2371,6 +2401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbcf5bfb5e3782d4ea62347522ee0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 11
 --- !u!1 &9036886285526618574
 GameObject:
   m_ObjectHideFlags: 0

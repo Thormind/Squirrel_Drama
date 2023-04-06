@@ -39,7 +39,21 @@ public class ScenesManager : MonoBehaviour
     public float loadProgress;
     public float unloadProgress;
 
-	public static GAME_MODE gameMode;
+	public delegate void GameModeChangedEventHandler(GAME_MODE newGameMode);
+	public static event GameModeChangedEventHandler OnGameModeChanged;
+	public static GAME_MODE gameMode
+	{
+		get { return _gameMode; }
+		set
+		{
+			print("gameMode changed!");
+			_gameMode = value;
+			OnGameModeChanged?.Invoke(_gameMode);
+		}
+	}
+	private static GAME_MODE _gameMode;
+
+
 	public static TIME_OF_DAY timeOfDay;
 
 	public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
@@ -51,6 +65,7 @@ public class ScenesManager : MonoBehaviour
 		get { return _gameState; }
 		set
 		{
+			print("gameState changed!");
 			previousGameState = _gameState;
 			_gameState = value;
 			OnGameStateChanged?.Invoke(_gameState);

@@ -177,12 +177,15 @@ public class SaveManager : MonoBehaviour
     }
 
     //TIME OF DAY SETTINGS
+    public delegate void TimeOfDayChangedEventHandler(TIME_OF_DAY newTimeOfDay);
+    public static event TimeOfDayChangedEventHandler OnTimeOfDayChanged;
     public TIME_OF_DAY TimeOfDay
     {
         get { return timeOfDay; }
         set
         {
             timeOfDay = value;
+            OnTimeOfDayChanged?.Invoke(timeOfDay);
             SaveTimeOfDay();
         }
     }
@@ -210,6 +213,7 @@ public class SaveManager : MonoBehaviour
         {
             timeOfDay = TIME_OF_DAY.NIGHT;
         }
+        OnTimeOfDayChanged?.Invoke(timeOfDay);
 
     }
 }

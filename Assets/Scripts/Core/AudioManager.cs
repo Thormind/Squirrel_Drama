@@ -542,7 +542,7 @@ public class AudioManager : MonoBehaviour
             {
                 infiniteAudioSource.clip = null;
             }
-            else
+            if (infiniteMusicChoice != MUSIC.RANDOM && infiniteMusicChoice != MUSIC.NONE)
             {
                 infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice];
             }

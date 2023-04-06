@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
 {
+    [SerializeField] private BUTTON button;
+
     private Vector3 confirmTargetScale;
     private Vector3 selectTargetScale;
     private Vector3 originalScale;
@@ -32,12 +34,14 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnSelect(BaseEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.MOUSEOVER);
+        GlobalUIManager.selectedButton = button;
         StartCoroutine(AnimateButton(transform.localScale, selectTargetScale));
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.MOUSEOVER);
+        GlobalUIManager.selectedButton = button;
         StartCoroutine(AnimateButton(transform.localScale, selectTargetScale));
     }
 
@@ -50,11 +54,13 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnDeselect(BaseEventData eventData)
     {
+        GlobalUIManager.selectedButton = BUTTON.NONE;
         StartCoroutine(AnimateButton(transform.localScale, originalScale));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        GlobalUIManager.selectedButton = BUTTON.NONE;
         StartCoroutine(AnimateButton(transform.localScale, originalScale));
     }
 
@@ -63,6 +69,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerDown(PointerEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.CLICK);
+        GlobalUIManager.selectedButton = BUTTON.NONE;
         StartCoroutine(AnimateButton(transform.localScale, confirmTargetScale));
     }
 
@@ -70,6 +77,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnSubmit(BaseEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.CLICK);
+        GlobalUIManager.selectedButton = BUTTON.NONE;
         if (gameObject.activeInHierarchy)
         {
             StartCoroutine(AnimateSubmitButton(transform.localScale, confirmTargetScale));
