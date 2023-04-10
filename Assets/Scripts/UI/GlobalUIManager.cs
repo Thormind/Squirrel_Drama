@@ -90,7 +90,6 @@ public class GlobalUIManager : MonoBehaviour
         get { return _selectedButton; }
         set
         {
-            print($"SelectedButton changed to {value}!");
             _previousSelectedButton = _selectedButton;
             _selectedButton = value;
 

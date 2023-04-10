@@ -69,7 +69,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerDown(PointerEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.CLICK);
-        GlobalUIManager.selectedButton = BUTTON.NONE;
+        //GlobalUIManager.selectedButton = BUTTON.NONE;
         StartCoroutine(AnimateButton(transform.localScale, confirmTargetScale));
     }
 
@@ -77,7 +77,7 @@ public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnSubmit(BaseEventData eventData)
     {
         AudioManager.instance.PlaySound(SOUND.CLICK);
-        GlobalUIManager.selectedButton = BUTTON.NONE;
+        //GlobalUIManager.selectedButton = BUTTON.NONE;
         if (gameObject.activeInHierarchy)
         {
             StartCoroutine(AnimateSubmitButton(transform.localScale, confirmTargetScale));

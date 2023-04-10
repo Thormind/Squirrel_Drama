@@ -18,7 +18,172 @@ public enum DIALOG_POSITION
 
 
 public class DialogAnimatorController : MonoBehaviour
-{
+{ 
+    private List<string> welcomeDialogList = new List<string>()
+    {
+        "HI!",
+        "Greetings, friend!",
+        "Hey there, welcome aboard!",
+        "Good to see you! Let's have some fun!",
+        "Welcome, friend! Ready for a challenge?",
+        "Hiya! Welcome to the game!",
+        "Welcome, welcome! Glad you could make it.",
+        "Howdy, partner! Welcome to the wild.",
+        "Ahoy there! Welcome aboard our fruity adventure.",
+        "Welcome to the funhouse! Let's get started.",
+        "Squeak-squeak, welcome to my nutty world!",
+        "Hey there, nut-lover! Welcome to our squirrelly adventure!",
+        "Welcome to the squirrel's nest! Let's have some nutty fun!",
+        "Get ready to go nuts, my friend! Welcome to my fun-filled world!",
+        "Welcome to our forest, where the fruits and nuts are plentiful and the fun never stops!",
+        "Squirrelly greetings! Welcome to our playful world!",
+        "Welcome to the treehouse, where the fun and games never end!",
+        "Get your tail shaking and your acorns ready, because you're in for a fun-filled welcome!",
+        "Welcome to our cozy burrow, where the fun and games are endless!",
+        "Let's play and explore together! Welcome to the squirrel's wonderland!"
+    };
+
+    private List<string> settingsDialogList = new List<string>()
+    {
+        "Let's tweak some things!",
+        "Squeak-squeak! Let's get nutty and customize the game!",
+        "This is where the magic happens, acorn addicts! Let's tweak some things!",
+        "Woo-hoo! Welcome to the treehouse of customization!",
+        "Let's shake our tails and make some changes in the settings, woohoo!",
+        "Nutty squirrel alert! Get ready to make some adjustments!",
+        "Squirrelly customization awaits! Let's go crazy with the settings!",
+        "Nuts about tweaking settings? Welcome to the squirrel zone!",
+        "Are you ready to play with the settings? Because I'm ready to play with my nuts!",
+        "Welcome to the squirrel's playground! Let's hop into the settings and have some fun!",
+        "You're in the right place if you want to make some nutty changes, my friends!"
+    };
+
+    private List<string> animationDialogList = new List<string>()
+    {
+        "Grab some nuts and get cozy, because it's movie time!",
+        "Squirrelly movie alert! Let's get our popcorn and watch some animations!",
+        "Welcome to our movie theatre in the tree! Let's get started with some animated fun!",
+        "Get your acorns ready and your tail comfortable, because we're watching a video animation!",
+        "Let's go on a nutty adventure together and watch a movie!",
+        "It's time to sit back, relax, and enjoy some squirrel-approved entertainment!",
+        "Get ready to be entertained, because we're watching a video animation!",
+        "Welcome to our animated wonderland! Let's watch a movie and escape reality for a while!",
+        "Get ready for some animated fun, because the movie is about to start!",
+        "It's time to curl up and watch a video animation, squirrel-style!"
+    };
+
+    private List<string> miscDialogList = new List<string>()
+    {
+        "A lot of stuff going on here!",
+        "Welcome to the Misc zone! This is where you can find all kinds of fun squirrel stuff!",
+        "Miscellaneous? More like mis-squirrel-aneous! Check out all the cool stuff we have in here!",
+        "Ready for a little squirrel exploration? Click on Misc to discover all the hidden treasures!",
+        "Buckle up, friend! The Misc button is a wild ride full of squirrel art, trophies, and more!",
+        "Don't be fooled by the name, Misc has a lot of fun stuff! Come and see for yourself!"
+    };
+
+    private List<string> quitDialogList = new List<string>()
+    {
+        "Heh, don't you dare to leave! There is still plenty of fun to be made!",
+        "Wait! Are you sure you wanna leave? I still have plenty of fruits left for you to collect!",
+        "Leaving so soon? But we were having so much fun! Let's keep playing!",
+        "Don't press that button! There's still so much to explore in our squirrelly world!",
+        "Hold on a sec! If you leave now, you'll miss out on all the nutty adventures we have planned!",
+        "Please don't leave me hanging! Stay and play a little longer with me, pretty please?",
+        "Leaving already? But I haven't even shown you my favorite tree in the forest yet!",
+        "Hey, don't go! You're my favorite player! Let's play some more!",
+        "Are you really leaving? But I was just about to teach you some new squirrel tricks!",
+        "Stay and play a little longer! I promise we'll have a squirrel-tastic time together!",
+        "Don't give up on the fun just yet! Let's keep playing and see what other squirrelly shenanigans we can get into!"
+    };
+
+    private List<string> confirmQuitDialogList = new List<string>()
+    {
+        "YOU REALLY WANNA LEAVE?!?!",
+        "Are you sure you want to leave? Don't make me beg like a squirrel for you to stay!",
+        "Wait, hold on a sec! Think about all the fun you're going to miss out on if you quit now!",
+        "You really want to leave me all alone? But we were having so much fun together!",
+        "Don't do it, friend! Think of all the squirrelly mischief we could get into if you stay a little longer!",
+        "Really? You're going to leave just like that? What am I going to do with all these fruits?"
+    };
+
+    private List<string> resetDialogList = new List<string>()
+    {
+        "Feeling like a fresh start, huh? Click here to reset all your squirrelly data!",
+        "Hey there! Want to erase all your high scores and start from scratch? This button's for you!",
+        "Looking to shake things up? Resetting your data is the perfect way to do it! Just click here!",
+        "Ready to turn over a new leaf? Hit that button and let's reset all your squirrel data together!",
+        "Thinking about starting fresh? Just click here to reset everything and embark on a brand new squirrelly adventure!"
+    };
+
+    private List<string> confirmResetDialogList = new List<string>()
+    {
+        "ARE YOU SURE YOU WANNA RESET ALL OF YOUR BEST SCORES?",
+        "You sure you want to reset everything? Are you absolutely positively sure?",
+        "Wait, wait, wait! Before you hit that button, let's talk about all the memories we'll be deleting! Are you ready for this?",
+        "You're really gonna reset all your data? That's a pretty big decision, squirrel friend! Are you sure you're ready for it?",
+        "Think long and hard about this, my friend! Once you hit that button, there's no turning back! Are you ready to start fresh?",
+        "I can't believe you're really going to do it! Are you sure you're not going to miss all those old high scores? You're really sure?"
+    };
+
+    private List<string> preGameDialogList = new List<string>()
+    {
+        "Let's go nuts!",
+        "Game on, squirrel friend!",
+        "Ready, set, climb!",
+        "Get set, collect!",
+        "Time to show off those squirrel skills!"
+    };
+
+    private List<string> musicDialogList = new List<string>()
+    {
+        "Let's groove to some tunes!",
+        "Pump up the jams, squirrel style!",
+        "Let's turn up the beat, acorn style!",
+        "Are you ready to rock, squirrel friend?",
+        "Let's make some noise, nutty style!"
+    };
+
+    private List<string> timeOfDayDialogList = new List<string>()
+    {
+        "We can skip time here, try it!",
+        "Let's time travel, acorn style!",
+        "Are you a morning or a night squirrel?",
+        "Time flies when you're having fun!",
+        "Let's see what time of day suits your squirrel style!",
+        "Time waits for no squirrel, so let's change it up!"
+    };
+
+    private List<string> legacyDialogList = new List<string>()
+    {
+        "I have an original Ice Cold Beer Arcade in my lounge, you wanna play?",
+        "Do you wanna play the original Ice Cold Beer arcade game with me?",
+        "Get ready to play the arcade classic, Ice Cold Beer! Join me in Legacy mode for some retro squirrel fun!",
+        "Hey, have you heard of Ice Cold Beer? It's the one game customers ask for by name! Come play with me in Legacy mode!",
+        "Do you have the skills to play the classic Ice Cold Beer arcade game? Let's find out in Legacy mode!",
+        "Come join me in Legacy mode for a trip down memory lane with the original arcade game, Ice Cold Beer!",
+        "Ready to play the game that started it all? Let's go old school with Ice Cold Beer in Legacy mode!",
+        "In Legacy mode, we can play the arcade classic, Ice Cold Beer! Let's see who can get the high score!",
+        "Let's take a break from the squirrelly adventures and play some Ice Cold Beer in Legacy mode!",
+        "I've got an original Ice Cold Beer arcade in my lounge! Wanna play? Join me in Legacy mode!",
+        "Get your game on and let's play the classic Ice Cold Beer arcade game in Legacy mode! Can you beat my high score?"
+    };
+
+    private List<string> infiniteDialogList = new List<string>()
+    {
+        "Welcome to the infinite game mode! Let's dodge some obstacles and get some fruits!",
+        "Squirrelly game alert! Let's climb the tree and bring me my fruit, while dodging bees, worms, holes, and bears!",
+        "Get ready to dodge and climb, because we're playing Infinite mode! Also, don't forget to bring me some fruit!",
+        "Hold onto your acorns, because we're going on a squirrel adventure! Watch out for the bees, worms, holes, and bears while bringing me my fruit!",
+        "Get your tail ready for some squirrel acrobatics! In Infinite mode, you must dodge bees, worms, holes, and bears to bring me my delicious fruit!",
+        "Let's get nutty in Infinite mode! We'll climb the tree, dodge obstacles, and grab fruit, all while having fun!",
+        "Welcome to the squirrel's playground! In Infinite mode, we'll dodge bees, worms, holes, and bears while bringing me my precious fruit!",
+        "Get your paws ready, because we're climbing the tree in Infinite mode! Watch out for the obstacles, and don't forget to bring me my fruit!",
+        "Let's get our game on in Infinite mode! We'll climb higher and higher, dodge obstacles, and bring me my fruit!",
+        "It's time to show off our squirrel skills in Infinite mode! Let's climb to the top, dodge obstacles, and bring me my delicious fruit!",
+        "Dodge holes, bees, worms and bears! Be careful! Also, bring me my fruit!"
+    };
+
     private DIALOG_POSITION _dialogPosition;
     private Vector3 targetDialogPosition;
     private Vector3 targetDialogScale;
@@ -377,50 +542,50 @@ public class DialogAnimatorController : MonoBehaviour
         switch (newSelectedButton)
         {
             case BUTTON.INFINITE_MODE:
-                AnimateDialogText("Dodge holes, bees, worms and bears! Be careful! Also, bring me my fruit!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(infiniteDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.LEGACY_MODE:
-                AnimateDialogText("I have an original Ice Cold Beer Arcade in my lounge, you wanna play?", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(legacyDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.SETTINGS:
-                AnimateDialogText("Let's tweak some things!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(settingsDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.ANIMATION:
-                AnimateDialogText("Let's watch a movie!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(animationDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.MISC:
-                AnimateDialogText("A lot of stuff going on here!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(miscDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.QUIT:
-                AnimateDialogText("Heh, don't you dare to leave! There is still plenty of fun to be made!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(quitDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.CONFIRM_QUIT:
-                AnimateDialogText("YOU REALLY WANNA LEAVE?!?!", DIALOG_ANIMATION_MODE.PANIC);
+                AnimateDialogText(RandomDialogChooser(confirmQuitDialogList), DIALOG_ANIMATION_MODE.PANIC);
                 break;
             case BUTTON.TIME_OF_DAY:
-                AnimateDialogText("We can skip time here, try it!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(timeOfDayDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.RESET_DATA:
-                AnimateDialogText("You wanna reset your data?", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(resetDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
             case BUTTON.CONFIRM_RESET_DATA:
-                AnimateDialogText("ARE YOU SURE YOU WANNA RESET ALL OF YOUR BEST SCORES?", DIALOG_ANIMATION_MODE.PANIC);
+                AnimateDialogText(RandomDialogChooser(confirmResetDialogList), DIALOG_ANIMATION_MODE.PANIC);
                 break;
             case BUTTON.ANY_KEY:
                 if (ScenesManager.gameMode == GAME_MODE.NONE)
                 {
-                    AnimateDialogText("HI!", DIALOG_ANIMATION_MODE.NORMAL);
+                    AnimateDialogText(RandomDialogChooser(welcomeDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 }
                 if (ScenesManager.gameMode == GAME_MODE.INFINITE_MODE)
                 {
-                    AnimateDialogText("GET READY FOR SOME FUN!", DIALOG_ANIMATION_MODE.NORMAL);
+                    AnimateDialogText(RandomDialogChooser(preGameDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 }
                 break;
             case BUTTON.NONE:
                 ClearDialogText();
                 break;
             case BUTTON.MUSIC:
-                AnimateDialogText("THIS WILL SOUND SO GOOD IN MY EARS!", DIALOG_ANIMATION_MODE.NORMAL);
+                AnimateDialogText(RandomDialogChooser(musicDialogList), DIALOG_ANIMATION_MODE.NORMAL);
                 break;
         }
     }
@@ -477,6 +642,24 @@ public class DialogAnimatorController : MonoBehaviour
         }
 
         AnimateDialogText(mainText.text, DIALOG_ANIMATION_MODE.NORMAL);
+    }
+
+
+    // Function to randomly choose a string from the list
+    private string RandomDialogChooser(List<string> dialogList)
+    {
+        // Shuffle the list using Fisher-Yates algorithm
+        for (int i = 0; i < dialogList.Count - 1; i++)
+        {
+            int j = UnityEngine.Random.Range(i, dialogList.Count);
+            string temp = dialogList[i];
+            dialogList[i] = dialogList[j];
+            dialogList[j] = temp;
+        }
+
+        // Pick a random element from the shuffled list
+        int randomIndex = Random.Range(0, dialogList.Count);
+        return dialogList[randomIndex];
     }
 
 
