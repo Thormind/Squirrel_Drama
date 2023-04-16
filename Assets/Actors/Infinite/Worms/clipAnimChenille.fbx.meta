@@ -12,42 +12,45 @@ ModelImporter:
   - first:
       74: 754348764379136500
     second: seRevient
+  - first:
+      74: 204609142861339026
+    second: Sort
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: antenneBoule
-    second: {fileID: 2100000, guid: 6938aa611e1a469459e365f807f8b20a, type: 2}
+    second: {fileID: 2100000, guid: 3f1d224405c7e414f81b2ebd0d440232, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: antenneTige
-    second: {fileID: 2100000, guid: c36cd7ce12c420447a542d46ee3e0ff6, type: 2}
+    second: {fileID: 2100000, guid: c8bca79eecaa1af43b74ca1694877a1c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: part1
-    second: {fileID: 2100000, guid: 73854fd1fcc7dce4eae6cea8d74d7f37, type: 2}
+    second: {fileID: 2100000, guid: 749e1ffebdc121b47ab7ae794408ed1c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: part2
-    second: {fileID: 2100000, guid: 08c0700bbb3ddfa438f2c38bc96fc9cb, type: 2}
+    second: {fileID: 2100000, guid: e8f9666565e1d8749a4af500edf12f0f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: part3
-    second: {fileID: 2100000, guid: 96048f8d7627f2047a123f8824e1de00, type: 2}
+    second: {fileID: 2100000, guid: 9c8ac5b5cb94f524e9eb6376ee68f133, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pupilles
-    second: {fileID: 2100000, guid: 01d39864cff913f4cb5f2766eafcf13e, type: 2}
+    second: {fileID: 2100000, guid: 125e3889106685b4eaf818d13dd5168a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: yeux
-    second: {fileID: 2100000, guid: f9fc1e11d2c4a4340b27d7baf19f363e, type: 2}
+    second: {fileID: 2100000, guid: 2c2aec03a1419004fa061a3a4614a040, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -75,7 +78,123 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: SeCrinque
+      takeName: SeCrinque
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 75
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: seTourne
+      takeName: seTourne
+      internalID: 0
+      firstFrame: 76
+      lastFrame: 124
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: seRevient
+      takeName: seRevient
+      internalID: 0
+      firstFrame: 125
+      lastFrame: 260
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sort
+      takeName: SeCrinque
+      internalID: 0
+      firstFrame: -30
+      lastFrame: 0
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []

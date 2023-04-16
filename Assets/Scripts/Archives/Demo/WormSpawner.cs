@@ -45,7 +45,7 @@ public class WormSpawner : MonoBehaviour
 
     public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
     {
-        GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
+        GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(0, 0, 0), wormsParent.transform);
 
         float randomInAnimationTime = Random.Range(WormsInAnimationTime - 0.5f, WormsInAnimationTime + 0.5f);
         float randomNumberOfDerpsAnimation = Random.Range(WormsDerpAnimationTime - 1f, WormsDerpAnimationTime + 1f);

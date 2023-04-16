@@ -5,6 +5,7 @@ using UnityEngine;
 public class InfiniteWormsAnimation : MonoBehaviour
 {
     public AudioSource wormSound;
+    public Animator wormAnimator;
     private float inAnimationTime;
     private float derpAnimationTime;
     private float numberOfDerps;
@@ -12,7 +13,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     private Vector3 initialPosition;
 
-    private float outAnimationRotationOffset = 180f; // Rotation angle to rotate on the Z-axis during the out animation
+    private float outAnimationRotationOffset = 0f; // Rotation angle to rotate on the Z-axis during the out animation
 
     public void HandleWormAnimationFunction(float inTime, float derpTime, float animationSpeed, Vector3 initialPos)
     {
@@ -118,6 +119,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
     [ContextMenu("Test Animation")]
     public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
     {
+        wormAnimator = GetComponent<Animator>();
         inAnimationTime = inTime;
         numberOfDerps = derpTurns;
         derpSpeed = animationSpeed;
@@ -129,32 +131,61 @@ public class InfiniteWormsAnimation : MonoBehaviour
     {
         float t = 0;
 
+        wormAnimator.Play("Sort");
+
+        // Both while loops are needed because the clip does not start instantly. The first loop
+        // wait for the clip to start and the second one wait for the clip to finish.
+
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
         while (t <= 1)
         {
+
+
             t += Time.fixedDeltaTime / inAnimationTime;
 
             yield return new WaitForFixedUpdate();
         }
 
-        StartCoroutine(HandleNewWormOutAnimation());
+       StartCoroutine(HandleNewWormOutAnimation());
 
         yield return null;
     }
 
     IEnumerator HandleNewWormOutAnimation()
     {
-        /*
-        wormAnimator.Play("seCrinque");
+        Debug.Log("wormOut");
 
-        wormSound.Play();
+        wormAnimator.Play("SeCrinque");
 
-        while (seCrinque.isPlaying)
+        // wormSound.Play();
+
+        // Both while loops are needed because the clip does not start instantly. The first loop
+        // wait for the clip to start and the second one wait for the clip to finish. 
+
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
         {
             yield return new WaitForFixedUpdate();
         }
 
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        Debug.Log("SeCrinque termine");
+
+
         StartCoroutine(HandleNewWormDerpAnimation());
-        */
+     
         yield return null;
     }
 
@@ -164,14 +195,22 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         while (remainingTurns > 0)
         {
-            /*
+            
             wormAnimator.Play("seTourne");
 
-            while (seTourne.isPlaying)
+            // Both while loops are needed because the clip does not start instantly. The first loop
+            // wait for the clip to start and the second one wait for the clip to finish.
+
+            while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
             {
                 yield return new WaitForFixedUpdate();
             }
-            */
+
+            while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
             remainingTurns--;
 
             yield return new WaitForFixedUpdate();
@@ -184,17 +223,29 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormBackInAnimation()
     {
-        /*
-        wormAnimator.Play("seRevient"); 
+        
+        wormAnimator.Play("seRevient");
 
-        while (seRevient.isPlaying)
+        // Both while loops are needed because the clip does not start instantly. The first loop
+        // wait for the clip to start and the second one wait for the clip to finish.
+
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        while (wormAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return new WaitForFixedUpdate();
         }
 
         Destroy(gameObject);
-        */
+        
         yield return null;
 
     }
+
+
+
+
 }
