@@ -117,6 +117,23 @@ public class InfiniteWormsAnimation : MonoBehaviour
     // ===== NEW ANIMATION ===== //
 
     [ContextMenu("Test Animation")]
+    public void TestHandleNewWormAnimationFunction()
+    {
+        float randomInAnimationTime = Random.Range(1.5f - 0.5f, 1.5f + 0.5f);
+        float randomNumberOfDerpsAnimation = Random.Range(2f - 1f, 2f + 1f);
+        float randomAnimationSpeed = Random.Range(200f - 50f, 200f + 50f);
+
+        wormAnimator = GetComponent<Animator>();
+        inAnimationTime = 1.5f;
+        numberOfDerps = 2f;
+        derpSpeed = 200f;
+
+
+
+        StartCoroutine(HandleNewWormInAnimation());
+    }
+
+
     public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
     {
         wormAnimator = GetComponent<Animator>();
@@ -129,6 +146,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormInAnimation()
     {
+        Debug.Log("testing animation!");
         float t = 0;
 
         wormAnimator.Play("Sort");
