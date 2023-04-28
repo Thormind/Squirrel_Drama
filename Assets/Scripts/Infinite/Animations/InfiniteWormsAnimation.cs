@@ -10,6 +10,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
     private float derpAnimationTime;
     private float numberOfDerps;
     private float derpSpeed;
+    private float remainingDerp;
 
     private Vector3 initialPosition;
 
@@ -116,6 +117,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     // ===== NEW ANIMATION ===== //
 
+    /*
     [ContextMenu("Test Animation")]
     public void TestHandleNewWormAnimationFunction()
     {
@@ -125,30 +127,35 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         wormAnimator = GetComponent<Animator>();
         inAnimationTime = 1.5f;
-        numberOfDerps = 2f;
-        derpSpeed = 200f;
+        numberOfDerps = 3f;
+        derpSpeed = 1000f;
 
 
 
         StartCoroutine(HandleNewWormInAnimation());
     }
-
+    */
 
     public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
     {
         wormAnimator = GetComponent<Animator>();
         inAnimationTime = inTime;
         numberOfDerps = derpTurns;
-        derpSpeed = animationSpeed;
+        //remainingDerp = numberOfDerps;
+        remainingDerp = 3f;
+
+        // *** Animation speed is multiplicative, 2f = 2x speed ***
+        //derpSpeed = animationSpeed;
+        derpSpeed = 5f;
 
         StartCoroutine(HandleNewWormInAnimation());
     }
 
     IEnumerator HandleNewWormInAnimation()
     {
-        Debug.Log("testing animation!");
         float t = 0;
 
+        wormAnimator.speed = derpSpeed;
         wormAnimator.Play("Sort");
 
         // Both while loops are needed because the clip does not start instantly. The first loop
@@ -173,16 +180,15 @@ public class InfiniteWormsAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-       StartCoroutine(HandleNewWormOutAnimation());
+        StartCoroutine(HandleNewWormOutAnimation());
 
         yield return null;
     }
 
     IEnumerator HandleNewWormOutAnimation()
     {
-        Debug.Log("wormOut");
-
         wormAnimator.Play("SeCrinque");
+
 
         // wormSound.Play();
 
@@ -199,9 +205,6 @@ public class InfiniteWormsAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        Debug.Log("SeCrinque termine");
-
-
         StartCoroutine(HandleNewWormDerpAnimation());
      
         yield return null;
@@ -209,12 +212,18 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormDerpAnimation()
     {
-        float remainingTurns = numberOfDerps;
-
-        while (remainingTurns > 0)
+        while (remainingDerp > 0)
         {
-            
-            wormAnimator.Play("seTourne");
+            if (wormAnimator.GetCurrentAnimatorStateInfo(0).IsName("seTourne"))
+            {
+                Debug.Log("seTourne0");
+                wormAnimator.Play("seTourne0");
+            }
+            else
+            {
+                Debug.Log("seTourne");
+                wormAnimator.Play("seTourne");
+            }
 
             // Both while loops are needed because the clip does not start instantly. The first loop
             // wait for the clip to start and the second one wait for the clip to finish.
@@ -229,9 +238,10 @@ public class InfiniteWormsAnimation : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
 
-            remainingTurns--;
-
+            Debug.Log("derp: " + remainingDerp);
+            remainingDerp--;
             yield return new WaitForFixedUpdate();
+
         }
 
         StartCoroutine(HandleNewWormBackInAnimation());
