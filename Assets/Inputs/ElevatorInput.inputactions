@@ -100,6 +100,17 @@
                 },
                 {
                     "name": "",
+                    "id": "9ea95d50-8dd4-4403-821e-8bde07d76680",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightEndUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "177a8b35-6b2c-4af4-972e-ef630f40508e",
                     "path": "<Gamepad>/rightStick/up",
                     "interactions": "",
@@ -113,6 +124,17 @@
                     "name": "",
                     "id": "cca07718-78eb-4842-872e-84cfc48edee1",
                     "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightEndDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73f17a88-200d-42df-b7da-a971553f739a",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
