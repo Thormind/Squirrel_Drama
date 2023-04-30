@@ -117,25 +117,6 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     // ===== NEW ANIMATION ===== //
 
-    /*
-    [ContextMenu("Test Animation")]
-    public void TestHandleNewWormAnimationFunction()
-    {
-        float randomInAnimationTime = Random.Range(1.5f - 0.5f, 1.5f + 0.5f);
-        float randomNumberOfDerpsAnimation = Random.Range(2f - 1f, 2f + 1f);
-        float randomAnimationSpeed = Random.Range(200f - 50f, 200f + 50f);
-
-        wormAnimator = GetComponent<Animator>();
-        inAnimationTime = 1.5f;
-        numberOfDerps = 3f;
-        derpSpeed = 1000f;
-
-
-
-        StartCoroutine(HandleNewWormInAnimation());
-    }
-    */
-
     public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
     {
         wormAnimator = GetComponent<Animator>();
@@ -146,7 +127,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         // *** Animation speed is multiplicative, 2f = 2x speed ***
         //derpSpeed = animationSpeed;
-        derpSpeed = 5f;
+        derpSpeed = 2f;
 
         StartCoroutine(HandleNewWormInAnimation());
     }
@@ -216,12 +197,10 @@ public class InfiniteWormsAnimation : MonoBehaviour
         {
             if (wormAnimator.GetCurrentAnimatorStateInfo(0).IsName("seTourne"))
             {
-                Debug.Log("seTourne0");
                 wormAnimator.Play("seTourne0");
             }
             else
             {
-                Debug.Log("seTourne");
                 wormAnimator.Play("seTourne");
             }
 
@@ -238,7 +217,6 @@ public class InfiniteWormsAnimation : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
 
-            Debug.Log("derp: " + remainingDerp);
             remainingDerp--;
             yield return new WaitForFixedUpdate();
 
