@@ -117,17 +117,15 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     // ===== NEW ANIMATION ===== //
 
-    public void HandleNewWormAnimationFunction(float inTime, int derpTurns, float animationSpeed)
+    public void HandleNewWormAnimationFunction(float inTime, float derpTurns, float animationSpeed)
     {
         wormAnimator = GetComponent<Animator>();
         inAnimationTime = inTime;
         numberOfDerps = derpTurns;
-        //remainingDerp = numberOfDerps;
-        remainingDerp = 3f;
+        remainingDerp = numberOfDerps;
 
         // *** Animation speed is multiplicative, 2f = 2x speed ***
-        //derpSpeed = animationSpeed;
-        derpSpeed = 2f;
+        derpSpeed = animationSpeed;
 
         StartCoroutine(HandleNewWormInAnimation());
     }
@@ -171,7 +169,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
         wormAnimator.Play("SeCrinque");
 
 
-        // wormSound.Play();
+        wormSound.Play();
 
         // Both while loops are needed because the clip does not start instantly. The first loop
         // wait for the clip to start and the second one wait for the clip to finish. 
@@ -245,8 +243,9 @@ public class InfiniteWormsAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        InfiniteWormsController.instance.RemoveSpawnedPosition(initialPosition);
         Destroy(gameObject);
-        
+
         yield return null;
 
     }

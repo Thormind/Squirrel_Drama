@@ -67,13 +67,101 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7410025737049738861, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -7349798601204331703, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -5180894116006197130, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -4696773110808585032, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -3948293479881541521, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -2637287047890679312, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: -881683101876054081, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 369b611645800ea42bd2052231d50b94, type: 3}
       propertyPath: m_Name
       value: infiniteWorm2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947002874975031450, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471707290265636668, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741830790132559732, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173178144027847829, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365608170128981552, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377008338082012670, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 5667936963265209222, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 5840517856085707808, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
     - target: {fileID: 6120253605968891017, guid: 369b611645800ea42bd2052231d50b94, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6195065812253562905, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275058980476491840, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 7402494040911017958, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 7648011326208406111, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473488843742035701, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8713964006171584898, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+      propertyPath: m_TagString
+      value: Worm
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 369b611645800ea42bd2052231d50b94, type: 3}
@@ -92,7 +180,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0007}
@@ -113,7 +201,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0004}
@@ -134,7 +222,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0008}
@@ -155,7 +243,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0007}
@@ -176,7 +264,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.001}
@@ -197,7 +285,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.001}
@@ -218,7 +306,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0008}
@@ -239,7 +327,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0003}
@@ -260,7 +348,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0009}
@@ -281,7 +369,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0003}
@@ -302,7 +390,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0005}
@@ -440,7 +528,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 86f2e0235cc90de47ae7ae857b9a06a9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -459,7 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210c86e9b69dae746a597e607716bc93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wormSound: {fileID: 0}
+  wormSound: {fileID: 6251230532660460681}
   wormAnimator: {fileID: 2173076450415394758}
 --- !u!1 &7112863116834931681 stripped
 GameObject:
@@ -476,7 +564,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0009}
@@ -497,7 +585,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0006}
@@ -518,7 +606,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.0009}

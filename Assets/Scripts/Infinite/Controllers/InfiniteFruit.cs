@@ -64,6 +64,7 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Worm")
             {
+          
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));

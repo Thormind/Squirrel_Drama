@@ -39884,6 +39884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wormsParent: {fileID: 145494253}
   wormPrefab: {fileID: 6227733640779642566, guid: 558450a290a156c44bceb88fad9785b2, type: 3}
+  hole: {fileID: 0}
   _wormsParameters: {fileID: 11400000, guid: 8cddae1bbfe45454a927c40d5fc14538, type: 2}
   difficultyLevel: 1
 --- !u!1 &1143510695
@@ -63854,7 +63855,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2889715040503380868}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

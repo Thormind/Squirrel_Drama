@@ -17,7 +17,6 @@ public class WormSpawner : MonoBehaviour
     private void Start()
     {
         difficultyLevel = 1;
-        spawnPosition = wormsParent.transform.position;
     }
 
     private void FixedUpdate()
@@ -31,7 +30,14 @@ public class WormSpawner : MonoBehaviour
     public void SpawnWorm()
     {
         QuickRemoveWorms();
-        InstantiateAnimation(spawnPosition, true);
+
+        Vector3 holePos = new Vector3(0f, 2f, 0f);
+        Debug.Log("wormParent: " + wormsParent.transform.position);
+        Vector3 worldPosition = wormsParent.transform.TransformPoint(holePos);
+        
+
+
+        InstantiateAnimation(worldPosition, true);
     }
 
     public void QuickRemoveWorms()
@@ -45,14 +51,18 @@ public class WormSpawner : MonoBehaviour
 
     public void InstantiateAnimation(Vector3 position, bool spawn, GameObject obj = null)
     {
+
+        Debug.Log("wormParentTransformed: " + position);
         GameObject wormInstantiated = Instantiate(wormPrefab, position, Quaternion.Euler(0, 0, 0), wormsParent.transform);
 
         float randomInAnimationTime = Random.Range(WormsInAnimationTime - 0.5f, WormsInAnimationTime + 0.5f);
         float randomNumberOfDerpsAnimation = Random.Range(WormsDerpAnimationTime - 1f, WormsDerpAnimationTime + 1f);
         float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
 
+        
         wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleNewWormAnimationFunction(
             randomInAnimationTime, (int) randomNumberOfDerpsAnimation, randomAnimationSpeed);
+
     }
 
     //MIN DISTANCE

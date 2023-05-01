@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wormsParent: {fileID: 370970711}
-  wormPrefab: {fileID: 3229739297079387043, guid: 39b147f3f7548df4790223499f18c13b, type: 3}
+  wormPrefab: {fileID: 6227733640779642566, guid: 558450a290a156c44bceb88fad9785b2, type: 3}
   _wormsParameters: {fileID: 11400000, guid: 8cddae1bbfe45454a927c40d5fc14538, type: 2}
   isAllSpawned: 0
 --- !u!1 &100488355
@@ -628,7 +628,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370970711}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.055, y: -0.1, z: -3.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

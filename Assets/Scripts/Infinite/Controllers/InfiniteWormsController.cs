@@ -65,14 +65,12 @@ public class InfiniteWormsController : MonoBehaviour
         else
         {
             NotifySpawnDebug(true);
-            holePosition = new Vector3(holePosition.x, holePosition.y, 1f);
 
             Vector3 worldPosition = wormsParent.transform.TransformPoint(holePosition);
 
             InstantiateAnimation(worldPosition, holePosition, true);
 
             _spawnedWormsPositions.Add(holePosition);
-
         }
     }
 
@@ -120,14 +118,14 @@ public class InfiniteWormsController : MonoBehaviour
     {
         if (spawn)
         {
-            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(-90, 0, 0), wormsParent.transform);
+            GameObject wormInstantiated = Instantiate(wormPrefab, worldPosition, Quaternion.Euler(0, 0, 0), wormsParent.transform);
 
             float randomInAnimationTime = Random.Range(WormsInAnimationTime - 0.5f, WormsInAnimationTime + 0.5f);
             float randomDerpAnimationTime = Random.Range(WormsDerpAnimationTime - 1f, WormsDerpAnimationTime + 1f);
-            float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 50f, WormsAnimationSpeed + 50f);
+            float randomAnimationSpeed = Random.Range(WormsAnimationSpeed - 0.2f, WormsAnimationSpeed + 0.2f);
 
-            wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleWormAnimationFunction(
-                randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed, holePosition);
+            wormInstantiated.GetComponent<InfiniteWormsAnimation>().HandleNewWormAnimationFunction(
+                randomInAnimationTime, randomDerpAnimationTime, randomAnimationSpeed);
         }
         if (!spawn && obj != null)
         {
