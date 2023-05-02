@@ -18,6 +18,7 @@ TagManager:
   - FxTemporaire
   - Points
   - FallingZone
+  - Squirrel
   layers:
   - Default
   - TransparentFX

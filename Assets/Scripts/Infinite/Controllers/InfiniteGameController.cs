@@ -21,6 +21,7 @@ public class InfiniteGameController : MonoBehaviour
     public InfiniteElevatorController elevatorControllerRef;
     public InfiniteFruit fruitRef;
     public InfiniteScoreMultiplier scoreMultiplierRef;
+    public SquirrelAnimation squirrelAnimationRef;
 
     public GameObject fruitParent;
     public GameObject obstaclesParent;
@@ -302,6 +303,8 @@ public class InfiniteGameController : MonoBehaviour
     {
         EnableFruitCollision(false);
 
+        StartSquirrelFruitSequence();
+
         RemoveObstacles();
 
         PauseTimer();
@@ -315,6 +318,21 @@ public class InfiniteGameController : MonoBehaviour
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
         {
             AnimationManager.instance.PlayInGameAnimation(NextLevel());
+        }
+        
+    }
+
+
+    public void StartSquirrelFruitSequence()
+    {
+        if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
+        {
+            AnimationManager.instance.PlayInGameAnimation(fruitRef.MoveToSquirrelCoroutine());
+            AnimationManager.instance.PlaySquirrelTakeFruitAnimation();
+            AnimationManager.instance.PlayInGameAnimation(fruitRef.MoveToSquirrelLoveCoroutine());
+            AnimationManager.instance.PlaySquirrelLoveFruitAnimation();
+            AnimationManager.instance.PlayInGameAnimation(fruitRef.AfterSquirrelLoveCoroutine());
+
         }
     }
 
@@ -692,6 +710,7 @@ public class InfiniteGameController : MonoBehaviour
         }
 
     }
+
 
     public void RemoveObstacles()
     {

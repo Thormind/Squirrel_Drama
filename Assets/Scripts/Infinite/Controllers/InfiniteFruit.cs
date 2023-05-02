@@ -12,6 +12,9 @@ public class InfiniteFruit : MonoBehaviour
     private float fallingFromTreeTime = 0.1f;
     private float crushedTime = 1f;
 
+    private float fruitToSquirrelRotateSpeed = 200f;
+    private float fruitToSquirrelTranslateSpeed = 2f;
+
     public bool collisionEnabled;
 
     public Rigidbody2D fruitRigidbody;
@@ -21,6 +24,8 @@ public class InfiniteFruit : MonoBehaviour
     public Transform fruitStackPosition;
     public Transform fruitBottomPosition;
     public Transform fruitStartPosition;
+    public Transform fruitSquirrelPosition;
+
 
     private void Awake()
     {
@@ -98,6 +103,64 @@ public class InfiniteFruit : MonoBehaviour
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
             }
         }
+    }
+
+    public IEnumerator MoveToSquirrelCoroutine()
+    {
+        fruitRigidbody.simulated = false;
+
+        Vector3 fruitPosition = transform.localPosition;
+        Vector3 squirrelPosition = new Vector3(fruitSquirrelPosition.transform.localPosition.x,
+            fruitSquirrelPosition.transform.localPosition.y,
+            fruitSquirrelPosition.transform.localPosition.z + 2f);
+
+        bool isFruitAtSquirrel = false;
+        bool isFruitStartLeftOfSquirrel = fruitPosition.x < fruitSquirrelPosition.localPosition.x;
+
+        Vector3 positionOffset = new Vector3((isFruitStartLeftOfSquirrel ? 1 : -1), 0, 0);
+        float zRotationOffset = isFruitStartLeftOfSquirrel ? -1 : 1;
+
+        while (!isFruitAtSquirrel)
+        {
+            fruitPosition = transform.localPosition;
+
+            Vector3 newPosition = transform.localPosition + positionOffset * fruitToSquirrelTranslateSpeed * Time.deltaTime;
+
+            if ((isFruitStartLeftOfSquirrel && newPosition.x >= squirrelPosition.x)
+                || (!isFruitStartLeftOfSquirrel && newPosition.x <= squirrelPosition.x))
+            {
+                newPosition.x = squirrelPosition.x;
+                isFruitAtSquirrel = true;
+            }
+
+            transform.localPosition = newPosition;
+            transform.Rotate(0, 0, zRotationOffset * fruitToSquirrelRotateSpeed * Time.deltaTime);
+            
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public IEnumerator MoveToSquirrelLoveCoroutine()
+    {
+        transform.localPosition = 
+            new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 0.3f);
+
+        yield return null;
+    }
+
+
+    public IEnumerator AfterSquirrelLoveCoroutine()
+    {
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 5f);
+
+        GetComponent<CircleCollider2D>().enabled = false;
+        fruitRigidbody.simulated = true;
+
+        fruitRigidbody.gravityScale = fruitFallingGravityScale;
+        fruitRigidbody.velocity = Vector2.zero;
+        fruitRigidbody.angularVelocity = 0;
+
+        yield return null;
     }
 
     IEnumerator MoveToHoleCoroutine(Collider2D holeTransform)

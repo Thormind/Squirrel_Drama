@@ -844,6 +844,7 @@ Transform:
   - {fileID: 688465987}
   - {fileID: 106993694}
   - {fileID: 1190752322}
+  - {fileID: 567328563}
   m_Father: {fileID: 1688894348}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -992,6 +993,7 @@ MonoBehaviour:
   fruitStackPosition: {fileID: 688465987}
   fruitBottomPosition: {fileID: 106993694}
   fruitStartPosition: {fileID: 1190752322}
+  fruitSquirrelPosition: {fileID: 567328563}
 --- !u!114 &506127054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1206,6 +1208,37 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506127045}
   m_Enabled: 0
+--- !u!1 &567328562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567328563}
+  m_Layer: 0
+  m_Name: fruitOnSquirrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &567328563
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567328562}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 40, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 475743738}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &597877958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1656,6 +1689,7 @@ MonoBehaviour:
   elevatorControllerRef: {fileID: 706388252}
   fruitRef: {fileID: 506127052}
   scoreMultiplierRef: {fileID: 826696007}
+  squirrelAnimationRef: {fileID: 0}
   fruitParent: {fileID: 506127045}
   obstaclesParent: {fileID: 1249040316}
   obstacleInstanciateVFX: {fileID: 141433446842962269, guid: 72b461dca7c3e3941bf47a5ac79d9d68, type: 3}
