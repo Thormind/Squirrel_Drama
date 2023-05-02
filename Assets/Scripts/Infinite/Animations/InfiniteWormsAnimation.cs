@@ -134,7 +134,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
     {
         float t = 0;
 
-        wormAnimator.speed = derpSpeed;
+        wormAnimator.speed = derpSpeed * 1.25f;
         wormAnimator.Play("Sort");
 
         // Both while loops are needed because the clip does not start instantly. The first loop
@@ -166,6 +166,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormOutAnimation()
     {
+        wormAnimator.speed = derpSpeed * 1.25f;
         wormAnimator.Play("SeCrinque");
 
 
@@ -191,6 +192,8 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormDerpAnimation()
     {
+        wormAnimator.speed = derpSpeed;
+
         while (remainingDerp > 0)
         {
             if (wormAnimator.GetCurrentAnimatorStateInfo(0).IsName("seTourne"))
@@ -227,7 +230,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
     IEnumerator HandleNewWormBackInAnimation()
     {
-        
+        wormAnimator.speed = derpSpeed * 1.25f;
         wormAnimator.Play("seRevient");
 
         // Both while loops are needed because the clip does not start instantly. The first loop
