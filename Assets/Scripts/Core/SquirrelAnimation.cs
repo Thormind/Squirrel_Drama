@@ -36,6 +36,7 @@ public class SquirrelAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        squirrelAnimator.Play("vibing");
     }
 
 }
