@@ -46,7 +46,7 @@ public class ScenesManager : MonoBehaviour
 		get { return _gameMode; }
 		set
 		{
-			print("gameMode changed!");
+			//print("gameMode changed!");
 			_gameMode = value;
 			OnGameModeChanged?.Invoke(_gameMode);
 		}
@@ -65,7 +65,7 @@ public class ScenesManager : MonoBehaviour
 		get { return _gameState; }
 		set
 		{
-			print("gameState changed!");
+			//print("gameState changed!");
 			previousGameState = _gameState;
 			_gameState = value;
 			OnGameStateChanged?.Invoke(_gameState);
