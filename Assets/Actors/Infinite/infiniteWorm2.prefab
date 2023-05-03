@@ -1,5 +1,197 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3712147219052285762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3811144726821197426}
+  - component: {fileID: 6899576279108228727}
+  m_Layer: 0
+  m_Name: ProximityCollider
+  m_TagString: ObstacleProximity
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3811144726821197426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712147219052285762}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3499857323396009959}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6899576279108228727
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3712147219052285762}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.006
+--- !u!1 &4605187951052629402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3768702993813359019}
+  - component: {fileID: 3635058412079246332}
+  m_Layer: 0
+  m_Name: ProximityCollider
+  m_TagString: ObstacleProximity
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3768702993813359019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4605187951052629402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3445988500589417180}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3635058412079246332
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4605187951052629402}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.006
+--- !u!1 &7408297463318343805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7341080106521409630}
+  - component: {fileID: 5389217585251081835}
+  m_Layer: 0
+  m_Name: ProximityCollider
+  m_TagString: ObstacleProximity
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7341080106521409630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408297463318343805}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3748660016850384241}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5389217585251081835
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408297463318343805}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.006
+--- !u!1 &9179592664883364356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7573295573990857876}
+  - component: {fileID: 5678154565885777665}
+  m_Layer: 0
+  m_Name: ProximityCollider
+  m_TagString: ObstacleProximity
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7573295573990857876
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179592664883364356}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5253715358461966887}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5678154565885777665
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179592664883364356}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.006
 --- !u!1001 &6533653311582014359
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -312,6 +504,11 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.0008}
   serializedVersion: 2
   m_Radius: 0.0033
+--- !u!4 &3445988500589417180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -756974888688805557, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+  m_PrefabInstance: {fileID: 6533653311582014359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3499018554487241160 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7648011326208406111, guid: 369b611645800ea42bd2052231d50b94, type: 3}
@@ -333,6 +530,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.0003}
   serializedVersion: 2
   m_Radius: 0.0035
+--- !u!4 &3499857323396009959 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7655502131410437232, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+  m_PrefabInstance: {fileID: 6533653311582014359}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3748660016850384241 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1249228289072611610, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+  m_PrefabInstance: {fileID: 6533653311582014359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4329861456109829233 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7402494040911017958, guid: 369b611645800ea42bd2052231d50b94, type: 3}
@@ -396,6 +603,11 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.0005}
   serializedVersion: 2
   m_Radius: 0.0032
+--- !u!4 &5253715358461966887 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1316389581482176944, guid: 369b611645800ea42bd2052231d50b94, type: 3}
+  m_PrefabInstance: {fileID: 6533653311582014359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6227733640779642566 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 369b611645800ea42bd2052231d50b94, type: 3}

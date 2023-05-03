@@ -327,12 +327,12 @@ public class InfiniteGameController : MonoBehaviour
     {
         if (HUDMenuManager.instance != null && HUDMenuManager.instance.isActiveAndEnabled && AnimationManager.instance != null)
         {
+            AnimationManager.instance.PlayHappySquirrelFaceAnimation();
             AnimationManager.instance.PlayInGameAnimation(fruitRef.MoveToSquirrelCoroutine());
             AnimationManager.instance.PlaySquirrelTakeFruitAnimation();
             AnimationManager.instance.PlayInGameAnimation(fruitRef.MoveToSquirrelLoveCoroutine());
             AnimationManager.instance.PlaySquirrelLoveFruitAnimation();
             AnimationManager.instance.PlayInGameAnimation(fruitRef.AfterSquirrelLoveCoroutine());
-
         }
     }
 
@@ -523,6 +523,8 @@ public class InfiniteGameController : MonoBehaviour
 
     private IEnumerator Death()
     {
+        AnimationManager.instance.PlaySadSquirrelFaceAnimation();
+
         PauseTimer();
 
         ScenesManager.gameState = GAME_STATE.DIED;

@@ -19,6 +19,7 @@ TagManager:
   - Points
   - FallingZone
   - Squirrel
+  - ObstacleProximity
   layers:
   - Default
   - TransparentFX

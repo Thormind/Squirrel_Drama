@@ -28,6 +28,7 @@ public class AnimationManager : MonoBehaviour
     public static AnimationManager instance;
 
     public SquirrelAnimation squirrelAnimationRef;
+    public SquirrelFaceAnimation squirrelFaceAnimationRef;
 
     private Queue<IEnumerator> menuAnimationQueue = new Queue<IEnumerator>();
     private Queue<IEnumerator> inGameAnimationQueue = new Queue<IEnumerator>();
@@ -75,6 +76,21 @@ public class AnimationManager : MonoBehaviour
     public void PlaySquirrelLoveFruitAnimation()
     {
         PlayInGameAnimation(squirrelAnimationRef.HandleSquirrelLoveFruitAnimation());
+    }
+
+    public void PlayHappySquirrelFaceAnimation()
+    {
+        PlayInGameAnimation(squirrelFaceAnimationRef.HandleHappySquirrelAnimation());
+    }
+
+    public void PlayAngrySquirrelFaceAnimation()
+    {
+        PlayInGameAnimation(squirrelFaceAnimationRef.HandleAngrySquirrelAnimation());
+    }
+
+    public void PlaySadSquirrelFaceAnimation()
+    {
+        PlayInGameAnimation(squirrelFaceAnimationRef.HandleSadSquirrelAnimation());
     }
 
     private IEnumerator PlayMenuQueue()

@@ -60,8 +60,12 @@ public class InfiniteFruit : MonoBehaviour
     {
         if (collisionEnabled)
         {
+            bool collisionIsNotProximity = false; 
+
             if (collision.transform.gameObject.tag == "Bee")
             {
+                collisionIsNotProximity = true;
+
                 InfiniteGameController.instance.HandleFruitInBee();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -69,7 +73,8 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Worm")
             {
-          
+                collisionIsNotProximity = true;
+
                 InfiniteGameController.instance.HandleFruitInWorm();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
@@ -77,6 +82,8 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Bear")
             {
+                collisionIsNotProximity = true;
+
                 InfiniteGameController.instance.HandleFruitInBear();
 
                 StartCoroutine(CrushedCoroutine(collision.transform));
@@ -84,24 +91,45 @@ public class InfiniteFruit : MonoBehaviour
 
             if (collision.transform.gameObject.tag == "Points")
             {
+                collisionIsNotProximity = true;
                 collision.enabled = false;
+
                 collision.transform.gameObject.GetComponent<InfinitePointsAnimation>().HandleFruitInPointsFunction();
+                
                 InfiniteGameController.instance.HandleFruitInPoints();
             }
 
             if (collision.transform.gameObject.tag == "Fruit")
             {
+                collisionIsNotProximity = true;
                 collision.enabled = false;
+
                 collision.transform.gameObject.GetComponent<InfiniteFruitAnimation>().HandleFruitInFruitFunction();
+                
                 InfiniteGameController.instance.HandleFruitInFruit();
             }
 
             if (collision.transform.gameObject.tag == "FallingZone")
             {
+                collisionIsNotProximity = true;
                 InfiniteGameController.instance.HandleFruitFalling();
 
                 StartCoroutine(FallFromTreeCoroutine(collision.transform));
             }
+
+            if (!collisionIsNotProximity && collision.transform.gameObject.tag == "ObstacleProximity")
+            {
+                collision.enabled = false;
+                AnimationManager.instance.PlayAngrySquirrelFaceAnimation();
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.transform.gameObject.tag == "ObstacleProximity" && !collision.enabled)
+        {
+            collision.enabled = true;
         }
     }
 
@@ -147,7 +175,6 @@ public class InfiniteFruit : MonoBehaviour
 
         yield return null;
     }
-
 
     public IEnumerator AfterSquirrelLoveCoroutine()
     {
