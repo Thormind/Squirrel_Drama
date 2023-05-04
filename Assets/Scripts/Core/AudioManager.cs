@@ -82,7 +82,7 @@ public class AudioManager : MonoBehaviour
     public AudioItem[] AudioItemArray;
     public Dictionary<SOUND, SoundAudioClip> soundDictionary = new Dictionary<SOUND, SoundAudioClip>();
     public MusicItem[] MusicItemArray;
-    public Dictionary<MUSIC, AudioClip> musicDictionary = new Dictionary<MUSIC, AudioClip>();
+    public Dictionary<MUSIC, SoundAudioClip> musicDictionary = new Dictionary<MUSIC, SoundAudioClip>();
 
 
     public delegate void GameStateChangedEventHandler(GAME_STATE newGameState);
@@ -98,7 +98,7 @@ public class AudioManager : MonoBehaviour
     public class MusicItem
     {
         public MUSIC music;
-        public AudioClip music_audio_clip;
+        public SoundAudioClip music_audio_clip;
     }
 
     [System.Serializable]
@@ -489,7 +489,8 @@ public class AudioManager : MonoBehaviour
 
             if (menuMusicChoice == MUSIC.RANDOM)
             {
-                menuAudioSource.clip = GetRandomMusicClip();
+                menuAudioSource.clip = GetRandomMusicClip().clip;
+                menuAudioSource.volume = GetRandomMusicClip().sound_vol;
             }
             if (menuMusicChoice == MUSIC.NONE)
             {
@@ -497,7 +498,8 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                menuAudioSource.clip = musicDictionary[menuMusicChoice];
+                menuAudioSource.clip = musicDictionary[menuMusicChoice].clip;
+                menuAudioSource.volume = musicDictionary[menuMusicChoice].sound_vol;
             }
 
             menuAudioSource.Play();
@@ -513,7 +515,8 @@ public class AudioManager : MonoBehaviour
 
             if (legacyMusicChoice == MUSIC.RANDOM)
             {
-                legacyMusicAudioSource.clip = GetRandomMusicClip();
+                legacyMusicAudioSource.clip = GetRandomMusicClip().clip;
+                legacyMusicAudioSource.volume = GetRandomMusicClip().sound_vol;
             }
             if (legacyMusicChoice == MUSIC.NONE)
             {
@@ -521,7 +524,8 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice];
+                legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice].clip;
+                legacyMusicAudioSource.volume = musicDictionary[legacyMusicChoice].sound_vol;
             }
 
             legacyMusicAudioSource.Play();
@@ -537,7 +541,8 @@ public class AudioManager : MonoBehaviour
 
             if (infiniteMusicChoice == MUSIC.RANDOM)
             {
-                infiniteAudioSource.clip = GetRandomMusicClip();
+                infiniteAudioSource.clip = GetRandomMusicClip().clip;
+                infiniteAudioSource.volume = GetRandomMusicClip().sound_vol;
             }
             if (infiniteMusicChoice == MUSIC.NONE)
             {
@@ -545,7 +550,8 @@ public class AudioManager : MonoBehaviour
             }
             if (infiniteMusicChoice != MUSIC.RANDOM && infiniteMusicChoice != MUSIC.NONE)
             {
-                infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice];
+                infiniteAudioSource.clip = musicDictionary[infiniteMusicChoice].clip;
+                infiniteAudioSource.volume = musicDictionary[infiniteMusicChoice].sound_vol;
             }
 
             infiniteAudioSource.Play();
@@ -589,7 +595,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public AudioClip GetRandomMusicClip()
+    public SoundAudioClip GetRandomMusicClip()
     {
         MusicItem randomMusicItem = MusicItemArray[UnityEngine.Random.Range(0, MusicItemArray.Length)];
         return randomMusicItem.music_audio_clip;
