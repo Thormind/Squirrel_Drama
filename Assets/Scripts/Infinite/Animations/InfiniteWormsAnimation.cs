@@ -5,6 +5,7 @@ using UnityEngine;
 public class InfiniteWormsAnimation : MonoBehaviour
 {
     public AudioSource wormSound;
+    public AudioSource wormSweep;
     public Animator wormAnimator;
     private float inAnimationTime;
     private float derpAnimationTime;
@@ -53,10 +54,13 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         float t = 0;
 
-        wormSound.Play();
-
         while (t <= 1)
         {
+            if (!wormSound.isPlaying)
+            {
+                wormSound.Play(0);
+            }
+
             t += Time.fixedDeltaTime / 0.5f;
 
             transform.localPosition = Vector3.Lerp(_initialPosition, outStartPosition, t);
@@ -135,7 +139,9 @@ public class InfiniteWormsAnimation : MonoBehaviour
         float t = 0;
 
         wormAnimator.speed = derpSpeed * 1.25f;
+        wormSound.Play(0);
         wormAnimator.Play("Sort");
+        wormSound.Play(0);
 
         // Both while loops are needed because the clip does not start instantly. The first loop
         // wait for the clip to start and the second one wait for the clip to finish.
@@ -167,8 +173,9 @@ public class InfiniteWormsAnimation : MonoBehaviour
     IEnumerator HandleNewWormOutAnimation()
     {
         wormAnimator.speed = derpSpeed * 1.25f;
+        wormSound.Play(0);
         wormAnimator.Play("SeCrinque");
-
+        wormSound.Play(0);
 
         // Both while loops are needed because the clip does not start instantly. The first loop
         // wait for the clip to start and the second one wait for the clip to finish. 
@@ -188,13 +195,14 @@ public class InfiniteWormsAnimation : MonoBehaviour
         yield return null;
     }
 
+
     IEnumerator HandleNewWormDerpAnimation()
     {
         wormAnimator.speed = derpSpeed;
 
         while (remainingDerp > 0)
         {
-            wormSound.Play();
+            wormSweep.Play(0);
             if (wormAnimator.GetCurrentAnimatorStateInfo(0).IsName("seTourne"))
             {
                 wormAnimator.Play("seTourne0");
@@ -230,7 +238,9 @@ public class InfiniteWormsAnimation : MonoBehaviour
     IEnumerator HandleNewWormBackInAnimation()
     {
         wormAnimator.speed = derpSpeed * 1.25f;
+        wormSound.Play(0);
         wormAnimator.Play("seRevient");
+        wormSound.Play(0);
 
         // Both while loops are needed because the clip does not start instantly. The first loop
         // wait for the clip to start and the second one wait for the clip to finish.

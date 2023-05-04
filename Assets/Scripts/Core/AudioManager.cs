@@ -40,8 +40,8 @@ public enum SOUND
     POINT_GRAB,                 // Implanted: true Note: correct volume
     LIFE_SPIN,                  // Implanted: true
     LIFE_POP,                   // Implanted: true
-    SQUIRREL_PANIC,             // Implanted: false
-    SQUIRREL_CAUTION,           // Implanted: false
+    SQUIRREL_HAPPY,             // Implanted: false
+    SQUIRREL_SAD,               // Implanted: false
     BEAR_ROAR,                  // Implanted: true
     BEAR_HIT,                   // Implanted: true
     WORM_BLINK,                 // Implanted: false
@@ -54,6 +54,7 @@ public enum SOUND
     LIFE_SPAWN,
     FRUIT_HOLE,
     FAIL,
+    SQUIRREL_KISS,
     // Legacy mode
     FAIL_HOLE,
     GOOD_HOLE,
@@ -350,14 +351,14 @@ public class AudioManager : MonoBehaviour
     }
 
     // call exemple: AudioManager.instance.PlaySound(SOUND.SQUIRREL_PANIC);
-    public void PlaySoundAllowed(SOUND sound)
+    public void PlaySoundAllowed(SOUND sound, ulong time)
     {
         AudioSource audioSource = soundplayer.GetComponent<AudioSource>();
         if (!audioSource.isPlaying)
         {
             audioSource.clip = soundDictionary[sound].clip;
             audioSource.volume = soundDictionary[sound].sound_vol;
-            audioSource.Play();
+            audioSource.Play(time);
         }
 
         else
@@ -369,7 +370,7 @@ public class AudioManager : MonoBehaviour
                 {
                     source.clip = soundDictionary[sound].clip;
                     source.volume = soundDictionary[sound].sound_vol;
-                    source.Play();
+                    source.Play(time);
                     return;
                 }
             }
@@ -379,7 +380,7 @@ public class AudioManager : MonoBehaviour
             newSource.playOnAwake = false;
             newSource.clip = soundDictionary[sound].clip;
             newSource.volume = soundDictionary[sound].sound_vol;
-            newSource.Play();
+            newSource.Play(time);
         }
     }
 
@@ -456,11 +457,11 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public void PlaySound(SOUND sound)
+    public void PlaySound(SOUND sound, ulong time = 0)
     {
         if (AudioManager.instance != null)
         {
-            PlaySoundAllowed(sound);
+            PlaySoundAllowed(sound, time);
         }
     }
 
