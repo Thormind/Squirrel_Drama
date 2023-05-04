@@ -170,8 +170,6 @@ public class InfiniteWormsAnimation : MonoBehaviour
         wormAnimator.Play("SeCrinque");
 
 
-        wormSound.Play();
-
         // Both while loops are needed because the clip does not start instantly. The first loop
         // wait for the clip to start and the second one wait for the clip to finish. 
 
@@ -196,6 +194,7 @@ public class InfiniteWormsAnimation : MonoBehaviour
 
         while (remainingDerp > 0)
         {
+            wormSound.Play();
             if (wormAnimator.GetCurrentAnimatorStateInfo(0).IsName("seTourne"))
             {
                 wormAnimator.Play("seTourne0");
