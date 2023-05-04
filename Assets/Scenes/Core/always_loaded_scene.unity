@@ -18355,6 +18355,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 806216436459d5c489380e43a5e02769, type: 3}
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
+      propertyPath: MusicItemArray.Array.data[3].music_audio_clip
+      value: 
+      objectReference: {fileID: 8300000, guid: bfb8e2fc84c96a74ba499547376d0f00, type: 3}
+    - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: MusicItemArray.Array.data[4].music_audio_clip
       value: 
       objectReference: {fileID: 8300000, guid: 1274e071112078d4abe4fdeb3c468ea4, type: 3}

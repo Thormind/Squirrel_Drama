@@ -9,7 +9,7 @@ public class SquirrelFaceAnimation : MonoBehaviour
     public IEnumerator HandleHappySquirrelAnimation()
     {
         AudioManager.instance.PlaySound(SOUND.SQUIRREL_HAPPY, 30000);
-        AudioManager.instance.PlaySound(SOUND.SQUIRREL_KISS, 90000);
+        AudioManager.instance.PlaySound(SOUND.SQUIRREL_KISS, 110000);
         squirrelFaceAnimator.Play("content");
 
         yield return null;
