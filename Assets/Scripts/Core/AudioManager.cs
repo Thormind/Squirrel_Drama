@@ -73,6 +73,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource infiniteAudioSource;
     public AudioSource legacyMusicAudioSource;
     public AudioSource gameOverMusic;
+    public AudioSource legacyVictory;
     public AudioSource wind;
     public AudioSource buzz;
 
@@ -215,6 +216,10 @@ public class AudioManager : MonoBehaviour
             case GAME_STATE.LEVEL_COMPLETED:
                 break;
             case GAME_STATE.GAME_COMPLETED:
+                if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+                {
+                    legacyVictory.Play();
+                }
                 break;
         }
     }
