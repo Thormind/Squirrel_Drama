@@ -8004,7 +8004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1711588660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18286,6 +18286,10 @@ PrefabInstance:
       propertyPath: gameOverMusic
       value: 
       objectReference: {fileID: 865318294}
+    - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
+      propertyPath: legacyVictory
+      value: 
+      objectReference: {fileID: 865318309}
     - target: {fileID: 2622619100695852837, guid: 596a45fa4bdadb84f8e7728c61e150b8, type: 3}
       propertyPath: cameraListener
       value: 
