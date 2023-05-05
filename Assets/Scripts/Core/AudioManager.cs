@@ -497,7 +497,7 @@ public class AudioManager : MonoBehaviour
         if (!menuAudioSource.isPlaying)
         {
             StopCurrentMusic();
-            MUSIC menuMusicChoice = SaveManager.GetMusicSettings(GAME_MODE.NONE);
+            MUSIC menuMusicChoice = MUSIC.MENU_2;
 
             if (menuMusicChoice == MUSIC.RANDOM)
             {
