@@ -534,7 +534,7 @@ public class AudioManager : MonoBehaviour
             {
                 legacyMusicAudioSource.clip = null;
             }
-            else
+            if (legacyMusicChoice != MUSIC.RANDOM && legacyMusicChoice != MUSIC.NONE)
             {
                 legacyMusicAudioSource.clip = musicDictionary[legacyMusicChoice].clip;
                 legacyMusicAudioSource.volume = musicDictionary[legacyMusicChoice].sound_vol;
