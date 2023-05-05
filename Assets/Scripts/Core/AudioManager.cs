@@ -74,6 +74,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource legacyMusicAudioSource;
     public AudioSource gameOverMusic;
     public AudioSource wind;
+    public AudioSource buzz;
 
     [SerializeField] public AudioListener cameraListener;
     public AudioListener gameListener;
@@ -156,6 +157,10 @@ public class AudioManager : MonoBehaviour
                 {
                     PlayWind();
                 }
+                if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+                {
+                    PlayBuzz();
+                }
                 break;
             case GAME_STATE.PAUSED:
                 Pause();
@@ -186,6 +191,7 @@ public class AudioManager : MonoBehaviour
             case GAME_STATE.INACTIVE:
                 AdjustMusic();
                 StopWind();
+                StopBuzz();
                 if (!intro.isPlaying)
                     PlayMenuMusic();
                 break;
@@ -198,7 +204,13 @@ public class AudioManager : MonoBehaviour
                     PlayGameOverMusic();
                     AudioManager.instance.PlaySound(SOUND.FAIL);
                     PlayWind();
-                } 
+                }
+                if (ScenesManager.gameMode == GAME_MODE.LEGACY_MODE)
+                {
+                    PlayGameOverMusic();
+                    AudioManager.instance.PlaySound(SOUND.FAIL);
+                    PlayBuzz();
+                }
                 break;
             case GAME_STATE.LEVEL_COMPLETED:
                 break;
@@ -580,6 +592,22 @@ public class AudioManager : MonoBehaviour
         if (wind.isPlaying)
         {
             wind.Stop();
+        }
+    }
+
+    public void PlayBuzz()
+    {
+        if (!buzz.isPlaying)
+        {
+            buzz.Play();
+        }
+    }
+
+    public void StopBuzz()
+    {
+        if (buzz.isPlaying)
+        {
+            buzz.Stop();
         }
     }
 
